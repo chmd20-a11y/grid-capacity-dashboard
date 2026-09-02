@@ -8,3 +8,4 @@ shot_b64.txt
 *.jpg
 *.png
 .github/
+capacity_pre_osm.json

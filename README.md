@@ -20,10 +20,12 @@
 
 ## 데이터 갱신 (여유용량은 계속 변합니다)
 ```bash
-python3 collect.py          # 한전 재수집 + 지오코딩 → capacity.json 갱신 (~8분)
+python3 collect.py          # 한전 재수집 + 읍면동 지오코딩 → capacity.json (~8분)
+python3 enrich_osm.py       # OSM에서 변전소 실명+정확좌표 매칭 (~30초)
 python3 build_standalone.py # 데이터 내장 단독 HTML 재생성 (선택)
 git add -A && git commit -m "data refresh" && git push   # 배포(Pages 자동 재빌드)
 ```
+(로컬 `refresh.sh` + launchd가 매주 화 06시 위 과정을 자동 실행)
 - `geocode_cache.json`은 커밋해 두어 재실행 시 지오코딩을 건너뜁니다(새 읍면동만 조회).
 - 자동 갱신: `.github/workflows/refresh.yml`(주 1회) — 첫 실행에서 한전이 GitHub IP를 막지 않는지 확인 필요. 막히면 로컬 cron 사용.
 

@@ -54,7 +54,7 @@
 <script>window.__DATA__={
  "generated_at": "2026-09-02 13:26 KST",
  "source": "한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 프로토타입 6개 지사권역",
- "unit": "MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=읍면동 지오코딩 평균 · 지사=최근접",
+ "unit": "MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=OSM 실측(매칭분)+읍면동근사(미매칭) · 지사=최근접",
  "branches": [
   {
    "name": "본사(광주)",
@@ -98,8 +98,8 @@
    "name": "송*",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 37.04419,
-   "lng": 127.08669,
+   "lat": 37.030574,
+   "lng": 127.089374,
    "subst_capa_mw": 250.0,
    "subst_free_mw": 230.84,
    "subst_free_pct": 92.3,
@@ -263,7 +263,10 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 22,
-   "branches": []
+   "branches": [],
+   "osm_name": "송탄변전소",
+   "coord_exact": true,
+   "match_km": 1.5
   },
   {
    "code": "2486",
@@ -294,15 +297,16 @@
    "connect_max_mw": 11.2,
    "geocoded": true,
    "dong_count": 3,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "SB10",
    "name": "통*",
    "region": "강화군",
    "branch": "강화사업소",
-   "lat": 37.74821,
-   "lng": 126.48353,
+   "lat": 37.688274,
+   "lng": 126.59092,
    "subst_capa_mw": 250.0,
    "subst_free_mw": 208.207,
    "subst_free_pct": 83.3,
@@ -325,7 +329,10 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "osm_name": "통진변전소",
+   "coord_exact": true,
+   "match_km": 11.6
   },
   {
    "code": "2682",
@@ -408,7 +415,8 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 18,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2180",
@@ -517,7 +525,8 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 3,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "5180",
@@ -635,15 +644,16 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 13,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2182",
    "name": "평*",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 37.02111,
-   "lng": 127.0576,
+   "lat": 37.030341,
+   "lng": 127.021089,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 191.618,
    "subst_free_pct": 95.8,
@@ -772,15 +782,18 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 20,
-   "branches": []
+   "branches": [],
+   "osm_name": "평택변전소",
+   "coord_exact": true,
+   "match_km": 3.4
   },
   {
    "code": "S317",
    "name": "추*",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 36.9901,
-   "lng": 127.08846,
+   "lat": 36.960954,
+   "lng": 127.077191,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 190.617,
    "subst_free_pct": 95.3,
@@ -937,15 +950,18 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 11,
-   "branches": []
+   "branches": [],
+   "osm_name": "추팔변전소",
+   "coord_exact": true,
+   "match_km": 3.4
   },
   {
    "code": "S122",
    "name": "문*",
    "region": "파주시",
    "branch": "파주지사",
-   "lat": 37.7822,
-   "lng": 126.74342,
+   "lat": 37.727637,
+   "lng": 126.722082,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 189.376,
    "subst_free_pct": 94.7,
@@ -1013,7 +1029,10 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 5,
-   "branches": []
+   "branches": [],
+   "osm_name": "문발변전소",
+   "coord_exact": true,
+   "match_km": 6.4
   },
   {
    "code": "S327",
@@ -1063,15 +1082,16 @@
    "connect_max_mw": 12.2,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S136",
    "name": "신**",
    "region": "파주시",
    "branch": "파주지사",
-   "lat": 37.75585,
-   "lng": 126.79192,
+   "lat": 37.739871,
+   "lng": 126.77118,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 187.628,
    "subst_free_pct": 93.8,
@@ -1120,15 +1140,18 @@
    "connect_max_mw": 11.8,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "osm_name": "신파주변전소",
+   "coord_exact": true,
+   "match_km": 2.5
   },
   {
    "code": "S347",
    "name": "진*",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 37.09606,
-   "lng": 127.05706,
+   "lat": 37.120596,
+   "lng": 127.08593,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 185.146,
    "subst_free_pct": 92.6,
@@ -1224,15 +1247,18 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 4,
-   "branches": []
+   "branches": [],
+   "osm_name": "진위변전소",
+   "coord_exact": true,
+   "match_km": 3.7
   },
   {
    "code": "E400",
    "name": "금***",
    "region": "파주시",
    "branch": "파주지사",
-   "lat": 37.79121,
-   "lng": 126.81363,
+   "lat": 37.766379,
+   "lng": 126.814124,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 182.954,
    "subst_free_pct": 91.5,
@@ -1389,7 +1415,10 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 8,
-   "branches": []
+   "branches": [],
+   "osm_name": "금촌변전소",
+   "coord_exact": true,
+   "match_km": 2.8
   },
   {
    "code": "E406",
@@ -1470,7 +1499,8 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 12,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S628",
@@ -1677,15 +1707,16 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 30,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "D321",
    "name": "소**",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 37.00559,
-   "lng": 127.12916,
+   "lat": 37.010148,
+   "lng": 127.122113,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 174.908,
    "subst_free_pct": 87.5,
@@ -1753,15 +1784,18 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 5,
-   "branches": []
+   "branches": [],
+   "osm_name": "소사벌변전소",
+   "coord_exact": true,
+   "match_km": 0.8
   },
   {
    "code": "S338",
    "name": "청*",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 37.04152,
-   "lng": 127.00141,
+   "lat": 37.049971,
+   "lng": 126.974005,
    "subst_capa_mw": 250.0,
    "subst_free_mw": 170.339,
    "subst_free_pct": 68.1,
@@ -1867,7 +1901,10 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 5,
-   "branches": []
+   "branches": [],
+   "osm_name": "청북변전소",
+   "coord_exact": true,
+   "match_km": 2.6
   },
   {
    "code": "S617",
@@ -1971,7 +2008,8 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 19,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S310",
@@ -2014,15 +2052,16 @@
    "connect_max_mw": 11.8,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S322",
    "name": "강*",
    "region": "강화군",
    "branch": "강화사업소",
-   "lat": 37.70456,
-   "lng": 126.42335,
+   "lat": 37.681685,
+   "lng": 126.481487,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 154.348,
    "subst_free_pct": 77.2,
@@ -2179,7 +2218,10 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 10,
-   "branches": []
+   "branches": [],
+   "osm_name": "강화변전소",
+   "coord_exact": true,
+   "match_km": 5.7
   },
   {
    "code": "2681",
@@ -2358,15 +2400,16 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 15,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "D517",
    "name": "동**",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 37.08163,
-   "lng": 127.04957,
+   "lat": 37.044373,
+   "lng": 127.036532,
    "subst_capa_mw": 150.0,
    "subst_free_mw": 146.081,
    "subst_free_pct": 97.4,
@@ -2389,7 +2432,10 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "osm_name": "동평택에너지센터",
+   "coord_exact": true,
+   "match_km": 4.3
   },
   {
    "code": "S132",
@@ -2444,7 +2490,8 @@
    "connect_max_mw": 10.1,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2635",
@@ -2482,15 +2529,16 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2579",
    "name": "포*",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 36.98192,
-   "lng": 126.94504,
+   "lat": 36.988154,
+   "lng": 126.894412,
    "subst_capa_mw": 150.0,
    "subst_free_mw": 139.715,
    "subst_free_pct": 93.1,
@@ -2607,7 +2655,10 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 3,
-   "branches": []
+   "branches": [],
+   "osm_name": "포승변전소",
+   "coord_exact": true,
+   "match_km": 4.5
   },
   {
    "code": "E296",
@@ -2779,7 +2830,8 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 20,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2636",
@@ -2810,7 +2862,8 @@
    "connect_max_mw": 8.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "D467",
@@ -2853,15 +2906,16 @@
    "connect_max_mw": 11.4,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S350",
    "name": "만*",
    "region": "평택시",
    "branch": "평택지사",
-   "lat": 36.94837,
-   "lng": 126.9237,
+   "lat": 36.971908,
+   "lng": 126.845666,
    "subst_capa_mw": 150.0,
    "subst_free_mw": 127.609,
    "subst_free_pct": 85.1,
@@ -2884,7 +2938,10 @@
    "connect_max_mw": 7.7,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "osm_name": "만호변전소",
+   "coord_exact": true,
+   "match_km": 7.4
   },
   {
    "code": "S619",
@@ -2988,7 +3045,8 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 30,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "E087",
@@ -3050,7 +3108,8 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 6,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "5057",
@@ -3147,15 +3206,16 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 19,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2061",
    "name": "문*",
    "region": "파주시",
    "branch": "파주지사",
-   "lat": 37.88652,
-   "lng": 126.79203,
+   "lat": 37.863318,
+   "lng": 126.783388,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 117.892,
    "subst_free_pct": 58.9,
@@ -3291,7 +3351,10 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 11,
-   "branches": []
+   "branches": [],
+   "osm_name": "문산변전소",
+   "coord_exact": true,
+   "match_km": 2.7
   },
   {
    "code": "S636",
@@ -3388,7 +3451,8 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 36,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "5056",
@@ -3506,7 +3570,8 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 24,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "E383",
@@ -3537,7 +3602,8 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S624",
@@ -3601,15 +3667,16 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 7,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S124",
    "name": "신**",
    "region": "파주시",
    "branch": "파주지사",
-   "lat": 37.78726,
-   "lng": 126.77682,
+   "lat": 37.80535,
+   "lng": 126.767571,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 92.706,
    "subst_free_pct": 46.4,
@@ -3766,7 +3833,10 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 9,
-   "branches": []
+   "branches": [],
+   "osm_name": "신덕은변전소",
+   "coord_exact": true,
+   "match_km": 2.2
   },
   {
    "code": "E283",
@@ -3804,7 +3874,8 @@
    "connect_max_mw": 10.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S618",
@@ -3875,15 +3946,16 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 11,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S130",
    "name": "선*",
    "region": "파주시",
    "branch": "파주지사",
-   "lat": 37.88778,
-   "lng": 126.85327,
+   "lat": 37.85441,
+   "lng": 126.800945,
    "subst_capa_mw": 150.0,
    "subst_free_mw": 80.555,
    "subst_free_pct": 53.7,
@@ -3972,7 +4044,10 @@
    "connect_max_mw": 12.4,
    "geocoded": true,
    "dong_count": 5,
-   "branches": []
+   "branches": [],
+   "osm_name": "선유변전소",
+   "coord_exact": true,
+   "match_km": 5.9
   },
   {
    "code": "D288",
@@ -4029,15 +4104,16 @@
    "connect_max_mw": 10.9,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "D317",
    "name": "서**",
    "region": "강화군",
    "branch": "강화사업소",
-   "lat": 37.73688,
-   "lng": 126.37427,
+   "lat": 37.708912,
+   "lng": 126.396782,
    "subst_capa_mw": 100.0,
    "subst_free_mw": 74.809,
    "subst_free_pct": 74.8,
@@ -4093,7 +4169,10 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 9,
-   "branches": []
+   "branches": [],
+   "osm_name": "서강화변전소",
+   "coord_exact": true,
+   "match_km": 3.7
   },
   {
    "code": "D504",
@@ -4124,7 +4203,8 @@
    "connect_max_mw": 9.6,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "D368",
@@ -4167,15 +4247,16 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2689",
    "name": "대*",
    "region": "영암군",
-   "branch": "해남사업소",
-   "lat": 34.70845,
-   "lng": 126.5688,
+   "branch": "영암지사",
+   "lat": 34.763079,
+   "lng": 126.458128,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 34.021,
    "subst_free_pct": 17.0,
@@ -4374,7 +4455,10 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 4,
-   "branches": []
+   "branches": [],
+   "osm_name": "대불변전소",
+   "coord_exact": true,
+   "match_km": 11.8
   },
   {
    "code": "S603",
@@ -4405,7 +4489,8 @@
    "connect_max_mw": 12.6,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "E157",
@@ -4455,15 +4540,16 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 5,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "5029",
    "name": "남*",
    "region": "해남군",
    "branch": "해남사업소",
-   "lat": 34.46633,
-   "lng": 126.59157,
+   "lat": 34.411504,
+   "lng": 126.616484,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 13.6,
    "subst_free_pct": 6.8,
@@ -4601,15 +4687,18 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 7,
-   "branches": []
+   "branches": [],
+   "osm_name": "남창변전소",
+   "coord_exact": true,
+   "match_km": 6.5
   },
   {
    "code": "D491",
    "name": "삼*",
    "region": "영암군",
    "branch": "해남사업소",
-   "lat": 34.72426,
-   "lng": 126.51812,
+   "lat": 34.741442,
+   "lng": 126.394229,
    "subst_capa_mw": 100.0,
    "subst_free_mw": 10.608,
    "subst_free_pct": 10.6,
@@ -4672,7 +4761,10 @@
    "connect_max_mw": 6.1,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "osm_name": "삼호변전소",
+   "coord_exact": true,
+   "match_km": 11.5
   },
   {
    "code": "E439",
@@ -4823,7 +4915,8 @@
    "connect_max_mw": 7.2,
    "geocoded": true,
    "dong_count": 32,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S602",
@@ -4880,7 +4973,8 @@
    "connect_max_mw": 6.9,
    "geocoded": true,
    "dong_count": 8,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "D292",
@@ -4918,7 +5012,8 @@
    "connect_max_mw": 3.1,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S107",
@@ -4961,7 +5056,8 @@
    "connect_max_mw": 0.3,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "E233",
@@ -5018,7 +5114,8 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 9,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2774",
@@ -5049,15 +5146,16 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "2583",
    "name": "영*",
    "region": "영암군",
    "branch": "영암지사",
-   "lat": 34.80138,
-   "lng": 126.65195,
+   "lat": 34.834187,
+   "lng": 126.682808,
    "subst_capa_mw": 206.0,
    "subst_free_mw": 0.0,
    "subst_free_pct": 0.0,
@@ -5198,15 +5296,18 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 12,
-   "branches": []
+   "branches": [],
+   "osm_name": "영암변전소",
+   "coord_exact": true,
+   "match_km": 4.6
   },
   {
    "code": "E440",
    "name": "장***",
    "region": "장흥군",
    "branch": "장흥지사",
-   "lat": 34.67194,
-   "lng": 126.91684,
+   "lat": 34.698165,
+   "lng": 126.923117,
    "subst_capa_mw": 200.0,
    "subst_free_mw": 0.0,
    "subst_free_pct": 0.0,
@@ -5356,15 +5457,18 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 11,
-   "branches": []
+   "branches": [],
+   "osm_name": "장흥변전소",
+   "coord_exact": true,
+   "match_km": 3.0
   },
   {
    "code": "2687",
    "name": "해*",
    "region": "해남군",
    "branch": "해남사업소",
-   "lat": 34.58052,
-   "lng": 126.55694,
+   "lat": 34.56656,
+   "lng": 126.578355,
    "subst_capa_mw": 213.0,
    "subst_free_mw": 0.0,
    "subst_free_pct": 0.0,
@@ -5514,7 +5618,10 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 10,
-   "branches": []
+   "branches": [],
+   "osm_name": "해남변전소",
+   "coord_exact": true,
+   "match_km": 2.5
   },
   {
    "code": "E131",
@@ -5604,7 +5711,8 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "E212",
@@ -5713,7 +5821,8 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 6,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S626",
@@ -5744,15 +5853,16 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   },
   {
    "code": "S637",
    "name": "화*",
    "region": "해남군",
    "branch": "해남사업소",
-   "lat": 34.63051,
-   "lng": 126.37649,
+   "lat": 34.685269,
+   "lng": 126.329035,
    "subst_capa_mw": 150.0,
    "subst_free_mw": 0.0,
    "subst_free_pct": 0.0,
@@ -5869,7 +5979,10 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 4,
-   "branches": []
+   "branches": [],
+   "osm_name": "화원변전소",
+   "coord_exact": true,
+   "match_km": 7.5
   },
   {
    "code": "S608",
@@ -5900,7 +6013,8 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": []
+   "branches": [],
+   "coord_exact": false
   }
  ]
 };</script>
@@ -5942,7 +6056,7 @@
       <span class="sw"><span class="dot" style="background:var(--o)"></span>5–15%</span>
       <span class="sw"><span class="dot" style="background:var(--r)"></span>&lt;5%</span>
       <div style="margin-top:8px">🏢 = 사업장 위치 &nbsp;·&nbsp; <span class="muted">여유용량↑ = 태양광 연계 여지↑ = 영업 우선순위↑</span></div>
-      <div style="margin-top:6px;color:#7d8ea3">※ 좌표는 시군구 중심 근사(프로토타입). 데이터: 한전 계통연계 조회.</div>
+      <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM 매칭). 그 외는 읍면동 근사좌표. 여유용량 데이터: 한전 계통연계 조회(실데이터).</div>
     </div>
   </aside>
   <div id="map"></div>
@@ -6009,8 +6123,10 @@ function render(){
 
 function popup(s){
   const lines=s.lines.slice(0,6).map(l=>`<div class="popup-line"><span>${l.dl_nm} <span class="muted">(#${l.mtr_no})</span></span><b style="color:${color(l.dl_capa? 100*l.g_dl/l.dl_capa:0)}">${(l.conn??l.g_dl).toFixed(1)} MW</b></div>`).join('');
-  return `<div class="popup-t">${s.name} <span class="muted">${s.code}</span></div>
-    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch}</div>
+  const nm = s.osm_name || (s.name+' 변전소');
+  const badge = s.coord_exact ? '<span class="pill" style="color:#66bd63">정확좌표·실명(OSM)</span>' : '<span class="pill">근사좌표</span>';
+  return `<div class="popup-t">${nm} <span class="muted">${s.code}</span></div>
+    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch} · ${badge}</div>
     <div class="popup-line"><span>변전소 여유</span><b>${s.subst_free_mw.toFixed(1)} / ${s.subst_capa_mw.toFixed(0)} MW (${s.subst_free_pct}%)</b></div>
     <div class="popup-line"><span>⚡ 최대 연계가능</span><b style="color:${color(s.subst_free_pct)}">${(s.connect_max_mw??0).toFixed(1)} MW</b></div>
     <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}`;
@@ -6021,7 +6137,7 @@ function renderTable(subs){
   document.getElementById('rankcnt').textContent=`(${subs.length}개)`;
   subs.forEach(s=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td><span class="dot" style="background:${color(s.subst_free_pct)}"></span>${s.name} <span class="muted">${s.code}</span></td>
+    tr.innerHTML=`<td><span class="dot" style="background:${color(s.subst_free_pct)}"></span>${s.osm_name||s.name}${s.coord_exact?' <span style="color:#66bd63">✓</span>':''} <span class="muted">${s.code}</span></td>
       <td>${s.region}</td><td class="num">${s.subst_free_mw.toFixed(1)}</td>
       <td class="num">${s.subst_free_pct}%</td><td class="num">${s.lines.length}</td>`;
     tr.onclick=()=>{ MAP.setView([s.lat,s.lng],12); MARKERS[s.code]&&MARKERS[s.code].openPopup(); };

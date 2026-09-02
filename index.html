@@ -89,7 +89,7 @@
       <span class="sw"><span class="dot" style="background:var(--o)"></span>5–15%</span>
       <span class="sw"><span class="dot" style="background:var(--r)"></span>&lt;5%</span>
       <div style="margin-top:8px">🏢 = 사업장 위치 &nbsp;·&nbsp; <span class="muted">여유용량↑ = 태양광 연계 여지↑ = 영업 우선순위↑</span></div>
-      <div style="margin-top:6px;color:#7d8ea3">※ 좌표는 시군구 중심 근사(프로토타입). 데이터: 한전 계통연계 조회.</div>
+      <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM 매칭). 그 외는 읍면동 근사좌표. 여유용량 데이터: 한전 계통연계 조회(실데이터).</div>
     </div>
   </aside>
   <div id="map"></div>
@@ -156,8 +156,10 @@ function render(){
 
 function popup(s){
   const lines=s.lines.slice(0,6).map(l=>`<div class="popup-line"><span>${l.dl_nm} <span class="muted">(#${l.mtr_no})</span></span><b style="color:${color(l.dl_capa? 100*l.g_dl/l.dl_capa:0)}">${(l.conn??l.g_dl).toFixed(1)} MW</b></div>`).join('');
-  return `<div class="popup-t">${s.name} <span class="muted">${s.code}</span></div>
-    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch}</div>
+  const nm = s.osm_name || (s.name+' 변전소');
+  const badge = s.coord_exact ? '<span class="pill" style="color:#66bd63">정확좌표·실명(OSM)</span>' : '<span class="pill">근사좌표</span>';
+  return `<div class="popup-t">${nm} <span class="muted">${s.code}</span></div>
+    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch} · ${badge}</div>
     <div class="popup-line"><span>변전소 여유</span><b>${s.subst_free_mw.toFixed(1)} / ${s.subst_capa_mw.toFixed(0)} MW (${s.subst_free_pct}%)</b></div>
     <div class="popup-line"><span>⚡ 최대 연계가능</span><b style="color:${color(s.subst_free_pct)}">${(s.connect_max_mw??0).toFixed(1)} MW</b></div>
     <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}`;
@@ -168,7 +170,7 @@ function renderTable(subs){
   document.getElementById('rankcnt').textContent=`(${subs.length}개)`;
   subs.forEach(s=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td><span class="dot" style="background:${color(s.subst_free_pct)}"></span>${s.name} <span class="muted">${s.code}</span></td>
+    tr.innerHTML=`<td><span class="dot" style="background:${color(s.subst_free_pct)}"></span>${s.osm_name||s.name}${s.coord_exact?' <span style="color:#66bd63">✓</span>':''} <span class="muted">${s.code}</span></td>
       <td>${s.region}</td><td class="num">${s.subst_free_mw.toFixed(1)}</td>
       <td class="num">${s.subst_free_pct}%</td><td class="num">${s.lines.length}</td>`;
     tr.onclick=()=>{ MAP.setView([s.lat,s.lng],12); MARKERS[s.code]&&MARKERS[s.code].openPopup(); };
