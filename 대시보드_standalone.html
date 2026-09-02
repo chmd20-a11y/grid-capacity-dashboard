@@ -6029,34 +6029,38 @@
   <aside class="side">
     <div class="tiles">
       <div class="tile"><div class="v" id="t_sub">–</div><div class="l">변전소 수</div></div>
-      <div class="tile"><div class="v" id="t_free">–</div><div class="l">총 여유용량 (MW)</div></div>
-      <div class="tile"><div class="v" id="t_top">–</div><div class="l">여유 최다 권역</div></div>
-      <div class="tile"><div class="v" id="t_line">–</div><div class="l">즉시연계 여유선로(≥5MW)</div></div>
+      <div class="tile"><div class="v" id="t_free">–</div><div class="l">연계가능 변전소 (선로&gt;0)</div></div>
+      <div class="tile"><div class="v" id="t_top">–</div><div class="l">연계여지 최다 권역</div></div>
+      <div class="tile"><div class="v" id="t_line">–</div><div class="l">즉시연계 선로 (≥5MW)</div></div>
     </div>
 
-    <h2>📅 월별 영업 캠페인 캘린더 <span class="muted">(여유용량 근거 · 자동)</span></h2>
+    <div class="legend" style="margin-bottom:12px">
+      <b>숫자 읽는 법</b> — <span style="color:var(--g2);font-weight:700">연계가능(선로 최대)</span> = 지금 태양광을 실제로 붙일 수 있는 양(변전소·변압기·선로 여유의 <b>병목</b>, 보통 선로당 ≤13MW). <span class="muted">지역여지(변전소 총여유)</span> = 그 변전소의 확장 잠재력(선로 증설 시). ※ 한전 <b>추정치</b>, 실제 연계는 별도 기술검토 필요.
+    </div>
+
+    <h2>📅 월별 영업 캠페인 캘린더 <span class="muted">(연계가능량 근거 · 자동)</span></h2>
     <div class="cal" id="cal"></div>
 
     <h2>🏢 지사 필터</h2>
     <select id="branchSel"><option value="">전체 지사</option></select>
 
-    <h2>🏆 변전소 여유용량 랭킹 <span class="muted" id="rankcnt"></span></h2>
+    <h2>🏆 실제 연계가능 랭킹 <span class="muted" id="rankcnt"></span></h2>
     <div style="max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:10px">
       <table id="tbl"><thead><tr>
-        <th>변전소</th><th>권역</th><th style="text-align:right">여유MW</th><th style="text-align:right">여유율</th><th style="text-align:right">선로</th>
+        <th>변전소</th><th>권역</th><th style="text-align:right">연계가능MW</th><th style="text-align:right">지역여지MW</th><th style="text-align:right">선로</th>
       </tr></thead><tbody></tbody></table>
     </div>
 
     <h2>범례</h2>
     <div class="legend">
-      <div style="margin-bottom:6px"><b>변전소 여유율</b> (원 크기 = 여유용량 MW)</div>
-      <span class="sw"><span class="dot" style="background:var(--g1)"></span>50%+</span>
-      <span class="sw"><span class="dot" style="background:var(--g2)"></span>30–50%</span>
-      <span class="sw"><span class="dot" style="background:var(--y)"></span>15–30%</span>
-      <span class="sw"><span class="dot" style="background:var(--o)"></span>5–15%</span>
-      <span class="sw"><span class="dot" style="background:var(--r)"></span>&lt;5%</span>
-      <div style="margin-top:8px">🏢 = 사업장 위치 &nbsp;·&nbsp; <span class="muted">여유용량↑ = 태양광 연계 여지↑ = 영업 우선순위↑</span></div>
-      <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM 매칭). 그 외는 읍면동 근사좌표. 여유용량 데이터: 한전 계통연계 조회(실데이터).</div>
+      <div style="margin-bottom:6px"><b>실제 연계가능</b> (원 크기·색 = 선로 최대 연계가능 MW)</div>
+      <span class="sw"><span class="dot" style="background:var(--g1)"></span>10MW+</span>
+      <span class="sw"><span class="dot" style="background:var(--g2)"></span>5–10</span>
+      <span class="sw"><span class="dot" style="background:var(--y)"></span>1–5</span>
+      <span class="sw"><span class="dot" style="background:var(--o)"></span>0–1</span>
+      <span class="sw"><span class="dot" style="background:var(--r)"></span>0(연계불가)</span>
+      <div style="margin-top:8px">🏢 = 사업장 위치 &nbsp;·&nbsp; <span class="muted">연계가능↑ = 지금 붙일 수 있음 = 우선공략</span></div>
+      <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM). 그 외 읍면동 근사. 데이터: 한전 분산형전원 계통연계 조회(22.9kV 기준·실데이터).</div>
     </div>
   </aside>
   <div id="map"></div>
@@ -6065,7 +6069,7 @@
 <script>
 const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04"];
 const mLabel = s => { const [y,m]=s.split("-"); return (y==="2027"?"’27 ":"")+parseInt(m)+"월"; };
-function color(pct){ return pct>=50?getCss('--g1'):pct>=30?getCss('--g2'):pct>=15?getCss('--y'):pct>=5?getCss('--o'):getCss('--r'); }
+function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[];
 
@@ -6103,61 +6107,66 @@ function render(){
   const subs=filtered();
   LAYER.clearLayers(); MARKERS={};
   subs.forEach(s=>{
-    const r=Math.max(5,Math.min(24,5+Math.sqrt(Math.max(0,s.subst_free_mw))*2.2));
+    const conn=s.connect_max_mw||0;
+    const r=Math.max(5,Math.min(22,5+conn*1.25));
     const m=L.circleMarker([s.lat,s.lng],{radius:r,color:'#0d1117',weight:1,
-      fillColor:color(s.subst_free_pct),fillOpacity:.82});
+      fillColor:colorConn(conn),fillOpacity:.85});
     m.bindPopup(popup(s));
     m.addTo(LAYER); MARKERS[s.code]=m;
   });
-  // tiles
-  const totalFree=subs.reduce((a,s)=>a+s.subst_free_mw,0);
-  const byRegion={}; subs.forEach(s=>byRegion[s.region]=(byRegion[s.region]||0)+s.subst_free_mw);
+  // tiles (연계가능 기준)
+  const usable=subs.filter(s=>(s.connect_max_mw||0)>0).length;
+  const byRegion={}; subs.forEach(s=>byRegion[s.region]=(byRegion[s.region]||0)+(s.connect_max_mw||0));
   const topR=Object.entries(byRegion).sort((a,b)=>b[1]-a[1])[0];
   const freeLines=subs.reduce((a,s)=>a+s.lines.filter(l=>(l.conn||0)>=5).length,0);
   document.getElementById('t_sub').textContent=subs.length;
-  document.getElementById('t_free').textContent=Math.round(totalFree).toLocaleString();
+  document.getElementById('t_free').textContent=usable;
   document.getElementById('t_top').textContent=topR?topR[0]:'–';
   document.getElementById('t_line').textContent=freeLines;
   renderTable(subs);
 }
 
 function popup(s){
-  const lines=s.lines.slice(0,6).map(l=>`<div class="popup-line"><span>${l.dl_nm} <span class="muted">(#${l.mtr_no})</span></span><b style="color:${color(l.dl_capa? 100*l.g_dl/l.dl_capa:0)}">${(l.conn??l.g_dl).toFixed(1)} MW</b></div>`).join('');
+  const conn=s.connect_max_mw||0;
+  const lines=s.lines.slice(0,6).map(l=>`<div class="popup-line"><span>${l.dl_nm} <span class="muted">(#${l.mtr_no})</span></span><b style="color:${colorConn(l.conn||0)}">${(l.conn??0).toFixed(1)} MW</b></div>`).join('');
   const nm = s.osm_name || (s.name+' 변전소');
   const badge = s.coord_exact ? '<span class="pill" style="color:#66bd63">정확좌표·실명(OSM)</span>' : '<span class="pill">근사좌표</span>';
+  const warn = conn<=0 ? '<div style="color:#d73027;font-size:12px;margin-top:3px">⚠ 현재 신규 연계 불가 (여유 0)</div>' : '';
   return `<div class="popup-t">${nm} <span class="muted">${s.code}</span></div>
     <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch} · ${badge}</div>
-    <div class="popup-line"><span>변전소 여유</span><b>${s.subst_free_mw.toFixed(1)} / ${s.subst_capa_mw.toFixed(0)} MW (${s.subst_free_pct}%)</b></div>
-    <div class="popup-line"><span>⚡ 최대 연계가능</span><b style="color:${color(s.subst_free_pct)}">${(s.connect_max_mw??0).toFixed(1)} MW</b></div>
+    <div class="popup-line" style="font-size:14px"><span>⚡ 최대 연계가능</span><b style="color:${colorConn(conn)}">${conn.toFixed(1)} MW</b></div>
+    <div class="popup-line muted" style="font-size:11.5px"><span>지역 여지(변전소 총여유)</span><span>${s.subst_free_mw.toFixed(0)} MW</span></div>${warn}
     <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}`;
 }
 
 function renderTable(subs){
   const tb=document.querySelector('#tbl tbody'); tb.innerHTML='';
   document.getElementById('rankcnt').textContent=`(${subs.length}개)`;
-  subs.forEach(s=>{
+  const sorted=[...subs].sort((a,b)=>(b.connect_max_mw||0)-(a.connect_max_mw||0));
+  sorted.forEach(s=>{
+    const conn=s.connect_max_mw||0;
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td><span class="dot" style="background:${color(s.subst_free_pct)}"></span>${s.osm_name||s.name}${s.coord_exact?' <span style="color:#66bd63">✓</span>':''} <span class="muted">${s.code}</span></td>
-      <td>${s.region}</td><td class="num">${s.subst_free_mw.toFixed(1)}</td>
-      <td class="num">${s.subst_free_pct}%</td><td class="num">${s.lines.length}</td>`;
+    tr.innerHTML=`<td><span class="dot" style="background:${colorConn(conn)}"></span>${s.osm_name||s.name}${s.coord_exact?' <span style="color:#66bd63">✓</span>':''} <span class="muted">${s.code}</span></td>
+      <td>${s.region}</td><td class="num">${conn.toFixed(1)}</td>
+      <td class="num muted">${s.subst_free_mw.toFixed(0)}</td><td class="num">${s.lines.length}</td>`;
     tr.onclick=()=>{ MAP.setView([s.lat,s.lng],12); MARKERS[s.code]&&MARKERS[s.code].openPopup(); };
     tb.appendChild(tr);
   });
 }
 
 function renderCalendar(){
-  // 지사(권역)별 총 여유용량 랭킹 → 여유 큰 순으로 이른 달 배정
+  // 지사(권역)별 실제 연계가능량 합 랭킹 → 큰 순으로 이른 달 배정
   const agg={};
-  DATA.branches.forEach(b=>agg[b.name]={name:b.name,free:0,cnt:0,best:0,lat:b.lat,lng:b.lng});
-  DATA.substations.forEach(s=>{ const a=agg[s.branch]; if(a){a.free+=s.subst_free_mw;a.cnt++;a.best=Math.max(a.best,s.subst_free_mw);} });
-  const ranked=Object.values(agg).sort((x,y)=>y.free-x.free);
+  DATA.branches.forEach(b=>agg[b.name]={name:b.name,conn:0,cnt:0,usable:0,free:0,lat:b.lat,lng:b.lng});
+  DATA.substations.forEach(s=>{ const a=agg[s.branch]; if(a){ const c=s.connect_max_mw||0; a.conn+=c; a.cnt++; if(c>0)a.usable++; a.free+=s.subst_free_mw; } });
+  const ranked=Object.values(agg).sort((x,y)=>y.conn-x.conn);
   const cal=document.getElementById('cal'); cal.innerHTML='';
   ranked.forEach((a,i)=>{
     if(i>=MONTHS.length) return;
     const row=document.createElement('div'); row.className='row';
     row.innerHTML=`<div class="m">${mLabel(MONTHS[i])}</div>
-      <div><div class="nm">${a.name}</div><div class="sub">변전소 ${a.cnt}개 · 최대 여유 ${a.best.toFixed(0)}MW</div></div>
-      <div class="val">${Math.round(a.free).toLocaleString()}<small>총 여유 MW</small></div>`;
+      <div><div class="nm">${a.name}</div><div class="sub">연계가능 변전소 ${a.usable}/${a.cnt}개 · 지역여지 ${Math.round(a.free).toLocaleString()}MW</div></div>
+      <div class="val">${a.conn.toFixed(0)}<small>연계가능 MW</small></div>`;
     row.onclick=()=>{ document.getElementById('branchSel').value=a.name; render(); MAP.setView([a.lat,a.lng],10); };
     cal.appendChild(row);
   });
