@@ -1,0 +1,5993 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>계통 여유용량 영업 대시보드 · 해피솔라</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#0f141a; --panel:#161d26; --panel2:#1d2732; --line:#2a3644;
+    --tx:#e8eef5; --tx2:#9fb0c3; --accent:#2f9e6f; --accent2:#3aa0ff;
+    --g1:#1a9850; --g2:#66bd63; --y:#fee08b; --o:#fdae61; --r:#d73027;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--tx)}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0;font-weight:700}
+  header .meta{font-size:12px;color:var(--tx2)}
+  .wrap{display:flex;height:calc(100vh - 56px);min-height:480px}
+  .side{width:420px;min-width:340px;max-width:46vw;overflow-y:auto;border-right:1px solid var(--line);padding:14px}
+  #map{flex:1;min-width:0}
+  .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+  .tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .tile .v{font-size:22px;font-weight:800}
+  .tile .l{font-size:11px;color:var(--tx2);margin-top:2px}
+  h2{font-size:13px;color:var(--tx2);margin:18px 0 8px;letter-spacing:.3px;text-transform:uppercase}
+  .cal{display:flex;flex-direction:column;gap:6px}
+  .cal .row{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 11px;cursor:pointer}
+  .cal .row:hover{border-color:var(--accent)}
+  .cal .m{font-weight:800;font-size:14px;color:var(--accent2)}
+  .cal .nm{font-weight:700}
+  .cal .sub{font-size:11px;color:var(--tx2);margin-top:1px}
+  .cal .val{text-align:right;font-weight:800}
+  .cal .val small{display:block;font-weight:500;color:var(--tx2);font-size:10px}
+  select{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;width:100%}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line)}
+  th{color:var(--tx2);font-weight:600;position:sticky;top:0;background:var(--panel)}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:var(--panel2)}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .legend{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:11.5px;color:var(--tx2)}
+  .legend b{color:var(--tx)}
+  .legend .sw{display:inline-flex;align-items:center;gap:5px;margin-right:12px}
+  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:1px 8px;font-size:11px;color:var(--tx2)}
+  .leaflet-popup-content{font-size:13px;line-height:1.5}
+  .popup-t{font-weight:800;font-size:14px;margin-bottom:4px}
+  .popup-line{display:flex;justify-content:space-between;gap:14px;font-size:12px}
+  .muted{color:#7d8ea3}
+  @media (max-width:760px){ .wrap{flex-direction:column;height:auto} .side{width:100%;max-width:none;border-right:none;border-bottom:1px solid var(--line)} #map{height:56vh} }
+</style>
+<script>window.__DATA__={
+ "generated_at": "2026-09-02 13:26 KST",
+ "source": "한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 프로토타입 6개 지사권역",
+ "unit": "MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=읍면동 지오코딩 평균 · 지사=최근접",
+ "branches": [
+  {
+   "name": "본사(광주)",
+   "lat": 35.1595,
+   "lng": 126.8526
+  },
+  {
+   "name": "영암지사",
+   "lat": 34.8,
+   "lng": 126.697
+  },
+  {
+   "name": "장흥지사",
+   "lat": 34.6814,
+   "lng": 126.907
+  },
+  {
+   "name": "해남사업소",
+   "lat": 34.573,
+   "lng": 126.599
+  },
+  {
+   "name": "파주지사",
+   "lat": 37.76,
+   "lng": 126.78
+  },
+  {
+   "name": "평택지사",
+   "lat": 36.992,
+   "lng": 127.113
+  },
+  {
+   "name": "강화도(신규타겟)",
+   "lat": 37.747,
+   "lng": 126.485
+  }
+ ],
+ "substations": [
+  {
+   "code": "2186",
+   "name": "송*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.04419,
+   "lng": 127.08669,
+   "subst_capa_mw": 250.0,
+   "subst_free_mw": 230.84,
+   "subst_free_pct": 92.3,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 41.119
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.13
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.8
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.791
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "삼남",
+     "dl_capa": 13.0,
+     "g_dl": 12.834,
+     "conn": 12.834
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "송공",
+     "dl_capa": 13.0,
+     "g_dl": 12.807,
+     "conn": 12.807
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "이충",
+     "dl_capa": 13.0,
+     "g_dl": 12.802,
+     "conn": 12.802
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "송남",
+     "dl_capa": 13.0,
+     "g_dl": 12.802,
+     "conn": 12.802
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "평공",
+     "dl_capa": 13.0,
+     "g_dl": 12.8,
+     "conn": 12.8
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "장공",
+     "dl_capa": 13.0,
+     "g_dl": 12.774,
+     "conn": 12.774
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "진하",
+     "dl_capa": 13.0,
+     "g_dl": 12.591,
+     "conn": 12.591
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "지산",
+     "dl_capa": 13.0,
+     "g_dl": 12.49,
+     "conn": 12.49
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "가평",
+     "dl_capa": 13.0,
+     "g_dl": 12.172,
+     "conn": 12.172
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "송북",
+     "dl_capa": 13.0,
+     "g_dl": 12.133,
+     "conn": 12.133
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "장안",
+     "dl_capa": 13.0,
+     "g_dl": 12.131,
+     "conn": 12.131
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "송진",
+     "dl_capa": 13.0,
+     "g_dl": 11.807,
+     "conn": 11.807
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "칠원",
+     "dl_capa": 12.0,
+     "g_dl": 11.539,
+     "conn": 11.539
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "평원",
+     "dl_capa": 13.0,
+     "g_dl": 11.24,
+     "conn": 11.24
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "세공",
+     "dl_capa": 12.0,
+     "g_dl": 10.949,
+     "conn": 10.949
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "산양",
+     "dl_capa": 12.0,
+     "g_dl": 10.813,
+     "conn": 10.813
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "가곡",
+     "dl_capa": 13.0,
+     "g_dl": 10.419,
+     "conn": 10.419
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "은산",
+     "dl_capa": 12.0,
+     "g_dl": 10.031,
+     "conn": 10.031
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "송도",
+     "dl_capa": 13.0,
+     "g_dl": 8.508,
+     "conn": 8.508
+    }
+   ],
+   "connect_max_mw": 12.8,
+   "geocoded": true,
+   "dong_count": 22
+  },
+  {
+   "code": "2486",
+   "name": "안*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 36.98724,
+   "lng": 127.12584,
+   "subst_capa_mw": 250.0,
+   "subst_free_mw": 208.57,
+   "subst_free_pct": 83.4,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 36.376
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "진사",
+     "dl_capa": 13.0,
+     "g_dl": 11.155,
+     "conn": 11.155
+    }
+   ],
+   "connect_max_mw": 11.2,
+   "geocoded": true,
+   "dong_count": 3
+  },
+  {
+   "code": "SB10",
+   "name": "통*",
+   "region": "강화군",
+   "branch": "강화도(신규타겟)",
+   "lat": 37.74821,
+   "lng": 126.48353,
+   "subst_capa_mw": 250.0,
+   "subst_free_mw": 208.207,
+   "subst_free_pct": 83.3,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.989
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "문수",
+     "dl_capa": 13.0,
+     "g_dl": 12.027,
+     "conn": 12.027
+    }
+   ],
+   "connect_max_mw": 12.0,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "2682",
+   "name": "충*",
+   "region": "북구",
+   "branch": "본사(광주)",
+   "lat": 35.15627,
+   "lng": 126.9101,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 198.831,
+   "subst_free_pct": 99.4,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.803
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.391
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.681
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "4",
+     "dl_nm": "동명",
+     "dl_capa": 13.0,
+     "g_dl": 12.971,
+     "conn": 12.971
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "경양",
+     "dl_capa": 13.0,
+     "g_dl": 12.923,
+     "conn": 12.923
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "조선",
+     "dl_capa": 13.0,
+     "g_dl": 12.903,
+     "conn": 12.903
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "수창",
+     "dl_capa": 13.0,
+     "g_dl": 12.9,
+     "conn": 12.9
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "송원",
+     "dl_capa": 13.0,
+     "g_dl": 12.77,
+     "conn": 12.77
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "양동",
+     "dl_capa": 13.0,
+     "g_dl": 12.727,
+     "conn": 12.727
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "충아",
+     "dl_capa": 13.0,
+     "g_dl": 12.681,
+     "conn": 12.681
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 18
+  },
+  {
+   "code": "2180",
+   "name": "오*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.09978,
+   "lng": 127.05379,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 196.351,
+   "subst_free_pct": 98.2,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.824
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.88
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.769
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.624
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "송탄",
+     "dl_capa": 13.0,
+     "g_dl": 13.0,
+     "conn": 13.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "원동",
+     "dl_capa": 13.0,
+     "g_dl": 12.647,
+     "conn": 12.647
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "부대",
+     "dl_capa": 13.0,
+     "g_dl": 12.615,
+     "conn": 12.615
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "서탄",
+     "dl_capa": 13.0,
+     "g_dl": 12.111,
+     "conn": 12.111
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "진위",
+     "dl_capa": 13.0,
+     "g_dl": 11.827,
+     "conn": 11.827
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "성전",
+     "dl_capa": 12.0,
+     "g_dl": 11.412,
+     "conn": 11.412
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "금성",
+     "dl_capa": 13.0,
+     "g_dl": 10.654,
+     "conn": 10.654
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "덕제",
+     "dl_capa": 13.0,
+     "g_dl": 9.373,
+     "conn": 9.373
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "모의",
+     "dl_capa": 13.0,
+     "g_dl": 8.907,
+     "conn": 8.907
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "제지",
+     "dl_capa": 13.0,
+     "g_dl": 5.883,
+     "conn": 5.883
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 3
+  },
+  {
+   "code": "5180",
+   "name": "북**",
+   "region": "북구",
+   "branch": "본사(광주)",
+   "lat": 35.17972,
+   "lng": 126.8798,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 196.091,
+   "subst_free_pct": 98.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 47.983
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.241
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.867
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "벽산",
+     "dl_capa": 13.0,
+     "g_dl": 12.896,
+     "conn": 12.896
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "신용",
+     "dl_capa": 13.0,
+     "g_dl": 12.894,
+     "conn": 12.894
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "운암",
+     "dl_capa": 13.0,
+     "g_dl": 12.867,
+     "conn": 12.867
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "양산#3",
+     "dl_capa": 13.0,
+     "g_dl": 12.846,
+     "conn": 12.846
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "신안",
+     "dl_capa": 13.0,
+     "g_dl": 12.842,
+     "conn": 12.842
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "하남",
+     "dl_capa": 13.0,
+     "g_dl": 12.803,
+     "conn": 12.803
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "양산#2",
+     "dl_capa": 13.0,
+     "g_dl": 12.787,
+     "conn": 12.787
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "양산#1",
+     "dl_capa": 13.0,
+     "g_dl": 12.7,
+     "conn": 12.7
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "아시아",
+     "dl_capa": 12.0,
+     "g_dl": 11.997,
+     "conn": 11.997
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "야외",
+     "dl_capa": 13.0,
+     "g_dl": 11.996,
+     "conn": 11.996
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "신가",
+     "dl_capa": 13.0,
+     "g_dl": 11.754,
+     "conn": 11.754
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "오비",
+     "dl_capa": 12.0,
+     "g_dl": 11.706,
+     "conn": 11.706
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 13
+  },
+  {
+   "code": "2182",
+   "name": "평*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.02111,
+   "lng": 127.0576,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 191.618,
+   "subst_free_pct": 95.8,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.994
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 31.47
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 35.747
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.461
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "세교",
+     "dl_capa": 13.0,
+     "g_dl": 12.97,
+     "conn": 12.97
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "미공",
+     "dl_capa": 13.0,
+     "g_dl": 12.9,
+     "conn": 12.9
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신풍",
+     "dl_capa": 13.0,
+     "g_dl": 12.89,
+     "conn": 12.89
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "가재",
+     "dl_capa": 13.0,
+     "g_dl": 12.802,
+     "conn": 12.802
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "해창",
+     "dl_capa": 13.0,
+     "g_dl": 12.254,
+     "conn": 12.254
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "율포",
+     "dl_capa": 13.0,
+     "g_dl": 11.964,
+     "conn": 11.964
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "합정",
+     "dl_capa": 12.0,
+     "g_dl": 11.95,
+     "conn": 11.95
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "어연",
+     "dl_capa": 13.0,
+     "g_dl": 11.618,
+     "conn": 11.618
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "평송",
+     "dl_capa": 12.0,
+     "g_dl": 11.468,
+     "conn": 11.468
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "갑문",
+     "dl_capa": 13.0,
+     "g_dl": 10.884,
+     "conn": 10.884
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "아산",
+     "dl_capa": 13.0,
+     "g_dl": 10.347,
+     "conn": 10.347
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "서정",
+     "dl_capa": 12.0,
+     "g_dl": 8.656,
+     "conn": 8.656
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "공도",
+     "dl_capa": 12.0,
+     "g_dl": 8.115,
+     "conn": 8.115
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "오성",
+     "dl_capa": 13.0,
+     "g_dl": 5.784,
+     "conn": 5.784
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 20
+  },
+  {
+   "code": "S317",
+   "name": "추*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 36.9901,
+   "lng": 127.08846,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 190.617,
+   "subst_free_pct": 95.3,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 47.492
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.661
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 39.161
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.459
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "추정",
+     "dl_capa": 13.0,
+     "g_dl": 12.899,
+     "conn": 12.899
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "추공",
+     "dl_capa": 13.0,
+     "g_dl": 12.841,
+     "conn": 12.841
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "추공",
+     "dl_capa": 13.0,
+     "g_dl": 12.841,
+     "conn": 12.841
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "안미",
+     "dl_capa": 13.0,
+     "g_dl": 12.82,
+     "conn": 12.82
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "안미",
+     "dl_capa": 13.0,
+     "g_dl": 12.82,
+     "conn": 12.82
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "한광",
+     "dl_capa": 13.0,
+     "g_dl": 12.757,
+     "conn": 12.757
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "배미",
+     "dl_capa": 13.0,
+     "g_dl": 12.689,
+     "conn": 12.689
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "용이",
+     "dl_capa": 13.0,
+     "g_dl": 12.646,
+     "conn": 12.646
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "안정",
+     "dl_capa": 13.0,
+     "g_dl": 12.638,
+     "conn": 12.638
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "추산",
+     "dl_capa": 13.0,
+     "g_dl": 12.501,
+     "conn": 12.501
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "추배",
+     "dl_capa": 12.0,
+     "g_dl": 11.925,
+     "conn": 11.925
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "평역",
+     "dl_capa": 12.0,
+     "g_dl": 11.904,
+     "conn": 11.904
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "군문",
+     "dl_capa": 12.0,
+     "g_dl": 11.833,
+     "conn": 11.833
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "계양",
+     "dl_capa": 12.0,
+     "g_dl": 11.815,
+     "conn": 11.815
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "용죽",
+     "dl_capa": 13.0,
+     "g_dl": 10.853,
+     "conn": 10.853
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "두정",
+     "dl_capa": 12.0,
+     "g_dl": 9.215,
+     "conn": 9.215
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "추평",
+     "dl_capa": 13.0,
+     "g_dl": 8.942,
+     "conn": 8.942
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "남공",
+     "dl_capa": 12.0,
+     "g_dl": 8.495,
+     "conn": 8.495
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 11
+  },
+  {
+   "code": "S122",
+   "name": "문*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.7822,
+   "lng": 126.74342,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 189.376,
+   "subst_free_pct": 94.7,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.96
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.322
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.304
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "산내",
+     "dl_capa": 13.0,
+     "g_dl": 12.704,
+     "conn": 12.704
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "경직",
+     "dl_capa": 13.0,
+     "g_dl": 12.632,
+     "conn": 12.632
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "전망",
+     "dl_capa": 13.0,
+     "g_dl": 12.446,
+     "conn": 12.446
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "금택",
+     "dl_capa": 13.0,
+     "g_dl": 12.01,
+     "conn": 12.01
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "문배",
+     "dl_capa": 13.0,
+     "g_dl": 10.833,
+     "conn": 10.833
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "장능",
+     "dl_capa": 13.0,
+     "g_dl": 9.864,
+     "conn": 9.864
+    }
+   ],
+   "connect_max_mw": 12.7,
+   "geocoded": true,
+   "dong_count": 5
+  },
+  {
+   "code": "S327",
+   "name": "남*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.10887,
+   "lng": 127.08407,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 187.925,
+   "subst_free_pct": 94.0,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.69
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 42.183
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "4",
+     "dl_nm": "송미",
+     "dl_capa": 13.0,
+     "g_dl": 12.199,
+     "conn": 12.199
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "남평",
+     "dl_capa": 12.0,
+     "g_dl": 11.901,
+     "conn": 11.901
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "북일",
+     "dl_capa": 13.0,
+     "g_dl": 10.862,
+     "conn": 10.862
+    }
+   ],
+   "connect_max_mw": 12.2,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S136",
+   "name": "신**",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.75585,
+   "lng": 126.79192,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 187.628,
+   "subst_free_pct": 93.8,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 42.507
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.9
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "한가",
+     "dl_capa": 12.0,
+     "g_dl": 11.776,
+     "conn": 11.776
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "서패",
+     "dl_capa": 12.0,
+     "g_dl": 9.494,
+     "conn": 9.494
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "지석",
+     "dl_capa": 12.0,
+     "g_dl": 8.868,
+     "conn": 8.868
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "해솔",
+     "dl_capa": 12.0,
+     "g_dl": 8.29,
+     "conn": 8.29
+    }
+   ],
+   "connect_max_mw": 11.8,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "S347",
+   "name": "진*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.09606,
+   "lng": 127.05706,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 185.146,
+   "subst_free_pct": 92.6,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.003
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.706
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.296
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "진오",
+     "dl_capa": 13.0,
+     "g_dl": 12.692,
+     "conn": 12.692
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "봉남",
+     "dl_capa": 13.0,
+     "g_dl": 12.603,
+     "conn": 12.603
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "진부",
+     "dl_capa": 13.0,
+     "g_dl": 12.518,
+     "conn": 12.518
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "진곡",
+     "dl_capa": 13.0,
+     "g_dl": 12.316,
+     "conn": 12.316
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "진산",
+     "dl_capa": 13.0,
+     "g_dl": 12.043,
+     "conn": 12.043
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "진한",
+     "dl_capa": 12.0,
+     "g_dl": 11.7,
+     "conn": 11.7
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "진리",
+     "dl_capa": 13.0,
+     "g_dl": 11.667,
+     "conn": 11.667
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "진북",
+     "dl_capa": 13.0,
+     "g_dl": 11.604,
+     "conn": 11.604
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "진남",
+     "dl_capa": 13.0,
+     "g_dl": 11.428,
+     "conn": 11.428
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "진미",
+     "dl_capa": 13.0,
+     "g_dl": 10.131,
+     "conn": 10.131
+    }
+   ],
+   "connect_max_mw": 12.7,
+   "geocoded": true,
+   "dong_count": 4
+  },
+  {
+   "code": "E400",
+   "name": "금***",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.79121,
+   "lng": 126.81363,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 182.954,
+   "subst_free_pct": 91.5,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 37.439
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 37.508
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 41.355
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.991
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "종점",
+     "dl_capa": 13.0,
+     "g_dl": 12.97,
+     "conn": 12.97
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "청사",
+     "dl_capa": 13.0,
+     "g_dl": 12.902,
+     "conn": 12.902
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "봉일",
+     "dl_capa": 13.0,
+     "g_dl": 11.785,
+     "conn": 11.785
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "용미",
+     "dl_capa": 13.0,
+     "g_dl": 11.711,
+     "conn": 11.711
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "영장",
+     "dl_capa": 12.0,
+     "g_dl": 11.5,
+     "conn": 11.5
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "영릉",
+     "dl_capa": 12.0,
+     "g_dl": 11.132,
+     "conn": 11.132
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "검산",
+     "dl_capa": 13.0,
+     "g_dl": 11.092,
+     "conn": 11.092
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "교삼",
+     "dl_capa": 13.0,
+     "g_dl": 10.954,
+     "conn": 10.954
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "영태",
+     "dl_capa": 13.0,
+     "g_dl": 10.382,
+     "conn": 10.382
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "오산",
+     "dl_capa": 13.0,
+     "g_dl": 10.297,
+     "conn": 10.297
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "분수",
+     "dl_capa": 12.0,
+     "g_dl": 9.972,
+     "conn": 9.972
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "금장",
+     "dl_capa": 13.0,
+     "g_dl": 9.745,
+     "conn": 9.745
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "순능",
+     "dl_capa": 13.0,
+     "g_dl": 9.426,
+     "conn": 9.426
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "새말",
+     "dl_capa": 13.0,
+     "g_dl": 8.935,
+     "conn": 8.935
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "도마",
+     "dl_capa": 13.0,
+     "g_dl": 8.728,
+     "conn": 8.728
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "금촌",
+     "dl_capa": 13.0,
+     "g_dl": 7.616,
+     "conn": 7.616
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "금덕",
+     "dl_capa": 11.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "갈곡",
+     "dl_capa": 11.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 8
+  },
+  {
+   "code": "E406",
+   "name": "농***",
+   "region": "서구",
+   "branch": "본사(광주)",
+   "lat": 35.15044,
+   "lng": 126.85181,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 177.243,
+   "subst_free_pct": 88.6,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 29.78
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.852
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 47.852
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.759
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "4",
+     "dl_nm": "신천",
+     "dl_capa": 13.0,
+     "g_dl": 12.909,
+     "conn": 12.909
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "염주",
+     "dl_capa": 13.0,
+     "g_dl": 12.863,
+     "conn": 12.863
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "금호",
+     "dl_capa": 13.0,
+     "g_dl": 12.852,
+     "conn": 12.852
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "내방",
+     "dl_capa": 13.0,
+     "g_dl": 10.852,
+     "conn": 10.852
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "덕흥",
+     "dl_capa": 13.0,
+     "g_dl": 5.241,
+     "conn": 5.241
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "환경대",
+     "dl_capa": 15.0,
+     "g_dl": 2.68,
+     "conn": 2.68
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 12
+  },
+  {
+   "code": "S628",
+   "name": "흑*",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.17292,
+   "lng": 126.78853,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 176.627,
+   "subst_free_pct": 88.3,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 30.202
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.737
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 37.134
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.215
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "월곡",
+     "dl_capa": 13.0,
+     "g_dl": 12.997,
+     "conn": 12.997
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "영수",
+     "dl_capa": 13.0,
+     "g_dl": 12.879,
+     "conn": 12.879
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "주공",
+     "dl_capa": 13.0,
+     "g_dl": 12.838,
+     "conn": 12.838
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "경진",
+     "dl_capa": 13.0,
+     "g_dl": 12.777,
+     "conn": 12.777
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "장수",
+     "dl_capa": 13.0,
+     "g_dl": 12.751,
+     "conn": 12.751
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "하일",
+     "dl_capa": 13.0,
+     "g_dl": 12.491,
+     "conn": 12.491
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "오선",
+     "dl_capa": 13.0,
+     "g_dl": 12.39,
+     "conn": 12.39
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "월곡",
+     "dl_capa": 12.0,
+     "g_dl": 11.997,
+     "conn": 11.997
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "대전",
+     "dl_capa": 12.0,
+     "g_dl": 11.901,
+     "conn": 11.901
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "장덕",
+     "dl_capa": 13.0,
+     "g_dl": 11.542,
+     "conn": 11.542
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "극락",
+     "dl_capa": 13.0,
+     "g_dl": 11.32,
+     "conn": 11.32
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "중앙",
+     "dl_capa": 12.0,
+     "g_dl": 11.027,
+     "conn": 11.027
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "흑석대우",
+     "dl_capa": 12.0,
+     "g_dl": 10.422,
+     "conn": 10.422
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "우산",
+     "dl_capa": 13.0,
+     "g_dl": 10.257,
+     "conn": 10.257
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "하삼",
+     "dl_capa": 12.0,
+     "g_dl": 9.993,
+     "conn": 9.993
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "화천",
+     "dl_capa": 12.0,
+     "g_dl": 9.15,
+     "conn": 9.15
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "흑석",
+     "dl_capa": 12.0,
+     "g_dl": 9.109,
+     "conn": 9.109
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "서부",
+     "dl_capa": 13.0,
+     "g_dl": 8.682,
+     "conn": 8.682
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "흑석북부",
+     "dl_capa": 12.0,
+     "g_dl": 8.566,
+     "conn": 8.566
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "흑구",
+     "dl_capa": 13.0,
+     "g_dl": 8.176,
+     "conn": 8.176
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "운남",
+     "dl_capa": 12.0,
+     "g_dl": 7.846,
+     "conn": 7.846
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "수현",
+     "dl_capa": 12.0,
+     "g_dl": 7.39,
+     "conn": 7.39
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "하남",
+     "dl_capa": 12.0,
+     "g_dl": 6.125,
+     "conn": 6.125
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "흑석중부",
+     "dl_capa": 12.0,
+     "g_dl": 4.246,
+     "conn": 4.246
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 30
+  },
+  {
+   "code": "D321",
+   "name": "소**",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.00559,
+   "lng": 127.12916,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 174.908,
+   "subst_free_pct": 87.5,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.136
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.099
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.668
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "용두",
+     "dl_capa": 13.0,
+     "g_dl": 12.889,
+     "conn": 12.889
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "고속",
+     "dl_capa": 13.0,
+     "g_dl": 11.309,
+     "conn": 11.309
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "칠곡",
+     "dl_capa": 13.0,
+     "g_dl": 11.141,
+     "conn": 11.141
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "유원",
+     "dl_capa": 13.0,
+     "g_dl": 9.149,
+     "conn": 9.149
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "산하",
+     "dl_capa": 13.0,
+     "g_dl": 8.848,
+     "conn": 8.848
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "지문",
+     "dl_capa": 13.0,
+     "g_dl": 6.923,
+     "conn": 6.923
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 5
+  },
+  {
+   "code": "S338",
+   "name": "청*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.04152,
+   "lng": 127.00141,
+   "subst_capa_mw": 250.0,
+   "subst_free_mw": 170.339,
+   "subst_free_pct": 68.1,
+   "transformers": [
+    {
+     "mtr_no": "5",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.851
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 32.25
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 25.673
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 42.404
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 17.044
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "청오",
+     "dl_capa": 13.0,
+     "g_dl": 12.917,
+     "conn": 12.917
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "회화",
+     "dl_capa": 13.0,
+     "g_dl": 10.557,
+     "conn": 10.557
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "청양",
+     "dl_capa": 13.0,
+     "g_dl": 10.545,
+     "conn": 10.545
+    },
+    {
+     "mtr_no": "5",
+     "dl_nm": "경동",
+     "dl_capa": 13.0,
+     "g_dl": 9.851,
+     "conn": 9.851
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "양교",
+     "dl_capa": 13.0,
+     "g_dl": 9.17,
+     "conn": 9.17
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "율북",
+     "dl_capa": 13.0,
+     "g_dl": 8.061,
+     "conn": 8.061
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "문곡",
+     "dl_capa": 13.0,
+     "g_dl": 7.357,
+     "conn": 7.357
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "유진",
+     "dl_capa": 13.0,
+     "g_dl": 5.35,
+     "conn": 5.35
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "백양",
+     "dl_capa": 10.0,
+     "g_dl": 2.322,
+     "conn": 2.322
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "백봉",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 5
+  },
+  {
+   "code": "S617",
+   "name": "일*",
+   "region": "북구",
+   "branch": "본사(광주)",
+   "lat": 35.21743,
+   "lng": 126.89701,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 166.096,
+   "subst_free_pct": 83.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 41.833
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 30.274
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.989
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "호반",
+     "dl_capa": 13.0,
+     "g_dl": 12.779,
+     "conn": 12.779
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "일곡",
+     "dl_capa": 13.0,
+     "g_dl": 12.772,
+     "conn": 12.772
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "북부",
+     "dl_capa": 13.0,
+     "g_dl": 12.231,
+     "conn": 12.231
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "외촌",
+     "dl_capa": 13.0,
+     "g_dl": 12.203,
+     "conn": 12.203
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "매곡",
+     "dl_capa": 13.0,
+     "g_dl": 12.132,
+     "conn": 12.132
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "양지",
+     "dl_capa": 13.0,
+     "g_dl": 12.014,
+     "conn": 12.014
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "본산",
+     "dl_capa": 13.0,
+     "g_dl": 11.995,
+     "conn": 11.995
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "푸른",
+     "dl_capa": 12.0,
+     "g_dl": 10.04,
+     "conn": 10.04
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "영강",
+     "dl_capa": 12.0,
+     "g_dl": 7.949,
+     "conn": 7.949
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "부영",
+     "dl_capa": 13.0,
+     "g_dl": 7.165,
+     "conn": 7.165
+    }
+   ],
+   "connect_max_mw": 12.8,
+   "geocoded": true,
+   "dong_count": 19
+  },
+  {
+   "code": "S310",
+   "name": "발*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.10884,
+   "lng": 127.02774,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 156.428,
+   "subst_free_pct": 78.2,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 35.391
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 33.021
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "구문",
+     "dl_capa": 13.0,
+     "g_dl": 11.791,
+     "conn": 11.791
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "용소",
+     "dl_capa": 13.0,
+     "g_dl": 11.749,
+     "conn": 11.749
+    }
+   ],
+   "connect_max_mw": 11.8,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S322",
+   "name": "강*",
+   "region": "강화군",
+   "branch": "강화도(신규타겟)",
+   "lat": 37.70456,
+   "lng": 126.42335,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 154.348,
+   "subst_free_pct": 77.2,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 35.48
+    },
+    {
+     "mtr_no": "6",
+     "mtr_capa": 50.0,
+     "g_mtr": 40.209
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.932
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 31.727
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "6",
+     "dl_nm": "강산",
+     "dl_capa": 13.0,
+     "g_dl": 12.922,
+     "conn": 12.922
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "고비",
+     "dl_capa": 13.0,
+     "g_dl": 12.759,
+     "conn": 12.759
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "전등",
+     "dl_capa": 13.0,
+     "g_dl": 12.101,
+     "conn": 12.101
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "호국",
+     "dl_capa": 13.0,
+     "g_dl": 11.888,
+     "conn": 11.888
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "초지",
+     "dl_capa": 13.0,
+     "g_dl": 11.41,
+     "conn": 11.41
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "갑용",
+     "dl_capa": 13.0,
+     "g_dl": 11.34,
+     "conn": 11.34
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "불은",
+     "dl_capa": 13.0,
+     "g_dl": 11.285,
+     "conn": 11.285
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "덕진",
+     "dl_capa": 13.0,
+     "g_dl": 10.415,
+     "conn": 10.415
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "마니",
+     "dl_capa": 13.0,
+     "g_dl": 10.3,
+     "conn": 10.3
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "대청",
+     "dl_capa": 12.0,
+     "g_dl": 10.249,
+     "conn": 10.249
+    },
+    {
+     "mtr_no": "6",
+     "dl_nm": "대월",
+     "dl_capa": 12.0,
+     "g_dl": 9.978,
+     "conn": 9.978
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "목비",
+     "dl_capa": 13.0,
+     "g_dl": 9.719,
+     "conn": 9.719
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "길상",
+     "dl_capa": 12.0,
+     "g_dl": 9.595,
+     "conn": 9.595
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "대교",
+     "dl_capa": 13.0,
+     "g_dl": 9.392,
+     "conn": 9.392
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "냉정",
+     "dl_capa": 13.0,
+     "g_dl": 8.862,
+     "conn": 8.862
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "송해",
+     "dl_capa": 13.0,
+     "g_dl": 8.465,
+     "conn": 8.465
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "내가",
+     "dl_capa": 12.0,
+     "g_dl": 8.359,
+     "conn": 8.359
+    },
+    {
+     "mtr_no": "6",
+     "dl_nm": "건평",
+     "dl_capa": 13.0,
+     "g_dl": 5.309,
+     "conn": 5.309
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 10
+  },
+  {
+   "code": "2681",
+   "name": "하*",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.21069,
+   "lng": 126.77583,
+   "subst_capa_mw": 250.0,
+   "subst_free_mw": 149.679,
+   "subst_free_pct": 59.9,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 11.682
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 16.725
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 29.334
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 32.559
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "미래",
+     "dl_capa": 12.0,
+     "g_dl": 11.955,
+     "conn": 11.955
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "남부",
+     "dl_capa": 12.0,
+     "g_dl": 11.501,
+     "conn": 11.501
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "두산",
+     "dl_capa": 12.0,
+     "g_dl": 11.223,
+     "conn": 11.223
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "삼성",
+     "dl_capa": 13.0,
+     "g_dl": 10.734,
+     "conn": 10.734
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "전자",
+     "dl_capa": 13.0,
+     "g_dl": 10.242,
+     "conn": 10.242
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "비아",
+     "dl_capa": 12.0,
+     "g_dl": 10.001,
+     "conn": 10.001
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "송대",
+     "dl_capa": 12.0,
+     "g_dl": 9.96,
+     "conn": 9.96
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "동원",
+     "dl_capa": 13.0,
+     "g_dl": 9.208,
+     "conn": 9.208
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "송정",
+     "dl_capa": 13.0,
+     "g_dl": 8.936,
+     "conn": 8.936
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "세한",
+     "dl_capa": 12.0,
+     "g_dl": 8.359,
+     "conn": 8.359
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "광전",
+     "dl_capa": 12.0,
+     "g_dl": 8.27,
+     "conn": 8.27
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "한유",
+     "dl_capa": 12.0,
+     "g_dl": 6.868,
+     "conn": 6.868
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "현대",
+     "dl_capa": 13.0,
+     "g_dl": 5.435,
+     "conn": 5.435
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "삼남",
+     "dl_capa": 13.0,
+     "g_dl": 3.449,
+     "conn": 3.449
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "삼도",
+     "dl_capa": 13.0,
+     "g_dl": 3.423,
+     "conn": 3.423
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신성",
+     "dl_capa": 12.0,
+     "g_dl": 3.381,
+     "conn": 3.381
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "백길",
+     "dl_capa": 13.0,
+     "g_dl": 2.709,
+     "conn": 2.709
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "진곡",
+     "dl_capa": 12.0,
+     "g_dl": 1.799,
+     "conn": 1.799
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "소촌",
+     "dl_capa": 11.0,
+     "g_dl": 0.688,
+     "conn": 0.688
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "위아",
+     "dl_capa": 13.0,
+     "g_dl": 0.114,
+     "conn": 0.114
+    }
+   ],
+   "connect_max_mw": 12.0,
+   "geocoded": true,
+   "dong_count": 15
+  },
+  {
+   "code": "D517",
+   "name": "동**",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.08163,
+   "lng": 127.04957,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 146.081,
+   "subst_free_pct": 97.4,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.722
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "덕월",
+     "dl_capa": 13.0,
+     "g_dl": 12.945,
+     "conn": 12.945
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S132",
+   "name": "백*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.82265,
+   "lng": 126.88636,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 142.77,
+   "subst_free_pct": 71.4,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.247
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 40.06
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 19.42
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "4",
+     "dl_nm": "기산",
+     "dl_capa": 12.0,
+     "g_dl": 10.075,
+     "conn": 10.075
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "비암",
+     "dl_capa": 12.0,
+     "g_dl": 8.62,
+     "conn": 8.62
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "백곡",
+     "dl_capa": 11.0,
+     "g_dl": 2.69,
+     "conn": 2.69
+    }
+   ],
+   "connect_max_mw": 10.1,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "2635",
+   "name": "지*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.75325,
+   "lng": 126.81409,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 141.279,
+   "subst_free_pct": 94.2,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 42.678
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "4",
+     "dl_nm": "내유",
+     "dl_capa": 13.0,
+     "g_dl": 12.91,
+     "conn": 12.91
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "지식",
+     "dl_capa": 12.0,
+     "g_dl": 6.895,
+     "conn": 6.895
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "2579",
+   "name": "포*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 36.98192,
+   "lng": 126.94504,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 139.715,
+   "subst_free_pct": 93.1,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 31.857
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 42.443
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 35.623
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "인광",
+     "dl_capa": 13.0,
+     "g_dl": 12.828,
+     "conn": 12.828
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "포청",
+     "dl_capa": 13.0,
+     "g_dl": 12.344,
+     "conn": 12.344
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "솔개",
+     "dl_capa": 13.0,
+     "g_dl": 11.993,
+     "conn": 11.993
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "석정",
+     "dl_capa": 13.0,
+     "g_dl": 11.975,
+     "conn": 11.975
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "덕지",
+     "dl_capa": 12.0,
+     "g_dl": 11.758,
+     "conn": 11.758
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "희곡",
+     "dl_capa": 13.0,
+     "g_dl": 11.68,
+     "conn": 11.68
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "안중",
+     "dl_capa": 13.0,
+     "g_dl": 11.543,
+     "conn": 11.543
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "후사",
+     "dl_capa": 13.0,
+     "g_dl": 10.659,
+     "conn": 10.659
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "현곡",
+     "dl_capa": 13.0,
+     "g_dl": 9.804,
+     "conn": 9.804
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "봉화",
+     "dl_capa": 13.0,
+     "g_dl": 8.619,
+     "conn": 8.619
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "현화",
+     "dl_capa": 13.0,
+     "g_dl": 6.521,
+     "conn": 6.521
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "도곡",
+     "dl_capa": 13.0,
+     "g_dl": 6.406,
+     "conn": 6.406
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "홍포",
+     "dl_capa": 12.0,
+     "g_dl": 1.023,
+     "conn": 1.023
+    }
+   ],
+   "connect_max_mw": 12.8,
+   "geocoded": true,
+   "dong_count": 3
+  },
+  {
+   "code": "E296",
+   "name": "비***",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.21251,
+   "lng": 126.85278,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 138.49,
+   "subst_free_pct": 69.2,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 24.195
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 26.509
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 45.458
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 42.328
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "공단",
+     "dl_capa": 13.0,
+     "g_dl": 12.98,
+     "conn": 12.98
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "신아",
+     "dl_capa": 13.0,
+     "g_dl": 12.926,
+     "conn": 12.926
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "월계",
+     "dl_capa": 13.0,
+     "g_dl": 12.911,
+     "conn": 12.911
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신창",
+     "dl_capa": 13.0,
+     "g_dl": 12.876,
+     "conn": 12.876
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "봉산",
+     "dl_capa": 13.0,
+     "g_dl": 12.775,
+     "conn": 12.775
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "숭덕",
+     "dl_capa": 13.0,
+     "g_dl": 12.664,
+     "conn": 12.664
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "청사",
+     "dl_capa": 13.0,
+     "g_dl": 12.55,
+     "conn": 12.55
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "한국",
+     "dl_capa": 13.0,
+     "g_dl": 12.537,
+     "conn": 12.537
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "호수",
+     "dl_capa": 13.0,
+     "g_dl": 12.481,
+     "conn": 12.481
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "선광",
+     "dl_capa": 13.0,
+     "g_dl": 12.207,
+     "conn": 12.207
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "본촌",
+     "dl_capa": 13.0,
+     "g_dl": 12.161,
+     "conn": 12.161
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "보훈",
+     "dl_capa": 13.0,
+     "g_dl": 12.157,
+     "conn": 12.157
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "동운",
+     "dl_capa": 13.0,
+     "g_dl": 10.909,
+     "conn": 10.909
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "삼각",
+     "dl_capa": 12.0,
+     "g_dl": 9.879,
+     "conn": 9.879
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "대치",
+     "dl_capa": 13.0,
+     "g_dl": 9.027,
+     "conn": 9.027
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "월출",
+     "dl_capa": 13.0,
+     "g_dl": 5.957,
+     "conn": 5.957
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "안청",
+     "dl_capa": 13.0,
+     "g_dl": 3.158,
+     "conn": 3.158
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "효창",
+     "dl_capa": 13.0,
+     "g_dl": 1.855,
+     "conn": 1.855
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "과기원",
+     "dl_capa": 11.0,
+     "g_dl": 1.244,
+     "conn": 1.244
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 20
+  },
+  {
+   "code": "2636",
+   "name": "송*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.75325,
+   "lng": 126.81409,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 137.225,
+   "subst_free_pct": 91.5,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.714
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "4",
+     "dl_nm": "설문",
+     "dl_capa": 13.0,
+     "g_dl": 8.032,
+     "conn": 8.032
+    }
+   ],
+   "connect_max_mw": 8.0,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "D467",
+   "name": "향*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.10884,
+   "lng": 127.02774,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 132.841,
+   "subst_free_pct": 66.4,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 3.604
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 41.179
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "정월",
+     "dl_capa": 12.0,
+     "g_dl": 11.402,
+     "conn": 11.402
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "남덕",
+     "dl_capa": 12.0,
+     "g_dl": 10.542,
+     "conn": 3.604
+    }
+   ],
+   "connect_max_mw": 11.4,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S350",
+   "name": "만*",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 36.94837,
+   "lng": 126.9237,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 127.609,
+   "subst_free_pct": 85.1,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.87
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "건전",
+     "dl_capa": 13.0,
+     "g_dl": 7.667,
+     "conn": 7.667
+    }
+   ],
+   "connect_max_mw": 7.7,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S619",
+   "name": "매*",
+   "region": "남구",
+   "branch": "본사(광주)",
+   "lat": 35.09758,
+   "lng": 126.84272,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 126.709,
+   "subst_free_pct": 84.5,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.957
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.294
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.458
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "풍암",
+     "dl_capa": 13.0,
+     "g_dl": 12.833,
+     "conn": 12.833
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "효천",
+     "dl_capa": 13.0,
+     "g_dl": 12.71,
+     "conn": 12.71
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "풍마",
+     "dl_capa": 13.0,
+     "g_dl": 12.166,
+     "conn": 12.166
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "송공",
+     "dl_capa": 13.0,
+     "g_dl": 12.151,
+     "conn": 12.151
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "매월",
+     "dl_capa": 13.0,
+     "g_dl": 12.097,
+     "conn": 12.097
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "송원",
+     "dl_capa": 13.0,
+     "g_dl": 11.844,
+     "conn": 11.844
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "대촌",
+     "dl_capa": 13.0,
+     "g_dl": 11.003,
+     "conn": 11.003
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "서창",
+     "dl_capa": 13.0,
+     "g_dl": 8.45,
+     "conn": 8.45
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "유통",
+     "dl_capa": 11.0,
+     "g_dl": 7.97,
+     "conn": 7.97
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "지석",
+     "dl_capa": 12.0,
+     "g_dl": 2.485,
+     "conn": 2.485
+    }
+   ],
+   "connect_max_mw": 12.8,
+   "geocoded": true,
+   "dong_count": 30
+  },
+  {
+   "code": "E087",
+   "name": "수*",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.20572,
+   "lng": 126.82372,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 125.295,
+   "subst_free_pct": 83.5,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 37.012
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.468
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.815
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "수완산정",
+     "dl_capa": 13.0,
+     "g_dl": 13.0,
+     "conn": 13.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "수완북부",
+     "dl_capa": 12.0,
+     "g_dl": 11.049,
+     "conn": 11.049
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "산동",
+     "dl_capa": 13.0,
+     "g_dl": 2.677,
+     "conn": 2.677
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "삼태",
+     "dl_capa": 13.0,
+     "g_dl": 1.642,
+     "conn": 1.642
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 6
+  },
+  {
+   "code": "5057",
+   "name": "남**",
+   "region": "남구",
+   "branch": "본사(광주)",
+   "lat": 35.1034,
+   "lng": 126.87086,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 121.327,
+   "subst_free_pct": 80.9,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.742
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 28.345
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.24
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "도심",
+     "dl_capa": 13.0,
+     "g_dl": 12.937,
+     "conn": 12.937
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "덕남",
+     "dl_capa": 13.0,
+     "g_dl": 12.9,
+     "conn": 12.9
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "주월",
+     "dl_capa": 13.0,
+     "g_dl": 12.869,
+     "conn": 12.869
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "방림",
+     "dl_capa": 13.0,
+     "g_dl": 12.85,
+     "conn": 12.85
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "양백",
+     "dl_capa": 13.0,
+     "g_dl": 12.764,
+     "conn": 12.764
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "금당",
+     "dl_capa": 13.0,
+     "g_dl": 12.701,
+     "conn": 12.701
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "남부",
+     "dl_capa": 13.0,
+     "g_dl": 9.476,
+     "conn": 9.476
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "남평",
+     "dl_capa": 11.0,
+     "g_dl": 7.955,
+     "conn": 7.955
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "도암",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 19
+  },
+  {
+   "code": "2061",
+   "name": "문*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.88652,
+   "lng": 126.79203,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 117.892,
+   "subst_free_pct": 58.9,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.122
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 12.358
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 47.675
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 13.737
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "연풍",
+     "dl_capa": 13.0,
+     "g_dl": 12.997,
+     "conn": 12.997
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "시내",
+     "dl_capa": 13.0,
+     "g_dl": 12.734,
+     "conn": 12.734
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "운정",
+     "dl_capa": 13.0,
+     "g_dl": 12.625,
+     "conn": 12.625
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "임진",
+     "dl_capa": 13.0,
+     "g_dl": 12.565,
+     "conn": 12.358
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "월롱",
+     "dl_capa": 13.0,
+     "g_dl": 12.193,
+     "conn": 12.193
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "부곡",
+     "dl_capa": 12.0,
+     "g_dl": 11.894,
+     "conn": 11.894
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "장산",
+     "dl_capa": 13.0,
+     "g_dl": 10.784,
+     "conn": 10.784
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "능산",
+     "dl_capa": 13.0,
+     "g_dl": 10.68,
+     "conn": 10.68
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "탄현",
+     "dl_capa": 13.0,
+     "g_dl": 8.57,
+     "conn": 8.57
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "전동",
+     "dl_capa": 13.0,
+     "g_dl": 7.952,
+     "conn": 7.952
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "마지",
+     "dl_capa": 13.0,
+     "g_dl": 6.457,
+     "conn": 6.457
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "적성",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "법원",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "가월",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "금파",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 11
+  },
+  {
+   "code": "S636",
+   "name": "송*",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.15979,
+   "lng": 126.7453,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 116.526,
+   "subst_free_pct": 77.7,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 22.911
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 43.615
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 0.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "중보",
+     "dl_capa": 13.0,
+     "g_dl": 12.895,
+     "conn": 12.895
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신흥",
+     "dl_capa": 13.0,
+     "g_dl": 12.863,
+     "conn": 12.863
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "황룡",
+     "dl_capa": 13.0,
+     "g_dl": 12.605,
+     "conn": 12.605
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "한성",
+     "dl_capa": 13.0,
+     "g_dl": 11.865,
+     "conn": 11.865
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "어등",
+     "dl_capa": 13.0,
+     "g_dl": 9.978,
+     "conn": 9.978
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신촌",
+     "dl_capa": 13.0,
+     "g_dl": 9.879,
+     "conn": 9.879
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "평삼",
+     "dl_capa": 12.0,
+     "g_dl": 5.784,
+     "conn": 5.784
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "해공",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "정광",
+     "dl_capa": 12.0,
+     "g_dl": 11.145,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 36
+  },
+  {
+   "code": "5056",
+   "name": "계*",
+   "region": "북구",
+   "branch": "본사(광주)",
+   "lat": 35.1758,
+   "lng": 126.9346,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 107.59,
+   "subst_free_pct": 71.7,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.183
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 34.305
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 35.102
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "산수",
+     "dl_capa": 13.0,
+     "g_dl": 12.991,
+     "conn": 12.991
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "서석",
+     "dl_capa": 13.0,
+     "g_dl": 12.98,
+     "conn": 12.98
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "두암",
+     "dl_capa": 13.0,
+     "g_dl": 12.902,
+     "conn": 12.902
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "본공",
+     "dl_capa": 13.0,
+     "g_dl": 12.863,
+     "conn": 12.863
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "문흥",
+     "dl_capa": 13.0,
+     "g_dl": 12.806,
+     "conn": 12.806
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "시내",
+     "dl_capa": 13.0,
+     "g_dl": 12.768,
+     "conn": 12.768
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "광계",
+     "dl_capa": 13.0,
+     "g_dl": 12.755,
+     "conn": 12.755
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "풍향",
+     "dl_capa": 13.0,
+     "g_dl": 12.591,
+     "conn": 12.591
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "망월",
+     "dl_capa": 13.0,
+     "g_dl": 5.718,
+     "conn": 5.718
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "서산",
+     "dl_capa": 13.0,
+     "g_dl": 5.005,
+     "conn": 5.005
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "고가",
+     "dl_capa": 13.0,
+     "g_dl": 2.011,
+     "conn": 2.011
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "창평",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 24
+  },
+  {
+   "code": "E383",
+   "name": "양***",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.7797,
+   "lng": 126.88214,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 98.549,
+   "subst_free_pct": 98.5,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.399
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "홍죽",
+     "dl_capa": 13.0,
+     "g_dl": 12.845,
+     "conn": 12.845
+    }
+   ],
+   "connect_max_mw": 12.8,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S624",
+   "name": "화*",
+   "region": "서구",
+   "branch": "본사(광주)",
+   "lat": 35.14576,
+   "lng": 126.89037,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 98.371,
+   "subst_free_pct": 98.4,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 49.467
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.904
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "짚봉",
+     "dl_capa": 13.0,
+     "g_dl": 12.901,
+     "conn": 12.901
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "대명",
+     "dl_capa": 13.0,
+     "g_dl": 12.889,
+     "conn": 12.889
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "발산",
+     "dl_capa": 13.0,
+     "g_dl": 12.817,
+     "conn": 12.817
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "농성",
+     "dl_capa": 13.0,
+     "g_dl": 12.677,
+     "conn": 12.677
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "화랑",
+     "dl_capa": 13.0,
+     "g_dl": 12.186,
+     "conn": 12.186
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 7
+  },
+  {
+   "code": "S124",
+   "name": "신**",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.78726,
+   "lng": 126.77682,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 92.706,
+   "subst_free_pct": 46.4,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 25.904
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 15.05
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 31.826
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 19.926
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "환경",
+     "dl_capa": 13.0,
+     "g_dl": 12.904,
+     "conn": 12.904
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "경모",
+     "dl_capa": 13.0,
+     "g_dl": 12.384,
+     "conn": 12.384
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "아동",
+     "dl_capa": 13.0,
+     "g_dl": 12.283,
+     "conn": 12.283
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "신축",
+     "dl_capa": 13.0,
+     "g_dl": 11.957,
+     "conn": 11.957
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "첼시",
+     "dl_capa": 13.0,
+     "g_dl": 11.87,
+     "conn": 11.87
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "덕일",
+     "dl_capa": 12.0,
+     "g_dl": 11.066,
+     "conn": 11.066
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "금탄",
+     "dl_capa": 12.0,
+     "g_dl": 10.892,
+     "conn": 10.892
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "덕상",
+     "dl_capa": 12.0,
+     "g_dl": 10.611,
+     "conn": 10.611
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "신현",
+     "dl_capa": 13.0,
+     "g_dl": 10.375,
+     "conn": 10.375
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "금승",
+     "dl_capa": 12.0,
+     "g_dl": 9.833,
+     "conn": 9.833
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "반도",
+     "dl_capa": 13.0,
+     "g_dl": 8.754,
+     "conn": 8.754
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "봉서",
+     "dl_capa": 12.0,
+     "g_dl": 8.702,
+     "conn": 8.702
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "맥금",
+     "dl_capa": 12.0,
+     "g_dl": 8.526,
+     "conn": 8.526
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "문종",
+     "dl_capa": 12.0,
+     "g_dl": 7.846,
+     "conn": 7.846
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "송강",
+     "dl_capa": 12.0,
+     "g_dl": 7.018,
+     "conn": 7.018
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "금강",
+     "dl_capa": 12.0,
+     "g_dl": 3.473,
+     "conn": 3.473
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "신탄",
+     "dl_capa": 12.0,
+     "g_dl": 2.359,
+     "conn": 2.359
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "위전",
+     "dl_capa": 11.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 9
+  },
+  {
+   "code": "E283",
+   "name": "영*",
+   "region": "해남군",
+   "branch": "해남사업소",
+   "lat": 34.57337,
+   "lng": 126.65949,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 89.086,
+   "subst_free_pct": 59.4,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 27.605
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "대용량#2",
+     "dl_capa": 18.0,
+     "g_dl": 9.984,
+     "conn": 9.984
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "일반#1",
+     "dl_capa": 12.0,
+     "g_dl": 0.72,
+     "conn": 0.72
+    }
+   ],
+   "connect_max_mw": 10.0,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S618",
+   "name": "소*",
+   "region": "동구",
+   "branch": "본사(광주)",
+   "lat": 35.1157,
+   "lng": 126.93392,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 82.175,
+   "subst_free_pct": 82.2,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 40.068
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 42.107
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "용산",
+     "dl_capa": 13.0,
+     "g_dl": 12.992,
+     "conn": 12.992
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "운림",
+     "dl_capa": 13.0,
+     "g_dl": 12.592,
+     "conn": 12.592
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "만연",
+     "dl_capa": 13.0,
+     "g_dl": 12.26,
+     "conn": 12.26
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "소태",
+     "dl_capa": 12.0,
+     "g_dl": 11.205,
+     "conn": 11.205
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "학림",
+     "dl_capa": 13.0,
+     "g_dl": 7.05,
+     "conn": 7.05
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "화순",
+     "dl_capa": 13.0,
+     "g_dl": 3.076,
+     "conn": 3.076
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 11
+  },
+  {
+   "code": "S130",
+   "name": "선*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.88778,
+   "lng": 126.85327,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 80.555,
+   "subst_free_pct": 53.7,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 28.947
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 19.531
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 32.08
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "경일",
+     "dl_capa": 13.0,
+     "g_dl": 12.426,
+     "conn": 12.426
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "축현",
+     "dl_capa": 13.0,
+     "g_dl": 11.915,
+     "conn": 11.915
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "유일",
+     "dl_capa": 12.0,
+     "g_dl": 10.91,
+     "conn": 10.91
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "대능",
+     "dl_capa": 13.0,
+     "g_dl": 10.383,
+     "conn": 10.383
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "원일",
+     "dl_capa": 12.0,
+     "g_dl": 9.493,
+     "conn": 9.493
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "봉암",
+     "dl_capa": 13.0,
+     "g_dl": 5.266,
+     "conn": 5.266
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "선일",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "구마",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "동문",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.4,
+   "geocoded": true,
+   "dong_count": 5
+  },
+  {
+   "code": "D288",
+   "name": "남*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.89771,
+   "lng": 126.87051,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 79.846,
+   "subst_free_pct": 53.2,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.298
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "매곡",
+     "dl_capa": 13.0,
+     "g_dl": 10.934,
+     "conn": 10.934
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "설마",
+     "dl_capa": 13.0,
+     "g_dl": 8.971,
+     "conn": 8.971
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "입암",
+     "dl_capa": 11.0,
+     "g_dl": 3.953,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "어유",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 10.9,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "D317",
+   "name": "서**",
+   "region": "강화군",
+   "branch": "강화도(신규타겟)",
+   "lat": 37.73688,
+   "lng": 126.37427,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 74.809,
+   "subst_free_pct": 74.8,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 37.065
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 37.744
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "양도",
+     "dl_capa": 12.0,
+     "g_dl": 11.954,
+     "conn": 11.954
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "읍내",
+     "dl_capa": 12.0,
+     "g_dl": 8.784,
+     "conn": 8.784
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "삼성",
+     "dl_capa": 12.0,
+     "g_dl": 8.13,
+     "conn": 8.13
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신봉",
+     "dl_capa": 12.0,
+     "g_dl": 6.151,
+     "conn": 6.151
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "교동",
+     "dl_capa": 12.0,
+     "g_dl": 1.446,
+     "conn": 1.446
+    }
+   ],
+   "connect_max_mw": 12.0,
+   "geocoded": true,
+   "dong_count": 9
+  },
+  {
+   "code": "D504",
+   "name": "남**",
+   "region": "평택시",
+   "branch": "평택지사",
+   "lat": 37.00004,
+   "lng": 127.14214,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 64.081,
+   "subst_free_pct": 42.7,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 17.267
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "진등",
+     "dl_capa": 13.0,
+     "g_dl": 9.577,
+     "conn": 9.577
+    }
+   ],
+   "connect_max_mw": 9.6,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "D368",
+   "name": "금*",
+   "region": "영암군",
+   "branch": "영암지사",
+   "lat": 34.87448,
+   "lng": 126.73185,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 44.026,
+   "subst_free_pct": 22.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.893
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "대산",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "성산",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "2689",
+   "name": "대*",
+   "region": "영암군",
+   "branch": "해남사업소",
+   "lat": 34.70845,
+   "lng": 126.5688,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 34.021,
+   "subst_free_pct": 17.0,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 6.047
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "산호",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "서창",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "선황",
+     "dl_capa": 18.0,
+     "g_dl": 3.428,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "영목",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "카스",
+     "dl_capa": 12.0,
+     "g_dl": 8.329,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "삼현",
+     "dl_capa": 12.0,
+     "g_dl": 5.196,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "삼호",
+     "dl_capa": 18.0,
+     "g_dl": 5.007,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "은곡",
+     "dl_capa": 12.0,
+     "g_dl": 3.881,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "한라",
+     "dl_capa": 13.0,
+     "g_dl": 12.447,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "대명",
+     "dl_capa": 12.0,
+     "g_dl": 8.712,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "F2",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "동남",
+     "dl_capa": 12.0,
+     "g_dl": 7.576,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "자유",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "원당",
+     "dl_capa": 12.0,
+     "g_dl": 6.549,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "마린",
+     "dl_capa": 12.0,
+     "g_dl": 5.41,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "학은",
+     "dl_capa": 12.0,
+     "g_dl": 1.994,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "산자",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "미포",
+     "dl_capa": 13.0,
+     "g_dl": 9.143,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "F1",
+     "dl_capa": 12.0,
+     "g_dl": 11.541,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "삼중",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "태전",
+     "dl_capa": 12.0,
+     "g_dl": 6.751,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "한관",
+     "dl_capa": 13.0,
+     "g_dl": 6.267,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "현대",
+     "dl_capa": 12.0,
+     "g_dl": 7.42,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "나불",
+     "dl_capa": 13.0,
+     "g_dl": 2.294,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 4
+  },
+  {
+   "code": "S603",
+   "name": "북*",
+   "region": "영암군",
+   "branch": "영암지사",
+   "lat": 34.74578,
+   "lng": 126.46944,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 29.804,
+   "subst_free_pct": 19.9,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.668
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "대성",
+     "dl_capa": 13.0,
+     "g_dl": 12.609,
+     "conn": 12.609
+    }
+   ],
+   "connect_max_mw": 12.6,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "E157",
+   "name": "덕*",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.15459,
+   "lng": 126.66698,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 16.294,
+   "subst_free_pct": 10.9,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "백용",
+     "dl_capa": 12.0,
+     "g_dl": 1.551,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "빛산",
+     "dl_capa": 12.0,
+     "g_dl": 7.714,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "덕원",
+     "dl_capa": 12.0,
+     "g_dl": 6.65,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 5
+  },
+  {
+   "code": "5029",
+   "name": "남*",
+   "region": "해남군",
+   "branch": "해남사업소",
+   "lat": 34.46633,
+   "lng": 126.59157,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 13.6,
+   "subst_free_pct": 6.8,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 7.487
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "동고",
+     "dl_capa": 13.0,
+     "g_dl": 7.425,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "두륜",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "신월",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "운전",
+     "dl_capa": 12.0,
+     "g_dl": 4.013,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "사구",
+     "dl_capa": 13.0,
+     "g_dl": 4.102,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "완도",
+     "dl_capa": 13.0,
+     "g_dl": 9.11,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "넙도",
+     "dl_capa": 19.0,
+     "g_dl": 5.277,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "하현",
+     "dl_capa": 12.0,
+     "g_dl": 1.12,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "현산",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "노화",
+     "dl_capa": 19.0,
+     "g_dl": 12.971,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "어불",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "원동",
+     "dl_capa": 13.0,
+     "g_dl": 12.768,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "송지",
+     "dl_capa": 18.0,
+     "g_dl": 1.972,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "백포",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "금강",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "그린",
+     "dl_capa": 12.0,
+     "g_dl": 2.5,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 7
+  },
+  {
+   "code": "D491",
+   "name": "삼*",
+   "region": "영암군",
+   "branch": "해남사업소",
+   "lat": 34.72426,
+   "lng": 126.51812,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 10.608,
+   "subst_free_pct": 10.6,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 35.262
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "삼영",
+     "dl_capa": 12.0,
+     "g_dl": 6.093,
+     "conn": 6.093
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "삼포",
+     "dl_capa": 12.0,
+     "g_dl": 3.169,
+     "conn": 3.169
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "한라",
+     "dl_capa": 12.0,
+     "g_dl": 6.322,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "갈마",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "F2",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "한국",
+     "dl_capa": 12.0,
+     "g_dl": 4.994,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 6.1,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "E439",
+   "name": "평***",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.12408,
+   "lng": 126.74003,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 9.872,
+   "subst_free_pct": 4.9,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 2.95
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.343
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 7.206
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "백암",
+     "dl_capa": 13.0,
+     "g_dl": 8.467,
+     "conn": 7.206
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "평하",
+     "dl_capa": 13.0,
+     "g_dl": 9.005,
+     "conn": 7.206
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "산정",
+     "dl_capa": 13.0,
+     "g_dl": 4.686,
+     "conn": 4.686
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "평산",
+     "dl_capa": 12.0,
+     "g_dl": 3.307,
+     "conn": 3.307
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "시내",
+     "dl_capa": 13.0,
+     "g_dl": 12.908,
+     "conn": 2.95
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "대덕",
+     "dl_capa": 13.0,
+     "g_dl": 9.019,
+     "conn": 2.95
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "공항",
+     "dl_capa": 13.0,
+     "g_dl": 4.985,
+     "conn": 0.343
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "임곡",
+     "dl_capa": 12.0,
+     "g_dl": 8.796,
+     "conn": 0.343
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "월전",
+     "dl_capa": 12.0,
+     "g_dl": 3.597,
+     "conn": 0.343
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "영천",
+     "dl_capa": 12.0,
+     "g_dl": 7.245,
+     "conn": 0.343
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "성진",
+     "dl_capa": 12.0,
+     "g_dl": 0.221,
+     "conn": 0.221
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "나산",
+     "dl_capa": 13.0,
+     "g_dl": 0.204,
+     "conn": 0.204
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "해보",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "월야",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "동곡",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "연산",
+     "dl_capa": 12.0,
+     "g_dl": 6.678,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 7.2,
+   "geocoded": true,
+   "dong_count": 32
+  },
+  {
+   "code": "S602",
+   "name": "장*",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.22103,
+   "lng": 126.76943,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 6.914,
+   "subst_free_pct": 4.6,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 8.559
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "남면",
+     "dl_capa": 13.0,
+     "g_dl": 8.802,
+     "conn": 6.914
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "사창",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "문화",
+     "dl_capa": 13.0,
+     "g_dl": 0.106,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "덕성",
+     "dl_capa": 13.0,
+     "g_dl": 8.685,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 6.9,
+   "geocoded": true,
+   "dong_count": 8
+  },
+  {
+   "code": "D292",
+   "name": "백*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.9547,
+   "lng": 126.86265,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 3.099,
+   "subst_free_pct": 3.1,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 7.526
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "비룡",
+     "dl_capa": 12.0,
+     "g_dl": 5.791,
+     "conn": 3.099
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "반정",
+     "dl_capa": 12.0,
+     "g_dl": 0.28,
+     "conn": 0.28
+    }
+   ],
+   "connect_max_mw": 3.1,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "S107",
+   "name": "전*",
+   "region": "파주시",
+   "branch": "파주지사",
+   "lat": 37.96615,
+   "lng": 126.92454,
+   "subst_capa_mw": 222.0,
+   "subst_free_mw": 3.014,
+   "subst_free_pct": 1.4,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 54.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 58.0,
+     "g_mtr": 9.273
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "고능",
+     "dl_capa": 13.0,
+     "g_dl": 0.309,
+     "conn": 0.309
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "간파",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.3,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "E233",
+   "name": "나***",
+   "region": "광산구",
+   "branch": "본사(광주)",
+   "lat": 35.07531,
+   "lng": 126.7363,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "노안",
+     "dl_capa": 13.0,
+     "g_dl": 7.488,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "남예",
+     "dl_capa": 13.0,
+     "g_dl": 10.791,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "갈곡",
+     "dl_capa": 12.0,
+     "g_dl": 0.076,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "영간",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 9
+  },
+  {
+   "code": "2774",
+   "name": "담*",
+   "region": "북구",
+   "branch": "본사(광주)",
+   "lat": 35.25247,
+   "lng": 126.91729,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "농공",
+     "dl_capa": 13.0,
+     "g_dl": 7.086,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "2583",
+   "name": "영*",
+   "region": "영암군",
+   "branch": "영암지사",
+   "lat": 34.80138,
+   "lng": 126.65195,
+   "subst_capa_mw": 206.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 51.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 52.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 51.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 52.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "5",
+     "mtr_capa": 0.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "동호",
+     "dl_capa": 12.0,
+     "g_dl": 3.147,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "덕진",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "학산",
+     "dl_capa": 12.0,
+     "g_dl": 0.407,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "독천",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "5",
+     "dl_nm": "금정",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "대봉",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "신학",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "신북",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "월출",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "마한",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "5",
+     "dl_nm": "모산",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "만수",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "시종",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "도포",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "5",
+     "dl_nm": "원목",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 12
+  },
+  {
+   "code": "E440",
+   "name": "장***",
+   "region": "장흥군",
+   "branch": "장흥지사",
+   "lat": 34.67194,
+   "lng": 126.91684,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "유치",
+     "dl_capa": 13.0,
+     "g_dl": 2.138,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "수문",
+     "dl_capa": 13.0,
+     "g_dl": 0.983,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "안양",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "옹암",
+     "dl_capa": 13.0,
+     "g_dl": 0.232,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "관산",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "대덕",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "회진",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "부산",
+     "dl_capa": 13.0,
+     "g_dl": 0.772,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "복흥",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "청용",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "진산",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "장평",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "대용량#1",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "읍내",
+     "dl_capa": 13.0,
+     "g_dl": 12.431,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "기동",
+     "dl_capa": 12.0,
+     "g_dl": 0.882,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "산단",
+     "dl_capa": 13.0,
+     "g_dl": 1.046,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "덕제",
+     "dl_capa": 12.0,
+     "g_dl": 7.316,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 11
+  },
+  {
+   "code": "2687",
+   "name": "해*",
+   "region": "해남군",
+   "branch": "해남사업소",
+   "lat": 34.58052,
+   "lng": 126.55694,
+   "subst_capa_mw": 213.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 54.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 53.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 53.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 53.0,
+     "g_mtr": 0.99
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "마산",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "영춘",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "해남",
+     "dl_capa": 13.0,
+     "g_dl": 0.81,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "읍내",
+     "dl_capa": 13.0,
+     "g_dl": 2.209,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "남리",
+     "dl_capa": 12.0,
+     "g_dl": 5.963,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "덕호",
+     "dl_capa": 12.0,
+     "g_dl": 3.013,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "장활",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "산이",
+     "dl_capa": 12.0,
+     "g_dl": 0.025,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "예정",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "북창",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "황산",
+     "dl_capa": 12.0,
+     "g_dl": 2.043,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "화산",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "옥천",
+     "dl_capa": 13.0,
+     "g_dl": 2.112,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "연곡",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "관동",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "평호",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "증의",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 10
+  },
+  {
+   "code": "E131",
+   "name": "왕*",
+   "region": "영암군",
+   "branch": "영암지사",
+   "lat": 34.88485,
+   "lng": 126.64527,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "동촌",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "흥덕",
+     "dl_capa": 18.0,
+     "g_dl": 0.542,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "청송",
+     "dl_capa": 19.0,
+     "g_dl": 4.186,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "상방",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "화성",
+     "dl_capa": 18.0,
+     "g_dl": 1.805,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신갈",
+     "dl_capa": 12.0,
+     "g_dl": 0.877,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "세성",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "학동",
+     "dl_capa": 18.0,
+     "g_dl": 3.297,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 2
+  },
+  {
+   "code": "E212",
+   "name": "강***",
+   "region": "해남군",
+   "branch": "해남사업소",
+   "lat": 34.60644,
+   "lng": 126.74678,
+   "subst_capa_mw": 232.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 58.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 58.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 58.0,
+     "g_mtr": 2.837
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 58.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "성전",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "대구",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "군동",
+     "dl_capa": 13.0,
+     "g_dl": 0.377,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "병영",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "금당",
+     "dl_capa": 12.0,
+     "g_dl": 3.504,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "신전",
+     "dl_capa": 18.0,
+     "g_dl": 1.851,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "만덕",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "용월",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "강정",
+     "dl_capa": 18.0,
+     "g_dl": 2.085,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "지석",
+     "dl_capa": 18.0,
+     "g_dl": 7.456,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 6
+  },
+  {
+   "code": "S626",
+   "name": "보*",
+   "region": "장흥군",
+   "branch": "장흥지사",
+   "lat": 34.74699,
+   "lng": 126.98217,
+   "subst_capa_mw": 250.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "대야",
+     "dl_capa": 18.0,
+     "g_dl": 0.678,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 1
+  },
+  {
+   "code": "S637",
+   "name": "화*",
+   "region": "해남군",
+   "branch": "해남사업소",
+   "lat": 34.63051,
+   "lng": 126.37649,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "옥동",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "석교",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "장춘",
+     "dl_capa": 12.0,
+     "g_dl": 1.527,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "외입",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "증도",
+     "dl_capa": 13.0,
+     "g_dl": 2.006,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "후산",
+     "dl_capa": 13.0,
+     "g_dl": 2.948,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "문내",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "양정",
+     "dl_capa": 12.0,
+     "g_dl": 3.033,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "부곡",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "주광",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "금호",
+     "dl_capa": 13.0,
+     "g_dl": 11.692,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "당포",
+     "dl_capa": 12.0,
+     "g_dl": 2.739,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "구림",
+     "dl_capa": 12.0,
+     "g_dl": 4.25,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 4
+  },
+  {
+   "code": "S608",
+   "name": "진*",
+   "region": "해남군",
+   "branch": "해남사업소",
+   "lat": 34.6068,
+   "lng": 126.32155,
+   "subst_capa_mw": 130.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "고려",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 1
+  }
+ ]
+};</script>
+</head>
+<body>
+<header>
+  <h1>⚡ 계통 여유용량 영업 대시보드</h1>
+  <span class="meta" id="meta">불러오는 중…</span>
+  <span class="meta pill" id="scope">프로토타입 · 6개 지사 권역</span>
+</header>
+<div class="wrap">
+  <aside class="side">
+    <div class="tiles">
+      <div class="tile"><div class="v" id="t_sub">–</div><div class="l">변전소 수</div></div>
+      <div class="tile"><div class="v" id="t_free">–</div><div class="l">총 여유용량 (MW)</div></div>
+      <div class="tile"><div class="v" id="t_top">–</div><div class="l">여유 최다 권역</div></div>
+      <div class="tile"><div class="v" id="t_line">–</div><div class="l">즉시연계 여유선로(≥5MW)</div></div>
+    </div>
+
+    <h2>📅 월별 영업 캠페인 캘린더 <span class="muted">(여유용량 근거 · 자동)</span></h2>
+    <div class="cal" id="cal"></div>
+
+    <h2>🏢 지사 필터</h2>
+    <select id="branchSel"><option value="">전체 지사</option></select>
+
+    <h2>🏆 변전소 여유용량 랭킹 <span class="muted" id="rankcnt"></span></h2>
+    <div style="max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:10px">
+      <table id="tbl"><thead><tr>
+        <th>변전소</th><th>권역</th><th style="text-align:right">여유MW</th><th style="text-align:right">여유율</th><th style="text-align:right">선로</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+
+    <h2>범례</h2>
+    <div class="legend">
+      <div style="margin-bottom:6px"><b>변전소 여유율</b> (원 크기 = 여유용량 MW)</div>
+      <span class="sw"><span class="dot" style="background:var(--g1)"></span>50%+</span>
+      <span class="sw"><span class="dot" style="background:var(--g2)"></span>30–50%</span>
+      <span class="sw"><span class="dot" style="background:var(--y)"></span>15–30%</span>
+      <span class="sw"><span class="dot" style="background:var(--o)"></span>5–15%</span>
+      <span class="sw"><span class="dot" style="background:var(--r)"></span>&lt;5%</span>
+      <div style="margin-top:8px">🏢 = 사업장 위치 &nbsp;·&nbsp; <span class="muted">여유용량↑ = 태양광 연계 여지↑ = 영업 우선순위↑</span></div>
+      <div style="margin-top:6px;color:#7d8ea3">※ 좌표는 시군구 중심 근사(프로토타입). 데이터: 한전 계통연계 조회.</div>
+    </div>
+  </aside>
+  <div id="map"></div>
+</div>
+
+<script>
+const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04"];
+const mLabel = s => { const [y,m]=s.split("-"); return (y==="2027"?"’27 ":"")+parseInt(m)+"월"; };
+function color(pct){ return pct>=50?getCss('--g1'):pct>=30?getCss('--g2'):pct>=15?getCss('--y'):pct>=5?getCss('--o'):getCss('--r'); }
+function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[];
+
+(window.__DATA__ ? Promise.resolve(window.__DATA__)
+  : fetch('capacity.json?_='+Date.now()).then(r=>r.json())
+).then(init).catch(e=>{
+  document.getElementById('meta').textContent='capacity.json 로드 실패 — 수집기 먼저 실행하세요';
+});
+
+function init(d){
+  DATA=d;
+  document.getElementById('meta').textContent = `생성: ${d.generated_at} · ${d.source}`;
+  MAP = L.map('map',{zoomControl:true}).setView([35.8,126.9],7);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18, attribution:'© OpenStreetMap'}).addTo(MAP);
+  LAYER = L.layerGroup().addTo(MAP);
+  // 지사 핀
+  d.branches.forEach(b=>{
+    const m=L.marker([b.lat,b.lng],{icon:L.divIcon({className:'',html:
+      `<div style="background:#3aa0ff;color:#fff;border:2px solid #fff;border-radius:8px;padding:2px 6px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.5)">🏢 ${b.name}</div>`,
+      iconSize:[10,10],iconAnchor:[5,5]})}).addTo(MAP);
+    BRANCHMARKERS.push(m);
+  });
+  buildBranchSelect();
+  render();
+  renderCalendar();
+}
+
+function filtered(){
+  const b=document.getElementById('branchSel').value;
+  return b? DATA.substations.filter(s=>s.branches.includes(b)) : DATA.substations;
+}
+
+function render(){
+  const subs=filtered();
+  LAYER.clearLayers(); MARKERS={};
+  subs.forEach(s=>{
+    const r=Math.max(5,Math.min(24,5+Math.sqrt(Math.max(0,s.subst_free_mw))*2.2));
+    const m=L.circleMarker([s.lat,s.lng],{radius:r,color:'#0d1117',weight:1,
+      fillColor:color(s.subst_free_pct),fillOpacity:.82});
+    m.bindPopup(popup(s));
+    m.addTo(LAYER); MARKERS[s.code]=m;
+  });
+  // tiles
+  const totalFree=subs.reduce((a,s)=>a+s.subst_free_mw,0);
+  const byRegion={}; subs.forEach(s=>byRegion[s.region]=(byRegion[s.region]||0)+s.subst_free_mw);
+  const topR=Object.entries(byRegion).sort((a,b)=>b[1]-a[1])[0];
+  const freeLines=subs.reduce((a,s)=>a+s.lines.filter(l=>(l.conn||0)>=5).length,0);
+  document.getElementById('t_sub').textContent=subs.length;
+  document.getElementById('t_free').textContent=Math.round(totalFree).toLocaleString();
+  document.getElementById('t_top').textContent=topR?topR[0]:'–';
+  document.getElementById('t_line').textContent=freeLines;
+  renderTable(subs);
+}
+
+function popup(s){
+  const lines=s.lines.slice(0,6).map(l=>`<div class="popup-line"><span>${l.dl_nm} <span class="muted">(#${l.mtr_no})</span></span><b style="color:${color(l.dl_capa? 100*l.g_dl/l.dl_capa:0)}">${(l.conn??l.g_dl).toFixed(1)} MW</b></div>`).join('');
+  return `<div class="popup-t">${s.name} <span class="muted">${s.code}</span></div>
+    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch}</div>
+    <div class="popup-line"><span>변전소 여유</span><b>${s.subst_free_mw.toFixed(1)} / ${s.subst_capa_mw.toFixed(0)} MW (${s.subst_free_pct}%)</b></div>
+    <div class="popup-line"><span>⚡ 최대 연계가능</span><b style="color:${color(s.subst_free_pct)}">${(s.connect_max_mw??0).toFixed(1)} MW</b></div>
+    <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}`;
+}
+
+function renderTable(subs){
+  const tb=document.querySelector('#tbl tbody'); tb.innerHTML='';
+  document.getElementById('rankcnt').textContent=`(${subs.length}개)`;
+  subs.forEach(s=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><span class="dot" style="background:${color(s.subst_free_pct)}"></span>${s.name} <span class="muted">${s.code}</span></td>
+      <td>${s.region}</td><td class="num">${s.subst_free_mw.toFixed(1)}</td>
+      <td class="num">${s.subst_free_pct}%</td><td class="num">${s.lines.length}</td>`;
+    tr.onclick=()=>{ MAP.setView([s.lat,s.lng],12); MARKERS[s.code]&&MARKERS[s.code].openPopup(); };
+    tb.appendChild(tr);
+  });
+}
+
+function renderCalendar(){
+  // 지사(권역)별 총 여유용량 랭킹 → 여유 큰 순으로 이른 달 배정
+  const agg={};
+  DATA.branches.forEach(b=>agg[b.name]={name:b.name,free:0,cnt:0,best:0,lat:b.lat,lng:b.lng});
+  DATA.substations.forEach(s=>{ const a=agg[s.branch]; if(a){a.free+=s.subst_free_mw;a.cnt++;a.best=Math.max(a.best,s.subst_free_mw);} });
+  const ranked=Object.values(agg).sort((x,y)=>y.free-x.free);
+  const cal=document.getElementById('cal'); cal.innerHTML='';
+  ranked.forEach((a,i)=>{
+    if(i>=MONTHS.length) return;
+    const row=document.createElement('div'); row.className='row';
+    row.innerHTML=`<div class="m">${mLabel(MONTHS[i])}</div>
+      <div><div class="nm">${a.name}</div><div class="sub">변전소 ${a.cnt}개 · 최대 여유 ${a.best.toFixed(0)}MW</div></div>
+      <div class="val">${Math.round(a.free).toLocaleString()}<small>총 여유 MW</small></div>`;
+    row.onclick=()=>{ document.getElementById('branchSel').value=a.name; render(); MAP.setView([a.lat,a.lng],10); };
+    cal.appendChild(row);
+  });
+}
+
+function buildBranchSelect(){
+  const sel=document.getElementById('branchSel');
+  DATA.branches.forEach(b=>{ const o=document.createElement('option'); o.value=b.name;o.textContent=b.name;sel.appendChild(o); });
+  sel.onchange=render;
+}
+</script>
+</body>
+</html>

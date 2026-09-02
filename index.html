@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>계통 여유용량 영업 대시보드 · 해피솔라</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#0f141a; --panel:#161d26; --panel2:#1d2732; --line:#2a3644;
+    --tx:#e8eef5; --tx2:#9fb0c3; --accent:#2f9e6f; --accent2:#3aa0ff;
+    --g1:#1a9850; --g2:#66bd63; --y:#fee08b; --o:#fdae61; --r:#d73027;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--tx)}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0;font-weight:700}
+  header .meta{font-size:12px;color:var(--tx2)}
+  .wrap{display:flex;height:calc(100vh - 56px);min-height:480px}
+  .side{width:420px;min-width:340px;max-width:46vw;overflow-y:auto;border-right:1px solid var(--line);padding:14px}
+  #map{flex:1;min-width:0}
+  .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+  .tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .tile .v{font-size:22px;font-weight:800}
+  .tile .l{font-size:11px;color:var(--tx2);margin-top:2px}
+  h2{font-size:13px;color:var(--tx2);margin:18px 0 8px;letter-spacing:.3px;text-transform:uppercase}
+  .cal{display:flex;flex-direction:column;gap:6px}
+  .cal .row{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 11px;cursor:pointer}
+  .cal .row:hover{border-color:var(--accent)}
+  .cal .m{font-weight:800;font-size:14px;color:var(--accent2)}
+  .cal .nm{font-weight:700}
+  .cal .sub{font-size:11px;color:var(--tx2);margin-top:1px}
+  .cal .val{text-align:right;font-weight:800}
+  .cal .val small{display:block;font-weight:500;color:var(--tx2);font-size:10px}
+  select{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;width:100%}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line)}
+  th{color:var(--tx2);font-weight:600;position:sticky;top:0;background:var(--panel)}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:var(--panel2)}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .legend{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:11.5px;color:var(--tx2)}
+  .legend b{color:var(--tx)}
+  .legend .sw{display:inline-flex;align-items:center;gap:5px;margin-right:12px}
+  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:1px 8px;font-size:11px;color:var(--tx2)}
+  .leaflet-popup-content{font-size:13px;line-height:1.5}
+  .popup-t{font-weight:800;font-size:14px;margin-bottom:4px}
+  .popup-line{display:flex;justify-content:space-between;gap:14px;font-size:12px}
+  .muted{color:#7d8ea3}
+  @media (max-width:760px){ .wrap{flex-direction:column;height:auto} .side{width:100%;max-width:none;border-right:none;border-bottom:1px solid var(--line)} #map{height:56vh} }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚡ 계통 여유용량 영업 대시보드</h1>
+  <span class="meta" id="meta">불러오는 중…</span>
+  <span class="meta pill" id="scope">프로토타입 · 6개 지사 권역</span>
+</header>
+<div class="wrap">
+  <aside class="side">
+    <div class="tiles">
+      <div class="tile"><div class="v" id="t_sub">–</div><div class="l">변전소 수</div></div>
+      <div class="tile"><div class="v" id="t_free">–</div><div class="l">총 여유용량 (MW)</div></div>
+      <div class="tile"><div class="v" id="t_top">–</div><div class="l">여유 최다 권역</div></div>
+      <div class="tile"><div class="v" id="t_line">–</div><div class="l">즉시연계 여유선로(≥5MW)</div></div>
+    </div>
+
+    <h2>📅 월별 영업 캠페인 캘린더 <span class="muted">(여유용량 근거 · 자동)</span></h2>
+    <div class="cal" id="cal"></div>
+
+    <h2>🏢 지사 필터</h2>
+    <select id="branchSel"><option value="">전체 지사</option></select>
+
+    <h2>🏆 변전소 여유용량 랭킹 <span class="muted" id="rankcnt"></span></h2>
+    <div style="max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:10px">
+      <table id="tbl"><thead><tr>
+        <th>변전소</th><th>권역</th><th style="text-align:right">여유MW</th><th style="text-align:right">여유율</th><th style="text-align:right">선로</th>
+      </tr></thead><tbody></tbody></table>
+    </div>
+
+    <h2>범례</h2>
+    <div class="legend">
+      <div style="margin-bottom:6px"><b>변전소 여유율</b> (원 크기 = 여유용량 MW)</div>
+      <span class="sw"><span class="dot" style="background:var(--g1)"></span>50%+</span>
+      <span class="sw"><span class="dot" style="background:var(--g2)"></span>30–50%</span>
+      <span class="sw"><span class="dot" style="background:var(--y)"></span>15–30%</span>
+      <span class="sw"><span class="dot" style="background:var(--o)"></span>5–15%</span>
+      <span class="sw"><span class="dot" style="background:var(--r)"></span>&lt;5%</span>
+      <div style="margin-top:8px">🏢 = 사업장 위치 &nbsp;·&nbsp; <span class="muted">여유용량↑ = 태양광 연계 여지↑ = 영업 우선순위↑</span></div>
+      <div style="margin-top:6px;color:#7d8ea3">※ 좌표는 시군구 중심 근사(프로토타입). 데이터: 한전 계통연계 조회.</div>
+    </div>
+  </aside>
+  <div id="map"></div>
+</div>
+
+<script>
+const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04"];
+const mLabel = s => { const [y,m]=s.split("-"); return (y==="2027"?"’27 ":"")+parseInt(m)+"월"; };
+function color(pct){ return pct>=50?getCss('--g1'):pct>=30?getCss('--g2'):pct>=15?getCss('--y'):pct>=5?getCss('--o'):getCss('--r'); }
+function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[];
+
+(window.__DATA__ ? Promise.resolve(window.__DATA__)
+  : fetch('capacity.json?_='+Date.now()).then(r=>r.json())
+).then(init).catch(e=>{
+  document.getElementById('meta').textContent='capacity.json 로드 실패 — 수집기 먼저 실행하세요';
+});
+
+function init(d){
+  DATA=d;
+  document.getElementById('meta').textContent = `생성: ${d.generated_at} · ${d.source}`;
+  MAP = L.map('map',{zoomControl:true}).setView([35.8,126.9],7);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18, attribution:'© OpenStreetMap'}).addTo(MAP);
+  LAYER = L.layerGroup().addTo(MAP);
+  // 지사 핀
+  d.branches.forEach(b=>{
+    const m=L.marker([b.lat,b.lng],{icon:L.divIcon({className:'',html:
+      `<div style="background:#3aa0ff;color:#fff;border:2px solid #fff;border-radius:8px;padding:2px 6px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.5)">🏢 ${b.name}</div>`,
+      iconSize:[10,10],iconAnchor:[5,5]})}).addTo(MAP);
+    BRANCHMARKERS.push(m);
+  });
+  buildBranchSelect();
+  render();
+  renderCalendar();
+}
+
+function filtered(){
+  const b=document.getElementById('branchSel').value;
+  return b? DATA.substations.filter(s=>s.branches.includes(b)) : DATA.substations;
+}
+
+function render(){
+  const subs=filtered();
+  LAYER.clearLayers(); MARKERS={};
+  subs.forEach(s=>{
+    const r=Math.max(5,Math.min(24,5+Math.sqrt(Math.max(0,s.subst_free_mw))*2.2));
+    const m=L.circleMarker([s.lat,s.lng],{radius:r,color:'#0d1117',weight:1,
+      fillColor:color(s.subst_free_pct),fillOpacity:.82});
+    m.bindPopup(popup(s));
+    m.addTo(LAYER); MARKERS[s.code]=m;
+  });
+  // tiles
+  const totalFree=subs.reduce((a,s)=>a+s.subst_free_mw,0);
+  const byRegion={}; subs.forEach(s=>byRegion[s.region]=(byRegion[s.region]||0)+s.subst_free_mw);
+  const topR=Object.entries(byRegion).sort((a,b)=>b[1]-a[1])[0];
+  const freeLines=subs.reduce((a,s)=>a+s.lines.filter(l=>(l.conn||0)>=5).length,0);
+  document.getElementById('t_sub').textContent=subs.length;
+  document.getElementById('t_free').textContent=Math.round(totalFree).toLocaleString();
+  document.getElementById('t_top').textContent=topR?topR[0]:'–';
+  document.getElementById('t_line').textContent=freeLines;
+  renderTable(subs);
+}
+
+function popup(s){
+  const lines=s.lines.slice(0,6).map(l=>`<div class="popup-line"><span>${l.dl_nm} <span class="muted">(#${l.mtr_no})</span></span><b style="color:${color(l.dl_capa? 100*l.g_dl/l.dl_capa:0)}">${(l.conn??l.g_dl).toFixed(1)} MW</b></div>`).join('');
+  return `<div class="popup-t">${s.name} <span class="muted">${s.code}</span></div>
+    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch}</div>
+    <div class="popup-line"><span>변전소 여유</span><b>${s.subst_free_mw.toFixed(1)} / ${s.subst_capa_mw.toFixed(0)} MW (${s.subst_free_pct}%)</b></div>
+    <div class="popup-line"><span>⚡ 최대 연계가능</span><b style="color:${color(s.subst_free_pct)}">${(s.connect_max_mw??0).toFixed(1)} MW</b></div>
+    <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}`;
+}
+
+function renderTable(subs){
+  const tb=document.querySelector('#tbl tbody'); tb.innerHTML='';
+  document.getElementById('rankcnt').textContent=`(${subs.length}개)`;
+  subs.forEach(s=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><span class="dot" style="background:${color(s.subst_free_pct)}"></span>${s.name} <span class="muted">${s.code}</span></td>
+      <td>${s.region}</td><td class="num">${s.subst_free_mw.toFixed(1)}</td>
+      <td class="num">${s.subst_free_pct}%</td><td class="num">${s.lines.length}</td>`;
+    tr.onclick=()=>{ MAP.setView([s.lat,s.lng],12); MARKERS[s.code]&&MARKERS[s.code].openPopup(); };
+    tb.appendChild(tr);
+  });
+}
+
+function renderCalendar(){
+  // 지사(권역)별 총 여유용량 랭킹 → 여유 큰 순으로 이른 달 배정
+  const agg={};
+  DATA.branches.forEach(b=>agg[b.name]={name:b.name,free:0,cnt:0,best:0,lat:b.lat,lng:b.lng});
+  DATA.substations.forEach(s=>{ const a=agg[s.branch]; if(a){a.free+=s.subst_free_mw;a.cnt++;a.best=Math.max(a.best,s.subst_free_mw);} });
+  const ranked=Object.values(agg).sort((x,y)=>y.free-x.free);
+  const cal=document.getElementById('cal'); cal.innerHTML='';
+  ranked.forEach((a,i)=>{
+    if(i>=MONTHS.length) return;
+    const row=document.createElement('div'); row.className='row';
+    row.innerHTML=`<div class="m">${mLabel(MONTHS[i])}</div>
+      <div><div class="nm">${a.name}</div><div class="sub">변전소 ${a.cnt}개 · 최대 여유 ${a.best.toFixed(0)}MW</div></div>
+      <div class="val">${Math.round(a.free).toLocaleString()}<small>총 여유 MW</small></div>`;
+    row.onclick=()=>{ document.getElementById('branchSel').value=a.name; render(); MAP.setView([a.lat,a.lng],10); };
+    cal.appendChild(row);
+  });
+}
+
+function buildBranchSelect(){
+  const sel=document.getElementById('branchSel');
+  DATA.branches.forEach(b=>{ const o=document.createElement('option'); o.value=b.name;o.textContent=b.name;sel.appendChild(o); });
+  sel.onchange=render;
+}
+</script>
+</body>
+</html>

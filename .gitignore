@@ -1,0 +1,10 @@
+*.log
+cj*.txt
+*.tmp
+capacity_v1_backup.json
+__pycache__/
+.DS_Store
+shot_b64.txt
+*.jpg
+*.png
+.github/
