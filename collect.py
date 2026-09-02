@@ -197,7 +197,7 @@ def main():
     out.sort(key=lambda x:-x["subst_free_mw"])
     kst=timezone(timedelta(hours=9))
     payload={"generated_at":datetime.now(kst).strftime("%Y-%m-%d %H:%M KST"),
-        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 프로토타입 6개 지사권역",
+        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 7개 사업소 권역",
         "unit":"MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=읍면동 지오코딩 평균 · 지사=최근접",
         "branches":[{"name":b["name"],"lat":b["office"][0],"lng":b["office"][1]} for b in BRANCHES],
         "substations":out}
