@@ -27348,6 +27348,7 @@ function init(d){
   buildBranchSelect();
   render();
   renderCalendar();
+  if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),12); m.openPopup(); toggleSupply(code); } },700); }
 }
 
 function filtered(){
