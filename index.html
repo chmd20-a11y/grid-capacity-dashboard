@@ -243,13 +243,16 @@ function buildBranchSelect(){
 
 function toggleCal(){ const c=document.getElementById('cal'),a=document.getElementById('calArrow'); const open=c.style.display==='none'; c.style.display=open?'flex':'none'; a.textContent=open?'▾':'▸'; }
 function haversineJ(a,b){ const R=6371,p=Math.PI/180,dlat=(b[0]-a[0])*p,dlng=(b[1]-a[1])*p; const x=Math.sin(dlat/2)**2+Math.cos(a[0]*p)*Math.cos(b[0]*p)*Math.sin(dlng/2)**2; return 2*R*Math.asin(Math.sqrt(x)); }
-function searchAddr(){
+function searchAddr(retry){
+  retry = (typeof retry==='number')?retry:0;
   const q=document.getElementById('addrInput').value.trim();
   const box=document.getElementById('addrResult');
   if(!q){ box.innerHTML=''; return; }
-  const m=q.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);   // 좌표 직접입력(테스트) 지원
+  const m=q.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);   // 좌표 직접입력 지원
   if(m){ showNearest(parseFloat(m[1]),parseFloat(m[2]),q); return; }
-  if(!(window.kakao&&kakao.maps&&kakao.maps.services)){ box.innerHTML='<span style="color:var(--r)">⚠ 지오코딩 키 미설정 — Kakao JS 키 적용 후 지번 검색이 됩니다.</span>'; return; }
+  if(!(window.kakao&&kakao.maps&&kakao.maps.services)){
+    if(window.KAKAO_KEY && retry<14){ box.innerHTML='<span class="muted">지도 로딩 중…</span>'; setTimeout(()=>searchAddr(retry+1),500); return; }
+    box.innerHTML='<span style="color:var(--r)">⚠ 지오코딩 키 미설정 — Kakao JS 키 적용 후 지번 검색이 됩니다.</span>'; return; }
   box.innerHTML='<span class="muted">검색 중…</span>';
   new kakao.maps.services.Geocoder().addressSearch(q,(res,status)=>{
     if(status===kakao.maps.services.Status.OK && res[0]){ showNearest(parseFloat(res[0].y),parseFloat(res[0].x),q); }
