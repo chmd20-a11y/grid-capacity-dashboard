@@ -27333,7 +27333,7 @@ function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null;
 // Kakao 지오코딩(지번검색) — 아래에 카카오 JavaScript 키를 넣으면 활성화됨
-window.KAKAO_KEY = "";
+window.KAKAO_KEY = "3c003211be49659008929069de83dced";
 (function(){ if(window.KAKAO_KEY){ const sc=document.createElement('script'); sc.src="//dapi.kakao.com/v2/maps/sdk.js?appkey="+window.KAKAO_KEY+"&libraries=services&autoload=false"; sc.onload=()=>kakao.maps.load(()=>{}); document.head.appendChild(sc); } })();
 
 (window.__DATA__ ? Promise.resolve(window.__DATA__)
