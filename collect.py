@@ -161,6 +161,8 @@ def main():
         for (d, si, gu, region, known) in build_cells(do, names):
             dongs = known if known is not None else list_addr("addr_lidong", d, si, gu)[0]
             dongs = [x for x in dongs if x and x not in ("Unknown","-기타지역")]
+            # 공급지역 그룹 라벨: 군/광역시구 = region, 시(구있음) = "시 구", 시(구없음) = 시
+            area = region if si == "-기타지역" else (f"{si} {gu}" if gu else si)
             print(f"[{d} {si if si!='-기타지역' else ''} {region}] 읍면동 {len(dongs)}개")
             for dong in dongs:
                 rows = fetch_detail(d, si, gu, dong)
@@ -173,8 +175,9 @@ def main():
                     if not r:
                         r = {"code":subst_cd,"nm":a[0],"subst_capa":to_mw(a[14]),
                              "g_subst":to_mw(a[9]),"transformers":{},"lines":{},
-                             "addrs":Counter(),"regions":Counter()}
+                             "addrs":Counter(),"regions":Counter(),"supply":{}}
                         subs[subst_cd]=r
+                    r["supply"].setdefault(area, set()).add(dong)
                     r["subst_capa"]=max(r["subst_capa"],to_mw(a[14]))
                     r["g_subst"]=max(r["g_subst"],to_mw(a[9]))
                     r["addrs"][addr_str]+=1; r["regions"][region]+=1
@@ -212,7 +215,8 @@ def main():
             "transformers":list(r["transformers"].values()),
             "lines":sorted(lines,key=lambda x:-x["conn"]),
             "connect_max_mw":round(max([l["conn"] for l in lines],default=0),1),
-            "geocoded":bool(pts),"dong_count":len(r["addrs"])})
+            "geocoded":bool(pts),"dong_count":len(r["addrs"]),
+            "supply":{a:sorted(v) for a,v in sorted(r["supply"].items())}})
     out.sort(key=lambda x:-x["subst_free_mw"])
     kst=timezone(timedelta(hours=9))
     payload={"generated_at":datetime.now(kst).strftime("%Y-%m-%d %H:%M KST"),

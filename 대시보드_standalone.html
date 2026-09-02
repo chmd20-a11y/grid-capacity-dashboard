@@ -48,14 +48,14 @@
   .legend b{color:var(--tx)}
   .legend .sw{display:inline-flex;align-items:center;gap:5px;margin-right:12px}
   .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:1px 8px;font-size:11px;color:var(--tx2)}
-  .leaflet-popup-content{font-size:13px;line-height:1.5}
+  .leaflet-popup-content{font-size:13px;line-height:1.5;min-width:250px}
   .popup-t{font-weight:800;font-size:14px;margin-bottom:4px}
   .popup-line{display:flex;justify-content:space-between;gap:14px;font-size:12px}
   .muted{color:#7d8ea3}
   @media (max-width:760px){ .wrap{flex-direction:column;height:auto} .side{width:100%;max-width:none;border-right:none;border-bottom:1px solid var(--line)} #map{height:56vh} }
 </style>
 <script>window.__DATA__={
- "generated_at": "2026-09-02 17:01 KST",
+ "generated_at": "2026-09-02 17:45 KST",
  "source": "한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 전라도 전체 + 경기·충남 확장",
  "unit": "MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=OSM 실측(매칭분)+읍면동근사(미매칭) · 사업소=최근접",
  "branches": [
@@ -180,6 +180,26 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "수원시 영통구": [
+     "망포동"
+    ],
+    "용인시 기흥구": [
+     "고매동",
+     "공세동",
+     "농서동"
+    ],
+    "화성시": [
+     "기산1동",
+     "기산2동",
+     "기산3동",
+     "동탄면",
+     "반월1동",
+     "반정2동",
+     "진안1동",
+     "진안3동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -364,6 +384,39 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 27,
+   "supply": {
+    "수원시 권선구": [
+     "고색동",
+     "곡반정동",
+     "권선2동",
+     "대황교동",
+     "오목천동",
+     "장지동"
+    ],
+    "화성시": [
+     "기안1동",
+     "반정1동",
+     "반정2동",
+     "배양1동",
+     "배양2동",
+     "배양3동",
+     "병점2동",
+     "병점동",
+     "봉담읍",
+     "송산1동",
+     "송산2동",
+     "송산3동",
+     "송산4동",
+     "안녕1동",
+     "안녕2동",
+     "안녕3동",
+     "정남면",
+     "진안1동",
+     "향남면",
+     "황계1동",
+     "황계2동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -506,6 +559,18 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 8,
+   "supply": {
+    "천안시 서북구": [
+     "두정동",
+     "백석동",
+     "부대동",
+     "성거읍",
+     "성성동",
+     "신당동",
+     "업성동",
+     "차암동"
+    ]
+   },
    "osm_name": "서천안변전소",
    "coord_exact": true,
    "match_km": 2.6
@@ -680,6 +745,35 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 23,
+   "supply": {
+    "용인시 처인구": [
+     "남사면"
+    ],
+    "평택시": [
+     "가재동",
+     "도일동",
+     "독곡동",
+     "동삭동",
+     "모곡동",
+     "비전동",
+     "서정동",
+     "서탄면",
+     "세교동",
+     "신장동",
+     "용이동",
+     "월곡동",
+     "이충동",
+     "장당동",
+     "장안동",
+     "죽백동",
+     "지산동",
+     "지제동",
+     "진위면",
+     "청룡동",
+     "칠괴동",
+     "칠원동"
+    ]
+   },
    "osm_name": "송탄변전소",
    "coord_exact": true,
    "match_km": 1.5
@@ -880,6 +974,24 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 14,
+   "supply": {
+    "용인시 처인구": [
+     "고림동",
+     "김량장동",
+     "남동",
+     "마평동",
+     "백암면",
+     "양지면",
+     "역북동",
+     "운학동",
+     "원삼면",
+     "유방동",
+     "이동면",
+     "포곡읍",
+     "해곡동",
+     "호동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -911,6 +1023,11 @@
    "connect_max_mw": 12.7,
    "geocoded": false,
    "dong_count": 1,
+   "supply": {
+    "용인시 처인구": [
+     "모현면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -1102,6 +1219,15 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "화성시": [
+     "마도면",
+     "봉담읍",
+     "비봉면",
+     "장안면",
+     "팔탄면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -1133,6 +1259,13 @@
    "connect_max_mw": 11.2,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "평택시": [
+     "소사동",
+     "용이동",
+     "유천동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -1164,6 +1297,11 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "강화군": [
+     "강화읍"
+    ]
+   },
    "osm_name": "통진변전소",
    "coord_exact": true,
    "match_km": 11.6
@@ -1204,6 +1342,11 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "신안군": [
+     "흑산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -1327,6 +1470,27 @@
    "connect_max_mw": 19.0,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "수원시 권선구": [
+     "서둔동",
+     "세류1동"
+    ],
+    "수원시 장안구": [
+     "송죽동",
+     "영화동",
+     "이목동",
+     "조원동",
+     "파장동"
+    ],
+    "수원시 팔달구": [
+     "고등동",
+     "매산로1가",
+     "매산로2가",
+     "매산로3가",
+     "화서1동",
+     "화서2동"
+    ]
+   },
    "osm_name": "율전변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -1447,6 +1611,17 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "안양시 동안구": [
+     "관양동",
+     "비산동",
+     "평촌동",
+     "호계동"
+    ],
+    "안양시 만안구": [
+     "안양동"
+    ]
+   },
    "osm_name": "관양변전소",
    "coord_exact": true,
    "match_km": 0.6
@@ -1523,6 +1698,15 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "안양시 동안구": [
+     "호계동"
+    ],
+    "안양시 만안구": [
+     "박달동",
+     "안양동"
+    ]
+   },
    "osm_name": "안양변전소",
    "coord_exact": true,
    "match_km": 0.8
@@ -1655,6 +1839,41 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 25,
+   "supply": {
+    "수원시 권선구": [
+     "곡반정동",
+     "권선2동",
+     "세류2동",
+     "세류3동",
+     "장지동"
+    ],
+    "수원시 영통구": [
+     "망포동",
+     "신동"
+    ],
+    "용인시 기흥구": [
+     "농서동"
+    ],
+    "화성시": [
+     "기산1동",
+     "기산2동",
+     "기산3동",
+     "능1동",
+     "능2동",
+     "능3동",
+     "동탄면",
+     "반정1동",
+     "반정2동",
+     "병점1동",
+     "병점2동",
+     "병점4동",
+     "병점5동",
+     "병점동",
+     "진안1동",
+     "진안2동",
+     "진안3동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -1717,6 +1936,17 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "수원시 권선구": [
+     "권선1동",
+     "권선2동",
+     "세류3동"
+    ],
+    "수원시 팔달구": [
+     "매교동",
+     "인계동"
+    ]
+   },
    "osm_name": "동수원변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -1802,6 +2032,32 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 18,
+   "supply": {
+    "동구": [
+     "계림동",
+     "대인동",
+     "동명동",
+     "산수동",
+     "서석동",
+     "장동",
+     "지산동",
+     "학동"
+    ],
+    "북구": [
+     "누문동",
+     "북동",
+     "신안동",
+     "운암동",
+     "유동",
+     "임동",
+     "중흥동"
+    ],
+    "서구": [
+     "광천동",
+     "농성동",
+     "양동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -1904,6 +2160,23 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "수원시 영통구": [
+     "하동"
+    ],
+    "용인시 기흥구": [
+     "마북동",
+     "보정동"
+    ],
+    "용인시 수지구": [
+     "동천동",
+     "상현동",
+     "성복동",
+     "신봉동",
+     "죽전동",
+     "풍덕천동"
+    ]
+   },
    "osm_name": "수원 SS",
    "coord_exact": true,
    "match_km": 10.1
@@ -1989,6 +2262,13 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "안양시 동안구": [
+     "관양동",
+     "평촌동",
+     "호계동"
+    ]
+   },
    "osm_name": "동안양변전소",
    "coord_exact": true,
    "match_km": 1.4
@@ -2060,6 +2340,27 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 11,
+   "supply": {
+    "수원시 권선구": [
+     "권선1동",
+     "세류1동",
+     "세류3동"
+    ],
+    "수원시 영통구": [
+     "원천동",
+     "이의동"
+    ],
+    "수원시 장안구": [
+     "연무동",
+     "영화동",
+     "조원동",
+     "하광교동"
+    ],
+    "수원시 팔달구": [
+     "매교동",
+     "인계동"
+    ]
+   },
    "osm_name": "우만변전소",
    "coord_exact": true,
    "match_km": 1.8
@@ -2269,6 +2570,39 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 23,
+   "supply": {
+    "수원시 권선구": [
+     "고색동",
+     "구운동",
+     "금곡동",
+     "당수동",
+     "서둔동",
+     "세류1동",
+     "세류3동",
+     "오목천동",
+     "입북동",
+     "탑동",
+     "평동",
+     "호매실동"
+    ],
+    "수원시 장안구": [
+     "영화동",
+     "율전동",
+     "이목동",
+     "천천동",
+     "파장동"
+    ],
+    "수원시 팔달구": [
+     "매산로1가",
+     "화서1동",
+     "화서2동"
+    ],
+    "화성시": [
+     "매송면",
+     "봉담읍",
+     "비봉면"
+    ]
+   },
    "osm_name": "서수원변전소",
    "coord_exact": true,
    "match_km": 2.4
@@ -2359,6 +2693,13 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "남양주시": [
+     "별내면",
+     "진접읍",
+     "퇴계원면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -2475,6 +2816,21 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "천안시 동남구": [
+     "다가동",
+     "봉명동",
+     "신부동"
+    ],
+    "천안시 서북구": [
+     "두정동",
+     "백석동",
+     "부대동",
+     "불당동",
+     "성정동",
+     "신당동"
+    ]
+   },
    "osm_name": "불당변전소",
    "coord_exact": true,
    "match_km": 2.3
@@ -2534,6 +2890,14 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "남양주시": [
+     "도농동",
+     "별내면",
+     "지금동",
+     "퇴계원면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -2638,6 +3002,24 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "용인시 기흥구": [
+     "동백동",
+     "마북동",
+     "상하동",
+     "언남동",
+     "중동",
+     "청덕동"
+    ],
+    "용인시 처인구": [
+     "김량장동",
+     "삼가동",
+     "역북동",
+     "유방동",
+     "이동면",
+     "포곡읍"
+    ]
+   },
    "osm_name": "동수원변전소",
    "coord_exact": true,
    "match_km": 10.3
@@ -2805,6 +3187,15 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "남양주시": [
+     "수동면",
+     "조안면",
+     "평내동",
+     "호평동",
+     "화도읍"
+    ]
+   },
    "osm_name": "마석변전소",
    "coord_exact": true,
    "match_km": 5.7
@@ -2937,6 +3328,18 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "평택시": [
+     "서탄면",
+     "신장동",
+     "진위면"
+    ],
+    "화성시": [
+     "양감면",
+     "정남면",
+     "향남면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -2975,6 +3378,12 @@
    "connect_max_mw": 12.5,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "화성시": [
+     "매송면",
+     "비봉면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -3093,6 +3502,27 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "광산구": [
+     "신창동"
+    ],
+    "북구": [
+     "동림동",
+     "매곡동",
+     "삼각동",
+     "신안동",
+     "연제동",
+     "오치동",
+     "용봉동",
+     "운암동",
+     "중흥동"
+    ],
+    "서구": [
+     "광천동",
+     "덕흥동",
+     "유촌동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -3162,6 +3592,18 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "용인시 기흥구": [
+     "마북동",
+     "보정동"
+    ],
+    "용인시 수지구": [
+     "죽전동"
+    ],
+    "용인시 처인구": [
+     "모현면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -3313,6 +3755,16 @@
    "connect_max_mw": 18.0,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "평택시": [
+     "서탄면"
+    ],
+    "화성시": [
+     "양감면",
+     "정남면",
+     "향남면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -3377,6 +3829,15 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "남양주시": [
+     "도농동",
+     "이패동",
+     "일패동",
+     "지금동",
+     "진접읍"
+    ]
+   },
    "osm_name": "진건변전소",
    "coord_exact": true,
    "match_km": 1.5
@@ -3448,6 +3909,14 @@
    "connect_max_mw": 18.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "용인시 처인구": [
+     "남사면"
+    ],
+    "화성시": [
+     "동탄면"
+    ]
+   },
    "osm_name": "동수원변전소",
    "coord_exact": true,
    "match_km": 9.3
@@ -3528,6 +3997,14 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "용인시 처인구": [
+     "남동",
+     "남사면",
+     "역북동",
+     "이동면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -3604,6 +4081,20 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "수원시 영통구": [
+     "이의동",
+     "하동"
+    ],
+    "수원시 장안구": [
+     "상광교동",
+     "연무동",
+     "하광교동"
+    ],
+    "용인시 기흥구": [
+     "영덕동"
+    ]
+   },
    "osm_name": "이의변전소",
    "coord_exact": true,
    "match_km": 1.3
@@ -3717,6 +4208,27 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 15,
+   "supply": {
+    "수원시 권선구": [
+     "고색동",
+     "금곡동",
+     "서둔동",
+     "세류1동",
+     "오목천동",
+     "장지동",
+     "탑동",
+     "평동",
+     "평리동"
+    ],
+    "화성시": [
+     "기안2동",
+     "매송면",
+     "배양2동",
+     "배양3동",
+     "봉담읍",
+     "안녕3동"
+    ]
+   },
    "osm_name": "호매실변전소",
    "coord_exact": true,
    "match_km": 1.4
@@ -3821,6 +4333,16 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "천안시 서북구": [
+     "백석동",
+     "성거읍",
+     "성환읍",
+     "신당동",
+     "업성동",
+     "차암동"
+    ]
+   },
    "osm_name": "한샘변전소",
    "coord_exact": true,
    "match_km": 2.6
@@ -3854,6 +4376,11 @@
    "connect_max_mw": 7.4,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "안양시 만안구": [
+     "석수동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -3904,6 +4431,18 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 8,
+   "supply": {
+    "화성시": [
+     "병점2동",
+     "병점3동",
+     "병점4동",
+     "병점5동",
+     "병점동",
+     "안녕1동",
+     "정남면",
+     "진안2동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -3975,6 +4514,20 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "남양주시": [
+     "가운동",
+     "금곡동",
+     "삼패동",
+     "수석동",
+     "와부읍",
+     "이패동",
+     "일패동",
+     "조안면",
+     "지금동",
+     "평내동"
+    ]
+   },
    "osm_name": "미금변전소",
    "coord_exact": true,
    "match_km": 2.4
@@ -4020,6 +4573,16 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "수원시 영통구": [
+     "망포동"
+    ],
+    "용인시 기흥구": [
+     "구갈동",
+     "상하동",
+     "신갈동"
+    ]
+   },
    "osm_name": "신갈변전소",
    "coord_exact": true,
    "match_km": 1.8
@@ -4053,6 +4616,14 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "안양시 동안구": [
+     "비산동"
+    ],
+    "안양시 만안구": [
+     "안양동"
+    ]
+   },
    "osm_name": "평촌변전소",
    "coord_exact": true,
    "match_km": 1.9
@@ -4192,6 +4763,34 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 22,
+   "supply": {
+    "평택시": [
+     "고덕면",
+     "군문동",
+     "모곡동",
+     "비전동",
+     "서정동",
+     "서탄면",
+     "세교동",
+     "신대동",
+     "신장동",
+     "안중읍",
+     "오성면",
+     "유천동",
+     "이충동",
+     "장당동",
+     "지산동",
+     "지제동",
+     "통복동",
+     "팽성읍",
+     "평택동",
+     "합정동"
+    ],
+    "화성시": [
+     "양감면",
+     "정남면"
+    ]
+   },
    "osm_name": "평택변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -4380,6 +4979,18 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "평택시": [
+     "서탄면"
+    ],
+    "화성시": [
+     "봉담읍",
+     "양감면",
+     "정남면",
+     "팔탄면",
+     "향남면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -4423,6 +5034,11 @@
    "connect_max_mw": 12.7,
    "geocoded": false,
    "dong_count": 1,
+   "supply": {
+    "용인시 처인구": [
+     "모현면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -4588,6 +5204,21 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 11,
+   "supply": {
+    "평택시": [
+     "군문동",
+     "비전동",
+     "소사동",
+     "오성면",
+     "용이동",
+     "유천동",
+     "죽백동",
+     "통복동",
+     "팽성읍",
+     "평택동",
+     "합정동"
+    ]
+   },
    "osm_name": "추팔변전소",
    "coord_exact": true,
    "match_km": 3.4
@@ -4666,6 +5297,15 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "파주시": [
+     "검산동",
+     "금촌동",
+     "맥금동",
+     "야동동",
+     "탄현면"
+    ]
+   },
    "osm_name": "문발변전소",
    "coord_exact": true,
    "match_km": 6.4
@@ -4840,6 +5480,14 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "화성시": [
+     "양감면",
+     "장안면",
+     "팔탄면",
+     "향남면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -4923,6 +5571,20 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "하남시": [
+     "덕풍동",
+     "망월동",
+     "미사동",
+     "배알미동",
+     "상산곡동",
+     "선동",
+     "신장동",
+     "창우동",
+     "천현동",
+     "하산곡동"
+    ]
+   },
    "osm_name": "신장변전소",
    "coord_exact": true,
    "match_km": 0.8
@@ -5104,6 +5766,15 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "용인시 처인구": [
+     "남사면",
+     "이동면"
+    ],
+    "평택시": [
+     "진위면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -5161,6 +5832,12 @@
    "connect_max_mw": 11.8,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "파주시": [
+     "금촌동",
+     "조리읍"
+    ]
+   },
    "osm_name": "신파주변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -5314,6 +5991,12 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "남양주시": [
+     "진접읍",
+     "퇴계원면"
+    ]
+   },
    "osm_name": "진접변전소",
    "coord_exact": true,
    "match_km": 2.8
@@ -5481,6 +6164,12 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "화성시": [
+     "동탄면",
+     "병점1동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -5585,6 +6274,17 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "용인시 처인구": [
+     "남사면"
+    ],
+    "평택시": [
+     "독곡동",
+     "서탄면",
+     "신장동",
+     "진위면"
+    ]
+   },
    "osm_name": "진위변전소",
    "coord_exact": true,
    "match_km": 3.7
@@ -5752,6 +6452,18 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 8,
+   "supply": {
+    "파주시": [
+     "광탄면",
+     "금촌동",
+     "법원읍",
+     "아동동",
+     "야동동",
+     "월롱면",
+     "조리읍",
+     "파주읍"
+    ]
+   },
    "osm_name": "금촌변전소",
    "coord_exact": true,
    "match_km": 2.8
@@ -5785,6 +6497,11 @@
    "connect_max_mw": 12.9,
    "geocoded": false,
    "dong_count": 1,
+   "supply": {
+    "용인시 처인구": [
+     "양지면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -5856,6 +6573,20 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "여수시": [
+     "낙포동",
+     "묘도동",
+     "상암동",
+     "신덕동",
+     "오천동",
+     "월내동",
+     "월하동",
+     "적량동",
+     "중흥동",
+     "평어동"
+    ]
+   },
    "osm_name": "용성변전소",
    "coord_exact": true,
    "match_km": 3.7
@@ -5901,6 +6632,11 @@
    "connect_max_mw": 11.8,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "남양주시": [
+     "화도읍"
+    ]
+   },
    "osm_name": "덕소변전소",
    "coord_exact": true,
    "match_km": 11.1
@@ -6054,6 +6790,25 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "전주시 덕진구": [
+     "덕진동2가",
+     "만성동",
+     "송천동1가",
+     "여의동",
+     "장동",
+     "팔복동2가",
+     "팔복동3가"
+    ],
+    "전주시 완산구": [
+     "상림동",
+     "서신동",
+     "중화산동2가",
+     "효자동1가",
+     "효자동2가",
+     "효자동3가"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6137,6 +6892,22 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "천안시 동남구": [
+     "구룡동",
+     "구성동",
+     "다가동",
+     "봉명동",
+     "신방동",
+     "영성동",
+     "오룡동",
+     "용곡동",
+     "원성동",
+     "청당동",
+     "청수동",
+     "풍세면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6218,6 +6989,24 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "북구": [
+     "동림동"
+    ],
+    "서구": [
+     "광천동",
+     "금호동",
+     "내방동",
+     "덕흥동",
+     "마륵동",
+     "벽진동",
+     "세하동",
+     "쌍촌동",
+     "유촌동",
+     "치평동",
+     "화정동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6425,6 +7214,42 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 30,
+   "supply": {
+    "광산구": [
+     "고룡동",
+     "덕림동",
+     "도천동",
+     "도호동",
+     "등임동",
+     "박호동",
+     "산막동",
+     "산수동",
+     "산정동",
+     "서봉동",
+     "선동",
+     "소촌동",
+     "송대동",
+     "송정동",
+     "송치동",
+     "신가동",
+     "신창동",
+     "신촌동",
+     "오선동",
+     "우산동",
+     "운남동",
+     "월곡동",
+     "임곡동",
+     "장덕동",
+     "장수동",
+     "진곡동",
+     "하남동",
+     "흑석동"
+    ],
+    "서구": [
+     "서창동",
+     "세하동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6494,6 +7319,14 @@
    "connect_max_mw": 17.5,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "부안군": [
+     "백산면",
+     "부안읍",
+     "주산면",
+     "줄포면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6570,6 +7403,15 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "평택시": [
+     "소사동",
+     "용이동",
+     "월곡동",
+     "죽백동",
+     "청룡동"
+    ]
+   },
    "osm_name": "소사벌변전소",
    "coord_exact": true,
    "match_km": 0.8
@@ -6615,6 +7457,11 @@
    "connect_max_mw": 12.8,
    "geocoded": false,
    "dong_count": 1,
+   "supply": {
+    "용인시 처인구": [
+     "양지면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6658,6 +7505,11 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "천안시 동남구": [
+     "풍세면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6800,6 +7652,18 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "평택시": [
+     "고덕면",
+     "서정동",
+     "서탄면",
+     "안중읍",
+     "오성면"
+    ],
+    "화성시": [
+     "양감면"
+    ]
+   },
    "osm_name": "청북변전소",
    "coord_exact": true,
    "match_km": 1.9
@@ -6833,6 +7697,11 @@
    "connect_max_mw": 12.5,
    "geocoded": false,
    "dong_count": 1,
+   "supply": {
+    "용인시 처인구": [
+     "모현면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -6984,6 +7853,16 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "화성시": [
+     "봉담읍",
+     "비봉면",
+     "장안면",
+     "정남면",
+     "팔탄면",
+     "향남면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -7088,6 +7967,32 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 20,
+   "supply": {
+    "담양군": [
+     "봉산면"
+    ],
+    "북구": [
+     "매곡동",
+     "본촌동",
+     "삼각동",
+     "생용동",
+     "수곡동",
+     "신용동",
+     "양산동",
+     "연제동",
+     "오치동",
+     "용강동",
+     "용두동",
+     "용봉동",
+     "용전동",
+     "운암동",
+     "운정동",
+     "일곡동",
+     "지야동",
+     "태령동",
+     "효령동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -7119,6 +8024,11 @@
    "connect_max_mw": 12.6,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "연천군": [
+     "청산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -7277,6 +8187,31 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 19,
+   "supply": {
+    "광양시": [
+     "봉강면"
+    ],
+    "순천시": [
+     "가곡동",
+     "덕암동",
+     "동외동",
+     "매곡동",
+     "생목동",
+     "서면",
+     "석현동",
+     "승주읍",
+     "연향동",
+     "왕지동",
+     "용당동",
+     "월등면",
+     "장천동",
+     "조곡동",
+     "조례동",
+     "풍덕동",
+     "해룡면",
+     "황전면"
+    ]
+   },
    "osm_name": "순천변전소",
    "coord_exact": true,
    "match_km": 4.0
@@ -7310,6 +8245,11 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "천안시 동남구": [
+     "수신면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -7442,6 +8382,40 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 30,
+   "supply": {
+    "군산시": [
+     "개정동",
+     "개정면",
+     "경암동",
+     "경장동",
+     "구암동",
+     "금암동",
+     "나포면",
+     "내흥동",
+     "대명동",
+     "대야면",
+     "동흥남동",
+     "미원동",
+     "미장동",
+     "사정동",
+     "서흥남동",
+     "성산면",
+     "수송동",
+     "신영동",
+     "영동",
+     "옥산면",
+     "임피면",
+     "장미동",
+     "장재동",
+     "조촌동",
+     "죽성동",
+     "중동",
+     "중앙로2가",
+     "중앙로3가",
+     "평화동",
+     "회현면"
+    ]
+   },
    "osm_name": "동군산변전소",
    "coord_exact": true,
    "match_km": 1.1
@@ -7609,6 +8583,20 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "강화군": [
+     "강화읍",
+     "교동면",
+     "길상면",
+     "내가면",
+     "불은면",
+     "삼산면",
+     "선원면",
+     "송해면",
+     "양도면",
+     "화도면"
+    ]
+   },
    "osm_name": "강화변전소",
    "coord_exact": true,
    "match_km": 5.7
@@ -7720,6 +8708,13 @@
    "connect_max_mw": 12.3,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "화성시": [
+     "마도면",
+     "서신면",
+     "송산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -7763,6 +8758,12 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "군산시": [
+     "비응도동",
+     "오식도동"
+    ]
+   },
    "osm_name": "비응변전소",
    "coord_exact": true,
    "match_km": 2.0
@@ -7796,6 +8797,11 @@
    "connect_max_mw": 9.3,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "화성시": [
+     "마도면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -7940,6 +8946,19 @@
    "connect_max_mw": 17.5,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "정읍시": [
+     "고부면",
+     "공평동",
+     "덕천면",
+     "소성면",
+     "영원면",
+     "용계동",
+     "이평면",
+     "입암면",
+     "흑암동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8063,6 +9082,47 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 31,
+   "supply": {
+    "김제시": [
+     "금구면",
+     "금산면",
+     "용지면"
+    ],
+    "완주군": [
+     "구이면",
+     "이서면"
+    ],
+    "전주시 덕진구": [
+     "남정동"
+    ],
+    "전주시 완산구": [
+     "경원동1가",
+     "고사동",
+     "교동",
+     "대성동",
+     "동서학동",
+     "동완산동",
+     "삼천동1가",
+     "삼천동2가",
+     "삼천동3가",
+     "상림동",
+     "색장동",
+     "서서학동",
+     "서완산동1가",
+     "석구동",
+     "용복동",
+     "원당동",
+     "전동",
+     "중인동",
+     "중화산동2가",
+     "평화동1가",
+     "평화동2가",
+     "평화동3가",
+     "효자동1가",
+     "효자동2가",
+     "효자동3가"
+    ]
+   },
    "osm_name": "남전주변전소",
    "coord_exact": true,
    "match_km": 2.1
@@ -8244,6 +9304,30 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 18,
+   "supply": {
+    "광산구": [
+     "고룡동",
+     "광산동",
+     "도천동",
+     "두정동",
+     "사호동",
+     "산막동",
+     "신룡동",
+     "안청동",
+     "오산동",
+     "오선동",
+     "임곡동",
+     "장덕동",
+     "장수동",
+     "진곡동",
+     "하남동"
+    ],
+    "장성군": [
+     "남면",
+     "동화면",
+     "황룡면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8327,6 +9411,31 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 19,
+   "supply": {
+    "전주시 덕진구": [
+     "금암동",
+     "덕진동1가",
+     "덕진동2가",
+     "우아동3가",
+     "인후동1가",
+     "인후동2가",
+     "진북동"
+    ],
+    "전주시 완산구": [
+     "교동",
+     "동서학동",
+     "동완산동",
+     "서서학동",
+     "서신동",
+     "서완산동1가",
+     "서완산동2가",
+     "중화산동1가",
+     "중화산동2가",
+     "평화동1가",
+     "효자동1가",
+     "효자동2가"
+    ]
+   },
    "osm_name": "태평변전소",
    "coord_exact": true,
    "match_km": 0.5
@@ -8468,6 +9577,18 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 8,
+   "supply": {
+    "남양주시": [
+     "금곡동",
+     "삼패동",
+     "와부읍",
+     "이패동",
+     "일패동",
+     "조안면",
+     "평내동",
+     "화도읍"
+    ]
+   },
    "osm_name": "덕소변전소",
    "coord_exact": true,
    "match_km": 2.8
@@ -8501,6 +9622,11 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "안양시 동안구": [
+     "관양동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8532,6 +9658,11 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "화성시": [
+     "동탄면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8622,6 +9753,25 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 15,
+   "supply": {
+    "여수시": [
+     "둔덕동",
+     "봉계동",
+     "선원동",
+     "소라면",
+     "소호동",
+     "신기동",
+     "안산동",
+     "여천동",
+     "월하동",
+     "주삼동",
+     "평어동",
+     "학동",
+     "해산동",
+     "화장동",
+     "화치동"
+    ]
+   },
    "osm_name": "여천변전소",
    "coord_exact": true,
    "match_km": 3.2
@@ -8676,6 +9826,18 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "용인시 기흥구": [
+     "마북동",
+     "보정동",
+     "신갈동",
+     "언남동",
+     "영덕동"
+    ],
+    "용인시 수지구": [
+     "죽전동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8733,6 +9895,29 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "수원시 권선구": [
+     "곡반정동",
+     "권선1동",
+     "권선2동"
+    ],
+    "수원시 영통구": [
+     "망포동",
+     "신동"
+    ],
+    "용인시 기흥구": [
+     "상갈동",
+     "서천동",
+     "하갈동"
+    ],
+    "화성시": [
+     "기산1동",
+     "기산3동",
+     "반월1동",
+     "반정1동",
+     "반정2동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8877,6 +10062,12 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "천안시 서북구": [
+     "성환읍",
+     "입장면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8960,6 +10151,21 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "용인시 기흥구": [
+     "고매동",
+     "공세동",
+     "구갈동",
+     "농서동",
+     "보라동",
+     "상갈동",
+     "영덕동",
+     "하갈동"
+    ],
+    "화성시": [
+     "동탄면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -8991,6 +10197,11 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "하남시": [
+     "감이동"
+    ]
+   },
    "osm_name": "위례변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -9038,6 +10249,12 @@
    "connect_max_mw": 12.2,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "남양주시": [
+     "별내면",
+     "진접읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -9102,6 +10319,13 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "화성시": [
+     "매송면",
+     "봉담읍",
+     "비봉면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -9234,6 +10458,26 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 14,
+   "supply": {
+    "목포시": [
+     "대성동",
+     "대양동",
+     "동명동",
+     "산정동",
+     "상동",
+     "석현동",
+     "연산동",
+     "옥암동",
+     "용당동",
+     "용해동"
+    ],
+    "무안군": [
+     "몽탄면",
+     "삼향읍",
+     "일로읍",
+     "청계면"
+    ]
+   },
    "osm_name": "목포변전소",
    "coord_exact": true,
    "match_km": 1.3
@@ -9267,6 +10511,11 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "평택시": [
+     "신장동"
+    ]
+   },
    "osm_name": "동수원변전소",
    "coord_exact": true,
    "match_km": 20.0
@@ -9331,6 +10580,13 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "안양시 만안구": [
+     "박달동",
+     "석수동",
+     "안양동"
+    ]
+   },
    "osm_name": "서수원변전소",
    "coord_exact": true,
    "match_km": 13.6
@@ -9376,6 +10632,11 @@
    "connect_max_mw": 12.3,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "남양주시": [
+     "진접읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -9548,6 +10809,39 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 27,
+   "supply": {
+    "천안시 동남구": [
+     "광덕면",
+     "구룡동",
+     "구성동",
+     "다가동",
+     "대흥동",
+     "문화동",
+     "병천면",
+     "봉명동",
+     "북면",
+     "사직동",
+     "삼룡동",
+     "성남면",
+     "성황동",
+     "신방동",
+     "신부동",
+     "안서동",
+     "영성동",
+     "오룡동",
+     "용곡동",
+     "원성동",
+     "유량동",
+     "청당동",
+     "청수동",
+     "풍세면"
+    ],
+    "천안시 서북구": [
+     "두정동",
+     "부대동",
+     "신당동"
+    ]
+   },
    "osm_name": "천안변전소",
    "coord_exact": true,
    "match_km": 0.6
@@ -9588,6 +10882,16 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "수원시 권선구": [
+     "당수동",
+     "입북동"
+    ],
+    "수원시 장안구": [
+     "율전동",
+     "파장동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -9643,6 +10947,12 @@
    "connect_max_mw": 10.1,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "파주시": [
+     "광탄면",
+     "법원읍"
+    ]
+   },
    "osm_name": "백학변전소",
    "coord_exact": true,
    "match_km": 21.8
@@ -9683,6 +10993,11 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "파주시": [
+     "조리읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -9780,6 +11095,39 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 29,
+   "supply": {
+    "군산시": [
+     "금광동",
+     "금동",
+     "나운동",
+     "동흥남동",
+     "둔율동",
+     "명산동",
+     "문화동",
+     "미룡동",
+     "미원동",
+     "미장동",
+     "산북동",
+     "삼학동",
+     "서흥남동",
+     "선양동",
+     "소룡동",
+     "송풍동",
+     "수송동",
+     "신풍동",
+     "신흥동",
+     "오룡동",
+     "옥구읍",
+     "옥산면",
+     "월명동",
+     "장재동",
+     "중앙로2가",
+     "중앙로3가",
+     "지곡동",
+     "해망동",
+     "회현면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -9966,6 +11314,17 @@
    "connect_max_mw": 15.5,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "천안시 동남구": [
+     "북면",
+     "신부동",
+     "안서동"
+    ],
+    "천안시 서북구": [
+     "성거읍",
+     "입장면"
+    ]
+   },
    "osm_name": "성거변전소",
    "coord_exact": true,
    "match_km": 3.5
@@ -10140,6 +11499,49 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 33,
+   "supply": {
+    "김제시": [
+     "백구면",
+     "용지면"
+    ],
+    "완주군": [
+     "봉동읍",
+     "삼례읍",
+     "이서면"
+    ],
+    "익산시": [
+     "춘포면"
+    ],
+    "전주시 덕진구": [
+     "강흥동",
+     "고랑동",
+     "금암동",
+     "남정동",
+     "덕진동1가",
+     "덕진동2가",
+     "도덕동",
+     "도도동",
+     "만성동",
+     "반월동",
+     "성덕동",
+     "송천동1가",
+     "송천동2가",
+     "여의동",
+     "용정동",
+     "원동",
+     "장동",
+     "전미동1가",
+     "전미동2가",
+     "팔복동1가",
+     "팔복동2가",
+     "팔복동3가",
+     "팔복동4가",
+     "호성동1가",
+     "호성동2가",
+     "호성동3가",
+     "화전동"
+    ]
+   },
    "osm_name": "전주변전소",
    "coord_exact": true,
    "match_km": 0.9
@@ -10267,6 +11669,13 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "평택시": [
+     "안중읍",
+     "오성면",
+     "현덕면"
+    ]
+   },
    "osm_name": "포승변전소",
    "coord_exact": true,
    "match_km": 4.5
@@ -10338,6 +11747,15 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "하남시": [
+     "감북동",
+     "망월동",
+     "초이동",
+     "초일동",
+     "풍산동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -10510,6 +11928,40 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 24,
+   "supply": {
+    "광산구": [
+     "도천동",
+     "비아동",
+     "산월동",
+     "수완동",
+     "신가동",
+     "신창동",
+     "쌍암동",
+     "안청동",
+     "월계동"
+    ],
+    "담양군": [
+     "대전면",
+     "수북면"
+    ],
+    "북구": [
+     "대촌동",
+     "동림동",
+     "본촌동",
+     "신용동",
+     "양산동",
+     "연제동",
+     "오룡동",
+     "용두동",
+     "용전동",
+     "월출동",
+     "지야동"
+    ],
+    "장성군": [
+     "남면",
+     "진원면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -10628,6 +12080,13 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "용인시 처인구": [
+     "모현면",
+     "유방동",
+     "포곡읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -10659,6 +12118,11 @@
    "connect_max_mw": 8.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "파주시": [
+     "조리읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -10716,6 +12180,13 @@
    "connect_max_mw": 8.8,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "천안시 서북구": [
+     "백석동",
+     "불당동",
+     "차암동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -10773,6 +12244,18 @@
    "connect_max_mw": 17.6,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "완주군": [
+     "구이면",
+     "상관면"
+    ],
+    "임실군": [
+     "강진면",
+     "관촌면",
+     "신덕면",
+     "운암면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -10804,6 +12287,11 @@
    "connect_max_mw": 7.7,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "평택시": [
+     "현덕면"
+    ]
+   },
    "osm_name": "만호변전소",
    "coord_exact": true,
    "match_km": 7.4
@@ -10910,6 +12398,47 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 33,
+   "supply": {
+    "나주시": [
+     "금천면",
+     "남평읍",
+     "산포면"
+    ],
+    "남구": [
+     "구소동",
+     "노대동",
+     "대지동",
+     "덕남동",
+     "도금동",
+     "석정동",
+     "송하동",
+     "승촌동",
+     "신장동",
+     "압촌동",
+     "양과동",
+     "양촌동",
+     "원산동",
+     "월성동",
+     "이장동",
+     "임암동",
+     "지석동",
+     "칠석동",
+     "행암동",
+     "화장동"
+    ],
+    "서구": [
+     "금호동",
+     "마륵동",
+     "매월동",
+     "벽진동",
+     "서창동",
+     "세하동",
+     "쌍촌동",
+     "용두동",
+     "풍암동",
+     "화정동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -10972,6 +12501,22 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 8,
+   "supply": {
+    "광산구": [
+     "도천동",
+     "비아동",
+     "산정동",
+     "수완동",
+     "월계동"
+    ],
+    "북구": [
+     "오룡동"
+    ],
+    "장성군": [
+     "남면",
+     "진원면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -11104,6 +12649,46 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 36,
+   "supply": {
+    "여수시": [
+     "V남면",
+     "고소동",
+     "공화동",
+     "관문동",
+     "광무동",
+     "교동",
+     "국동",
+     "낙포동",
+     "남산동",
+     "덕충동",
+     "돌산읍",
+     "둔덕동",
+     "만흥동",
+     "문수동",
+     "미평동",
+     "봉강동",
+     "봉계동",
+     "봉산동",
+     "상암동",
+     "서교동",
+     "수정동",
+     "시전동",
+     "신기동",
+     "신덕동",
+     "신월동",
+     "여서동",
+     "연등동",
+     "오림동",
+     "오천동",
+     "웅천동",
+     "종화동",
+     "중앙동",
+     "중흥동",
+     "충무동",
+     "호명동",
+     "화정면"
+    ]
+   },
    "osm_name": "여수변전소",
    "coord_exact": true,
    "match_km": 2.7
@@ -11203,6 +12788,44 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 26,
+   "supply": {
+    "나주시": [
+     "금천면",
+     "남평읍",
+     "다도면",
+     "산포면"
+    ],
+    "남구": [
+     "구소동",
+     "노대동",
+     "덕남동",
+     "백운동",
+     "봉선동",
+     "송하동",
+     "승촌동",
+     "신장동",
+     "양과동",
+     "양촌동",
+     "월산동",
+     "이장동",
+     "임암동",
+     "주월동",
+     "진월동",
+     "칠석동",
+     "행암동"
+    ],
+    "북구": [
+     "풍향동"
+    ],
+    "서구": [
+     "양동"
+    ],
+    "화순군": [
+     "도곡면",
+     "도암면",
+     "화순읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -11272,6 +12895,18 @@
    "connect_max_mw": 10.2,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "순천시": [
+     "해룡면"
+    ],
+    "여수시": [
+     "소라면",
+     "율촌면",
+     "중흥동",
+     "평어동",
+     "화치동"
+    ]
+   },
    "osm_name": "화치변전소",
    "coord_exact": true,
    "match_km": 3.7
@@ -11418,6 +13053,24 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "연천군": [
+     "전곡읍"
+    ],
+    "파주시": [
+     "군내면",
+     "문산읍",
+     "법원읍",
+     "월롱면",
+     "장단면",
+     "적성면",
+     "진동면",
+     "진서면",
+     "탄현면",
+     "파주읍",
+     "파평면"
+    ]
+   },
    "osm_name": "문산변전소",
    "coord_exact": true,
    "match_km": 4.4
@@ -11503,6 +13156,14 @@
    "connect_max_mw": 18.9,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "천안시 동남구": [
+     "광덕면",
+     "병천면",
+     "성남면",
+     "수신면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -11600,6 +13261,55 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 41,
+   "supply": {
+    "광산구": [
+     "남산동",
+     "덕림동",
+     "도덕동",
+     "도산동",
+     "동림동",
+     "동호동",
+     "명도동",
+     "복룡동",
+     "북산동",
+     "산막동",
+     "산수동",
+     "산정동",
+     "삼거동",
+     "서봉동",
+     "선동",
+     "선암동",
+     "소촌동",
+     "송대동",
+     "송산동",
+     "송정동",
+     "송촌동",
+     "송치동",
+     "신촌동",
+     "양동",
+     "양산동",
+     "오운동",
+     "옥동",
+     "왕동",
+     "우산동",
+     "운수동",
+     "월전동",
+     "장록동",
+     "지산동",
+     "지죽동",
+     "지평동",
+     "황룡동"
+    ],
+    "장성군": [
+     "동화면",
+     "삼서면"
+    ],
+    "함평군": [
+     "나산면",
+     "월야면",
+     "해보면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -11671,6 +13381,13 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "천안시 서북구": [
+     "성거읍",
+     "성환읍",
+     "입장면"
+    ]
+   },
    "osm_name": "직산 변전소",
    "coord_exact": true,
    "match_km": 3.8
@@ -11803,6 +13520,17 @@
    "connect_max_mw": 12.4,
    "geocoded": true,
    "dong_count": 7,
+   "supply": {
+    "화성시": [
+     "마도면",
+     "봉담읍",
+     "비봉면",
+     "서신면",
+     "송산면",
+     "장안면",
+     "팔탄면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -11841,6 +13569,11 @@
    "connect_max_mw": 15.3,
    "geocoded": false,
    "dong_count": 1,
+   "supply": {
+    "용인시 처인구": [
+     "양지면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -11945,6 +13678,15 @@
    "connect_max_mw": 2.1,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "서산시": [
+     "대산읍",
+     "성연면",
+     "온석동",
+     "지곡면",
+     "팔봉면"
+    ]
+   },
    "osm_name": "성연변전소",
    "coord_exact": true,
    "match_km": 2.1
@@ -12065,6 +13807,47 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 31,
+   "supply": {
+    "담양군": [
+     "고서면",
+     "남면",
+     "대덕면",
+     "무정면",
+     "봉산면",
+     "창평면"
+    ],
+    "동구": [
+     "계림동",
+     "동명동",
+     "산수동",
+     "장동",
+     "지산동"
+    ],
+    "북구": [
+     "각화동",
+     "금곡동",
+     "덕의동",
+     "두암동",
+     "망월동",
+     "매곡동",
+     "문흥동",
+     "신안동",
+     "오치동",
+     "용봉동",
+     "우산동",
+     "운암동",
+     "운정동",
+     "장등동",
+     "중흥동",
+     "청풍동",
+     "충효동",
+     "풍향동",
+     "화암동"
+    ],
+    "화순군": [
+     "이서면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -12096,6 +13879,11 @@
    "connect_max_mw": 1.7,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "서산시": [
+     "운산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -12275,6 +14063,29 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 15,
+   "supply": {
+    "완주군": [
+     "경천면",
+     "고산면",
+     "동상면",
+     "봉동읍",
+     "비봉면",
+     "삼례읍",
+     "운주면",
+     "화산면"
+    ],
+    "익산시": [
+     "왕궁면",
+     "춘포면"
+    ],
+    "전주시 덕진구": [
+     "고랑동",
+     "송천동2가",
+     "전미동1가",
+     "전미동2가",
+     "호성동3가"
+    ]
+   },
    "osm_name": "북전주변전소",
    "coord_exact": true,
    "match_km": 1.9
@@ -12428,6 +14239,50 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 34,
+   "supply": {
+    "완주군": [
+     "고산면",
+     "구이면",
+     "동상면",
+     "봉동읍",
+     "삼례읍",
+     "상관면",
+     "소양면"
+    ],
+    "임실군": [
+     "관촌면",
+     "신덕면"
+    ],
+    "전주시 덕진구": [
+     "금상동",
+     "금암동",
+     "덕진동1가",
+     "산정동",
+     "송천동1가",
+     "송천동2가",
+     "우아동1가",
+     "우아동2가",
+     "우아동3가",
+     "인후동1가",
+     "인후동2가",
+     "진북동",
+     "호성동1가",
+     "호성동2가"
+    ],
+    "전주시 완산구": [
+     "경원동1가",
+     "경원동2가",
+     "경원동3가",
+     "교동",
+     "남노송동",
+     "대성동",
+     "색장동",
+     "중노송동",
+     "풍남동1가",
+     "풍남동2가",
+     "풍남동3가"
+    ]
+   },
    "osm_name": "동전주변전소",
    "coord_exact": true,
    "match_km": 1.5
@@ -12508,6 +14363,15 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "천안시 동남구": [
+     "광덕면",
+     "구룡동",
+     "신방동",
+     "청당동",
+     "풍세면"
+    ]
+   },
    "osm_name": "풍세변전소",
    "coord_exact": true,
    "match_km": 2.9
@@ -12642,6 +14506,13 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "화성시": [
+     "장안면",
+     "팔탄면",
+     "향남면"
+    ]
+   },
    "osm_name": "수원 SS",
    "coord_exact": true,
    "match_km": 20.4
@@ -12675,6 +14546,11 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "서산시": [
+     "고북면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -12784,6 +14660,23 @@
    "connect_max_mw": 11.8,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "군산시": [
+     "개사동",
+     "금동",
+     "내초동",
+     "미룡동",
+     "산북동",
+     "소룡동",
+     "신관동",
+     "오식도동",
+     "옥구읍",
+     "옥산면",
+     "옥서면",
+     "장미동",
+     "해망동"
+    ]
+   },
    "osm_name": "군장변전소",
    "coord_exact": true,
    "match_km": 11.4
@@ -12838,6 +14731,16 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "용인시 기흥구": [
+     "구갈동",
+     "마북동",
+     "보정동",
+     "상갈동",
+     "신갈동",
+     "언남동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -12876,6 +14779,15 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "전주시 덕진구": [
+     "고랑동",
+     "송천동1가",
+     "송천동2가",
+     "팔복동1가",
+     "팔복동4가"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -12940,6 +14852,14 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "용인시 수지구": [
+     "고기동",
+     "동천동",
+     "성복동",
+     "신봉동"
+    ]
+   },
    "osm_name": "신갈변전소",
    "coord_exact": true,
    "match_km": 7.3
@@ -12973,6 +14893,11 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "파주시": [
+     "광탄면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -13037,6 +14962,19 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 7,
+   "supply": {
+    "남구": [
+     "백운동",
+     "월산동",
+     "주월동"
+    ],
+    "서구": [
+     "농성동",
+     "쌍촌동",
+     "양동",
+     "화정동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -13115,6 +15053,22 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "용인시 기흥구": [
+     "고매동",
+     "공세동",
+     "구갈동",
+     "보라동",
+     "상갈동",
+     "상하동",
+     "지곡동",
+     "하갈동"
+    ],
+    "용인시 처인구": [
+     "삼가동",
+     "역북동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -13193,6 +15147,23 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "하남시": [
+     "감북동",
+     "감이동",
+     "감일동",
+     "광암동",
+     "교산동",
+     "덕풍동",
+     "상사창동",
+     "천현동",
+     "초이동",
+     "초일동",
+     "춘궁동",
+     "하사창동",
+     "항동"
+    ]
+   },
    "osm_name": "동서울 변전소",
    "coord_exact": true,
    "match_km": 1.9
@@ -13360,6 +15331,19 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "파주시": [
+     "검산동",
+     "광탄면",
+     "금촌동",
+     "맥금동",
+     "아동동",
+     "야동동",
+     "월롱면",
+     "탄현면",
+     "파주읍"
+    ]
+   },
    "osm_name": "신덕은변전소",
    "coord_exact": true,
    "match_km": 2.2
@@ -13494,6 +15478,55 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 41,
+   "supply": {
+    "보성군": [
+     "벌교읍"
+    ],
+    "순천시": [
+     "가곡동",
+     "교량동",
+     "금곡동",
+     "낙안면",
+     "남내동",
+     "남정동",
+     "대대동",
+     "대룡동",
+     "덕암동",
+     "덕월동",
+     "동외동",
+     "매곡동",
+     "별량면",
+     "삼거동",
+     "상사면",
+     "서면",
+     "석현동",
+     "송광면",
+     "승주읍",
+     "안풍동",
+     "야흥동",
+     "연향동",
+     "영동",
+     "오천동",
+     "옥천동",
+     "와룡동",
+     "외서면",
+     "용당동",
+     "인월동",
+     "인제동",
+     "장천동",
+     "저전동",
+     "조곡동",
+     "조례동",
+     "중앙동",
+     "풍덕동",
+     "해룡면",
+     "행동",
+     "홍내동"
+    ],
+    "여수시": [
+     "율촌면"
+    ]
+   },
    "osm_name": "서순천변전소",
    "coord_exact": true,
    "match_km": 3.5
@@ -13654,6 +15687,37 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 25,
+   "supply": {
+    "김제시": [
+     "백구면"
+    ],
+    "익산시": [
+     "금강동",
+     "금마면",
+     "남중동",
+     "동산동",
+     "마동",
+     "목천동",
+     "부송동",
+     "삼기면",
+     "석탄동",
+     "신동",
+     "신용동",
+     "신흥동",
+     "어양동",
+     "여산면",
+     "영등동",
+     "왕궁면",
+     "월성동",
+     "인화동2가",
+     "임상동",
+     "정족동",
+     "평화동",
+     "함라면",
+     "함열읍",
+     "황등면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -13685,6 +15749,14 @@
    "connect_max_mw": 1.9,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "광양시": [
+     "광양읍"
+    ],
+    "순천시": [
+     "해룡면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -13822,6 +15894,46 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 32,
+   "supply": {
+    "군산시": [
+     "대야면",
+     "서수면",
+     "임피면"
+    ],
+    "김제시": [
+     "백구면"
+    ],
+    "익산시": [
+     "갈산동",
+     "금강동",
+     "남중동",
+     "동산동",
+     "마동",
+     "만석동",
+     "모현동1가",
+     "모현동2가",
+     "목천동",
+     "석탄동",
+     "송학동",
+     "신동",
+     "신용동",
+     "신흥동",
+     "영등동",
+     "오산면",
+     "인화동1가",
+     "인화동2가",
+     "주현동",
+     "중앙동1가",
+     "중앙동2가",
+     "중앙동3가",
+     "창인동1가",
+     "창인동2가",
+     "평화동",
+     "함라면",
+     "현영동",
+     "황등면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -13860,6 +15972,14 @@
    "connect_max_mw": 10.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "강진군": [
+     "도암면"
+    ],
+    "해남군": [
+     "옥천면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -13999,6 +16119,36 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 24,
+   "supply": {
+    "고흥군": [
+     "영남면"
+    ],
+    "여수시": [
+     "V남면",
+     "경호동",
+     "돌산읍",
+     "둔덕동",
+     "문수동",
+     "봉계동",
+     "선원동",
+     "소라면",
+     "소호동",
+     "시전동",
+     "신기동",
+     "신월동",
+     "안산동",
+     "여서동",
+     "여천동",
+     "웅천동",
+     "율촌면",
+     "주삼동",
+     "학동",
+     "해산동",
+     "화양면",
+     "화장동",
+     "화정면"
+    ]
+   },
    "osm_name": "소라변전소",
    "coord_exact": true,
    "match_km": 4.2
@@ -14032,6 +16182,11 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "천안시 동남구": [
+     "광덕면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -14103,6 +16258,27 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "남구": [
+     "방림동",
+     "진월동"
+    ],
+    "동구": [
+     "내남동",
+     "서석동",
+     "선교동",
+     "소태동",
+     "용산동",
+     "용연동",
+     "운림동",
+     "월남동",
+     "학동"
+    ],
+    "화순군": [
+     "도곡면",
+     "화순읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -14160,6 +16336,16 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "목포시": [
+     "석현동",
+     "옥암동"
+    ],
+    "무안군": [
+     "삼향읍",
+     "일로읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -14257,6 +16443,15 @@
    "connect_max_mw": 12.4,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "파주시": [
+     "문산읍",
+     "법원읍",
+     "적성면",
+     "파주읍",
+     "파평면"
+    ]
+   },
    "osm_name": "선유변전소",
    "coord_exact": true,
    "match_km": 5.9
@@ -14349,6 +16544,17 @@
    "connect_max_mw": 11.9,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "광양시": [
+     "광양읍"
+    ],
+    "순천시": [
+     "해룡면"
+    ],
+    "여수시": [
+     "율촌면"
+    ]
+   },
    "osm_name": "율촌변전소",
    "coord_exact": true,
    "match_km": 1.7
@@ -14408,6 +16614,16 @@
    "connect_max_mw": 10.9,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "연천군": [
+     "미산면",
+     "전곡읍"
+    ],
+    "파주시": [
+     "적성면",
+     "파주읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -14566,6 +16782,17 @@
    "connect_max_mw": 18.0,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "완주군": [
+     "봉동읍",
+     "비봉면",
+     "삼례읍",
+     "화산면"
+    ],
+    "익산시": [
+     "왕궁면"
+    ]
+   },
    "osm_name": "봉동변전소",
    "coord_exact": true,
    "match_km": 2.7
@@ -14684,6 +16911,14 @@
    "connect_max_mw": 11.0,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "군산시": [
+     "내초동",
+     "비응도동",
+     "소룡동",
+     "오식도동"
+    ]
+   },
    "osm_name": "내초변전소",
    "coord_exact": true,
    "match_km": 0.6
@@ -14750,6 +16985,19 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "강화군": [
+     "강화읍",
+     "교동면",
+     "내가면",
+     "삼산면",
+     "서도면",
+     "송해면",
+     "양도면",
+     "양사면",
+     "하점면"
+    ]
+   },
    "osm_name": "서강화변전소",
    "coord_exact": true,
    "match_km": 3.7
@@ -14870,6 +17118,19 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "광양시": [
+     "광영동",
+     "금호동",
+     "다압면",
+     "마동",
+     "옥곡면",
+     "중동",
+     "진상면",
+     "진월면",
+     "태인동"
+    ]
+   },
    "osm_name": "태금변전소",
    "coord_exact": true,
    "match_km": 6.1
@@ -15004,6 +17265,21 @@
    "connect_max_mw": 18.9,
    "geocoded": true,
    "dong_count": 11,
+   "supply": {
+    "완도군": [
+     "고금면",
+     "군외면",
+     "금일읍",
+     "노화읍",
+     "보길면",
+     "생일면",
+     "소안면",
+     "신지면",
+     "약산면",
+     "완도읍",
+     "청산면"
+    ]
+   },
    "osm_name": "완도변전소",
    "coord_exact": true,
    "match_km": 6.6
@@ -15157,6 +17433,15 @@
    "connect_max_mw": 12.3,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "천안시 동남구": [
+     "동면",
+     "병천면",
+     "북면",
+     "성남면",
+     "수신면"
+    ]
+   },
    "osm_name": "동천안변전소",
    "coord_exact": true,
    "match_km": 3.3
@@ -15338,6 +17623,11 @@
    "connect_max_mw": 12.6,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "화성시": [
+     "장안면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -15428,6 +17718,13 @@
    "connect_max_mw": 9.1,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "서산시": [
+     "대산읍",
+     "성연면",
+     "지곡면"
+    ]
+   },
    "osm_name": "대산변전소",
    "coord_exact": true,
    "match_km": 9.9
@@ -15513,6 +17810,31 @@
    "connect_max_mw": 8.8,
    "geocoded": true,
    "dong_count": 15,
+   "supply": {
+    "곡성군": [
+     "옥과면",
+     "입면"
+    ],
+    "남원시": [
+     "대강면"
+    ],
+    "순창군": [
+     "구림면",
+     "금과면",
+     "동계면",
+     "순창읍",
+     "쌍치면",
+     "유등면",
+     "인계면",
+     "적성면",
+     "팔덕면",
+     "풍산면"
+    ],
+    "임실군": [
+     "덕치면",
+     "삼계면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -15692,6 +18014,13 @@
    "connect_max_mw": 12.5,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "화성시": [
+     "마도면",
+     "서신면",
+     "송산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -15723,6 +18052,11 @@
    "connect_max_mw": 9.6,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "평택시": [
+     "용이동"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -15820,6 +18154,24 @@
    "connect_max_mw": 3.9,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "군산시": [
+     "나포면"
+    ],
+    "익산시": [
+     "금마면",
+     "낭산면",
+     "망성면",
+     "삼기면",
+     "성당면",
+     "여산면",
+     "용동면",
+     "웅포면",
+     "함라면",
+     "함열읍",
+     "황등면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -15851,6 +18203,11 @@
    "connect_max_mw": 3.6,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "여수시": [
+     "화정면"
+    ]
+   },
    "osm_name": "여수변전소",
    "coord_exact": true,
    "match_km": 19.2
@@ -15931,6 +18288,27 @@
    "connect_max_mw": 12.6,
    "geocoded": true,
    "dong_count": 11,
+   "supply": {
+    "곡성군": [
+     "고달면"
+    ],
+    "광양시": [
+     "다압면"
+    ],
+    "구례군": [
+     "간전면",
+     "광의면",
+     "구례읍",
+     "마산면",
+     "문척면",
+     "산동면",
+     "용방면",
+     "토지면"
+    ],
+    "순천시": [
+     "황전면"
+    ]
+   },
    "osm_name": "구례변전소",
    "coord_exact": true,
    "match_km": 3.0
@@ -16023,6 +18401,21 @@
    "connect_max_mw": 4.7,
    "geocoded": true,
    "dong_count": 9,
+   "supply": {
+    "나주시": [
+     "금천면",
+     "남평읍",
+     "다도면",
+     "봉황면",
+     "산포면",
+     "세지면",
+     "평산동"
+    ],
+    "영암군": [
+     "금정면",
+     "신북면"
+    ]
+   },
    "osm_name": "금천변전소",
    "coord_exact": true,
    "match_km": 5.6
@@ -16232,6 +18625,16 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "영암군": [
+     "미암면",
+     "삼호읍",
+     "학산면"
+    ],
+    "해남군": [
+     "계곡면"
+    ]
+   },
    "osm_name": "대불변전소",
    "coord_exact": true,
    "match_km": 11.8
@@ -16305,6 +18708,13 @@
    "connect_max_mw": 8.6,
    "geocoded": true,
    "dong_count": 3,
+   "supply": {
+    "군산시": [
+     "비응도동",
+     "오식도동",
+     "옥도면"
+    ]
+   },
    "osm_name": "군장변전소",
    "coord_exact": true,
    "match_km": 6.4
@@ -16439,6 +18849,37 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 23,
+   "supply": {
+    "목포시": [
+     "금화동",
+     "달동",
+     "대성동",
+     "대양동",
+     "대의동2가",
+     "산정동",
+     "상동",
+     "서산동",
+     "양동",
+     "연산동",
+     "온금동",
+     "용당동",
+     "용해동",
+     "유달동",
+     "율도동",
+     "죽교동",
+     "항동",
+     "해안동2가",
+     "해안동3가",
+     "해안동4가",
+     "호남동"
+    ],
+    "신안군": [
+     "압해면"
+    ],
+    "영암군": [
+     "삼호읍"
+    ]
+   },
    "osm_name": "북항변전소",
    "coord_exact": true,
    "match_km": 2.9
@@ -16472,6 +18913,11 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "진안군": [
+     "용담면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -16591,6 +19037,16 @@
    "connect_max_mw": 4.2,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "고창군": [
+     "상하면"
+    ],
+    "영광군": [
+     "백수읍",
+     "법성면",
+     "홍농읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -16742,6 +19198,34 @@
    "connect_max_mw": 11.1,
    "geocoded": true,
    "dong_count": 22,
+   "supply": {
+    "완주군": [
+     "삼례읍"
+    ],
+    "익산시": [
+     "금강동",
+     "금마면",
+     "덕기동",
+     "동산동",
+     "마동",
+     "부송동",
+     "삼기면",
+     "석암동",
+     "석왕동",
+     "석탄동",
+     "신흥동",
+     "어양동",
+     "영등동",
+     "왕궁면",
+     "용제동",
+     "월성동",
+     "은기동",
+     "임상동",
+     "정족동",
+     "춘포면",
+     "팔봉동"
+    ]
+   },
    "osm_name": "팔복변전소",
    "coord_exact": true,
    "match_km": 15.7
@@ -16839,6 +19323,12 @@
    "connect_max_mw": 4.9,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "용인시 처인구": [
+     "백암면",
+     "원삼면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -16931,6 +19421,20 @@
    "connect_max_mw": 2.4,
    "geocoded": true,
    "dong_count": 8,
+   "supply": {
+    "광양시": [
+     "광양읍",
+     "봉강면",
+     "옥곡면",
+     "옥룡면",
+     "중군동",
+     "황금동"
+    ],
+    "순천시": [
+     "조례동",
+     "해룡면"
+    ]
+   },
    "osm_name": "광양변전소",
    "coord_exact": true,
    "match_km": 2.0
@@ -16976,6 +19480,12 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "연천군": [
+     "연천읍",
+     "청산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -17068,6 +19578,35 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 17,
+   "supply": {
+    "광산구": [
+     "내산동",
+     "대산동",
+     "덕림동",
+     "삼거동",
+     "양동"
+    ],
+    "나주시": [
+     "노안면",
+     "다시면",
+     "대호동",
+     "문평면"
+    ],
+    "영광군": [
+     "군남면",
+     "불갑면"
+    ],
+    "장성군": [
+     "삼서면"
+    ],
+    "함평군": [
+     "나산면",
+     "손불면",
+     "신광면",
+     "월야면",
+     "해보면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -17146,6 +19685,19 @@
    "connect_max_mw": 7.9,
    "geocoded": true,
    "dong_count": 7,
+   "supply": {
+    "완주군": [
+     "봉동읍",
+     "화산면"
+    ],
+    "익산시": [
+     "금마면",
+     "낭산면",
+     "망성면",
+     "여산면",
+     "왕궁면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -17257,6 +19809,32 @@
    "connect_max_mw": 1.6,
    "geocoded": true,
    "dong_count": 16,
+   "supply": {
+    "곡성군": [
+     "겸면",
+     "고달면",
+     "목사동면",
+     "삼기면",
+     "석곡면",
+     "오곡면",
+     "죽곡면"
+    ],
+    "구례군": [
+     "구례읍"
+    ],
+    "보성군": [
+     "벌교읍"
+    ],
+    "순천시": [
+     "서면",
+     "송광면",
+     "승주읍",
+     "외서면",
+     "월등면",
+     "주암면",
+     "황전면"
+    ]
+   },
    "osm_name": "승주변전소",
    "coord_exact": true,
    "match_km": 9.0
@@ -17417,6 +19995,32 @@
    "connect_max_mw": 7.9,
    "geocoded": true,
    "dong_count": 22,
+   "supply": {
+    "서산시": [
+     "갈산동",
+     "덕지천동",
+     "동문동",
+     "부석면",
+     "석남동",
+     "석림동",
+     "성연면",
+     "수석동",
+     "양대동",
+     "예천동",
+     "오남동",
+     "온석동",
+     "운산면",
+     "음암면",
+     "읍내동",
+     "인지면",
+     "잠홍동",
+     "장동",
+     "죽성동",
+     "지곡면",
+     "팔봉면",
+     "해미면"
+    ]
+   },
    "osm_name": "서산변전소",
    "coord_exact": true,
    "match_km": 2.6
@@ -17565,6 +20169,27 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "강진군": [
+     "신전면"
+    ],
+    "완도군": [
+     "고금면",
+     "군외면",
+     "노화읍",
+     "보길면",
+     "완도읍"
+    ],
+    "해남군": [
+     "북일면",
+     "북평면",
+     "삼산면",
+     "송지면",
+     "옥천면",
+     "현산면",
+     "화산면"
+    ]
+   },
    "osm_name": "남창변전소",
    "coord_exact": true,
    "match_km": 1.6
@@ -17699,6 +20324,44 @@
    "connect_max_mw": 11.5,
    "geocoded": true,
    "dong_count": 24,
+   "supply": {
+    "곡성군": [
+     "오산면"
+    ],
+    "담양군": [
+     "고서면",
+     "금성면",
+     "담양읍",
+     "대덕면",
+     "대전면",
+     "무정면",
+     "봉산면",
+     "수북면",
+     "용면",
+     "월산면",
+     "창평면"
+    ],
+    "북구": [
+     "용강동",
+     "태령동"
+    ],
+    "순창군": [
+     "구림면",
+     "금과면",
+     "복흥면",
+     "순창읍",
+     "쌍치면",
+     "팔덕면",
+     "풍산면"
+    ],
+    "장성군": [
+     "북하면"
+    ],
+    "정읍시": [
+     "부전동",
+     "산내면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -17770,6 +20433,12 @@
    "connect_max_mw": 6.1,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "영암군": [
+     "미암면",
+     "삼호읍"
+    ]
+   },
    "osm_name": "삼호변전소",
    "coord_exact": true,
    "match_km": 11.5
@@ -17822,6 +20491,14 @@
    "connect_max_mw": 2.7,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "서산시": [
+     "성연면",
+     "운산면",
+     "음암면",
+     "지곡면"
+    ]
+   },
    "osm_name": "신서산변전소",
    "coord_exact": true,
    "match_km": 14.2
@@ -17975,6 +20652,55 @@
    "connect_max_mw": 7.2,
    "geocoded": true,
    "dong_count": 37,
+   "supply": {
+    "광산구": [
+     "내산동",
+     "대산동",
+     "덕림동",
+     "도산동",
+     "동산동",
+     "명화동",
+     "복룡동",
+     "본덕동",
+     "삼거동",
+     "삼도동",
+     "송대동",
+     "송정동",
+     "송촌동",
+     "송학동",
+     "신동",
+     "양동",
+     "연산동",
+     "오운동",
+     "옥동",
+     "요기동",
+     "용곡동",
+     "용동",
+     "용봉동",
+     "월전동",
+     "유계동",
+     "장록동",
+     "지정동",
+     "지죽동",
+     "지평동",
+     "하산동",
+     "황룡동"
+    ],
+    "나주시": [
+     "노안면"
+    ],
+    "남구": [
+     "승촌동"
+    ],
+    "장성군": [
+     "삼서면"
+    ],
+    "함평군": [
+     "나산면",
+     "월야면",
+     "해보면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -18107,6 +20833,42 @@
    "connect_max_mw": 6.9,
    "geocoded": true,
    "dong_count": 22,
+   "supply": {
+    "광산구": [
+     "광산동",
+     "덕림동",
+     "비아동",
+     "신룡동",
+     "양산동",
+     "오산동"
+    ],
+    "담양군": [
+     "월산면"
+    ],
+    "북구": [
+     "대촌동",
+     "월출동"
+    ],
+    "순창군": [
+     "복흥면"
+    ],
+    "장성군": [
+     "남면",
+     "동화면",
+     "북이면",
+     "북일면",
+     "북하면",
+     "삼계면",
+     "삼서면",
+     "서삼면",
+     "장성읍",
+     "진원면",
+     "황룡면"
+    ],
+    "함평군": [
+     "월야면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -18185,6 +20947,14 @@
    "connect_max_mw": 5.1,
    "geocoded": true,
    "dong_count": 4,
+   "supply": {
+    "서산시": [
+     "고북면",
+     "운산면",
+     "음암면",
+     "해미면"
+    ]
+   },
    "osm_name": "해미변전소",
    "coord_exact": true,
    "match_km": 2.3
@@ -18286,6 +21056,22 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 8,
+   "supply": {
+    "무주군": [
+     "무주읍",
+     "무풍면",
+     "부남면",
+     "설천면",
+     "안성면",
+     "적상면"
+    ],
+    "장수군": [
+     "계북면"
+    ],
+    "진안군": [
+     "동향면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -18364,6 +21150,18 @@
    "connect_max_mw": 3.1,
    "geocoded": true,
    "dong_count": 6,
+   "supply": {
+    "연천군": [
+     "미산면",
+     "백학면",
+     "왕징면",
+     "장남면"
+    ],
+    "파주시": [
+     "적성면",
+     "진동면"
+    ]
+   },
    "osm_name": "백학변전소",
    "coord_exact": true,
    "match_km": 2.8
@@ -18524,6 +21322,22 @@
    "connect_max_mw": 3.0,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "연천군": [
+     "군남면",
+     "미산면",
+     "백학면",
+     "신서면",
+     "연천읍",
+     "왕징면",
+     "전곡읍",
+     "중면",
+     "청산면"
+    ],
+    "파주시": [
+     "적성면"
+    ]
+   },
    "osm_name": "전곡변전소",
    "coord_exact": true,
    "match_km": 8.4
@@ -18557,6 +21371,12 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "광양시": [
+     "다압면",
+     "진상면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -18743,6 +21563,76 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 56,
+   "supply": {
+    "광산구": [
+     "동산동",
+     "본덕동",
+     "송학동",
+     "신동",
+     "연산동",
+     "요기동",
+     "용봉동"
+    ],
+    "나주시": [
+     "경현동",
+     "공산면",
+     "과원동",
+     "관정동",
+     "교동",
+     "금계동",
+     "금성동",
+     "금천면",
+     "남내동",
+     "남외동",
+     "남평읍",
+     "노안면",
+     "다도면",
+     "다시면",
+     "대기동",
+     "대호동",
+     "동수동",
+     "문평면",
+     "반남면",
+     "보산동",
+     "봉황면",
+     "부덕동",
+     "산정동",
+     "산포면",
+     "삼도동",
+     "삼영동",
+     "서내동",
+     "석현동",
+     "성북동",
+     "세지면",
+     "송월동",
+     "송촌동",
+     "안창동",
+     "영산동",
+     "오량동",
+     "왕곡면",
+     "용산동",
+     "운곡동",
+     "이창동",
+     "죽림동",
+     "중앙동",
+     "청동",
+     "토계동",
+     "평산동"
+    ],
+    "남구": [
+     "승촌동"
+    ],
+    "영암군": [
+     "신북면"
+    ],
+    "함평군": [
+     "학교면"
+    ],
+    "화순군": [
+     "도곡면",
+     "도암면"
+    ]
+   },
    "osm_name": "나주변전소",
    "coord_exact": true,
    "match_km": 3.2
@@ -18903,6 +21793,37 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 19,
+   "supply": {
+    "강진군": [
+     "강진읍",
+     "군동면",
+     "대구면",
+     "도암면",
+     "마량면",
+     "병영면",
+     "성전면",
+     "신전면",
+     "옴천면",
+     "작천면",
+     "칠량면"
+    ],
+    "영암군": [
+     "영암읍"
+    ],
+    "완도군": [
+     "고금면",
+     "약산면"
+    ],
+    "장흥군": [
+     "대덕읍",
+     "장흥읍"
+    ],
+    "해남군": [
+     "계곡면",
+     "북일면",
+     "옥천면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -19061,6 +21982,36 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 18,
+   "supply": {
+    "강진군": [
+     "군동면",
+     "마량면",
+     "병영면",
+     "옴천면",
+     "칠량면"
+    ],
+    "보성군": [
+     "보성읍"
+    ],
+    "영암군": [
+     "금정면"
+    ],
+    "완도군": [
+     "고금면"
+    ],
+    "장흥군": [
+     "관산읍",
+     "대덕읍",
+     "부산면",
+     "안양면",
+     "용산면",
+     "유치면",
+     "장동면",
+     "장평면",
+     "장흥읍",
+     "회진면"
+    ]
+   },
    "osm_name": "장흥변전소",
    "coord_exact": true,
    "match_km": 6.0
@@ -19221,6 +22172,26 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "강진군": [
+     "도암면",
+     "성전면"
+    ],
+    "영암군": [
+     "미암면"
+    ],
+    "해남군": [
+     "계곡면",
+     "마산면",
+     "산이면",
+     "삼산면",
+     "옥천면",
+     "해남읍",
+     "현산면",
+     "화산면",
+     "황산면"
+    ]
+   },
    "osm_name": "해남변전소",
    "coord_exact": true,
    "match_km": 2.6
@@ -19372,6 +22343,34 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 18,
+   "supply": {
+    "강진군": [
+     "성전면"
+    ],
+    "나주시": [
+     "공산면",
+     "동강면",
+     "반남면",
+     "봉황면",
+     "세지면"
+    ],
+    "영암군": [
+     "군서면",
+     "금정면",
+     "덕진면",
+     "도포면",
+     "미암면",
+     "삼호읍",
+     "서호면",
+     "시종면",
+     "신북면",
+     "영암읍",
+     "학산면"
+    ],
+    "장흥군": [
+     "유치면"
+    ]
+   },
    "osm_name": "영암변전소",
    "coord_exact": true,
    "match_km": 2.1
@@ -19532,6 +22531,27 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 15,
+   "supply": {
+    "고흥군": [
+     "고흥읍",
+     "과역면",
+     "금산면",
+     "도덕면",
+     "도양읍",
+     "도화면",
+     "동일면",
+     "두원면",
+     "봉래면",
+     "영남면",
+     "점암면",
+     "포두면",
+     "풍양면"
+    ],
+    "완도군": [
+     "금당면",
+     "금일읍"
+    ]
+   },
    "osm_name": "고흥변전소",
    "coord_exact": true,
    "match_km": 4.8
@@ -19638,6 +22658,26 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "고흥군": [
+     "과역면",
+     "남양면",
+     "대서면",
+     "동강면",
+     "점암면"
+    ],
+    "보성군": [
+     "득량면",
+     "벌교읍",
+     "율어면",
+     "조성면"
+    ],
+    "순천시": [
+     "낙안면",
+     "별량면",
+     "외서면"
+    ]
+   },
    "osm_name": "벌교변전소",
    "coord_exact": true,
    "match_km": 6.2
@@ -19723,6 +22763,19 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 7,
+   "supply": {
+    "고흥군": [
+     "금산면",
+     "도덕면",
+     "도양읍",
+     "두원면",
+     "풍양면"
+    ],
+    "완도군": [
+     "금당면",
+     "금일읍"
+    ]
+   },
    "osm_name": "고흥변전소",
    "coord_exact": true,
    "match_km": 11.6
@@ -19855,6 +22908,32 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 18,
+   "supply": {
+    "곡성군": [
+     "겸면",
+     "고달면",
+     "곡성읍",
+     "삼기면",
+     "오곡면",
+     "옥과면",
+     "입면"
+    ],
+    "남원시": [
+     "금지면",
+     "대강면",
+     "대산면",
+     "송동면",
+     "수지면",
+     "조산동",
+     "주생면"
+    ],
+    "순창군": [
+     "순창읍",
+     "유등면",
+     "적성면",
+     "풍산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -19999,6 +23078,33 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 15,
+   "supply": {
+    "곡성군": [
+     "겸면"
+    ],
+    "나주시": [
+     "남평읍"
+    ],
+    "담양군": [
+     "남면",
+     "대덕면"
+    ],
+    "순천시": [
+     "송광면"
+    ],
+    "화순군": [
+     "능주면",
+     "도곡면",
+     "도암면",
+     "동면",
+     "이서면",
+     "이양면",
+     "청풍면",
+     "춘양면",
+     "한천면",
+     "화순읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -20110,6 +23216,22 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "무안군": [
+     "망운면",
+     "무안읍",
+     "운남면",
+     "청계면",
+     "해제면",
+     "현경면"
+    ],
+    "신안군": [
+     "압해면",
+     "임자면",
+     "증도면",
+     "지도읍"
+    ]
+   },
    "osm_name": "운남변전소",
    "coord_exact": true,
    "match_km": 8.6
@@ -20329,6 +23451,34 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 18,
+   "supply": {
+    "나주시": [
+     "공산면",
+     "다시면",
+     "동강면",
+     "문평면"
+    ],
+    "무안군": [
+     "망운면",
+     "몽탄면",
+     "무안읍",
+     "삼향읍",
+     "청계면",
+     "현경면"
+    ],
+    "영광군": [
+     "염산면"
+    ],
+    "함평군": [
+     "나산면",
+     "대동면",
+     "손불면",
+     "신광면",
+     "엄다면",
+     "학교면",
+     "함평읍"
+    ]
+   },
    "osm_name": "엄다변전소",
    "coord_exact": true,
    "match_km": 2.7
@@ -20461,6 +23611,24 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "나주시": [
+     "공산면",
+     "다시면",
+     "동강면",
+     "동수동",
+     "반남면",
+     "세지면",
+     "왕곡면"
+    ],
+    "무안군": [
+     "몽탄면"
+    ],
+    "영암군": [
+     "시종면",
+     "신북면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -20617,6 +23785,33 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 17,
+   "supply": {
+    "보성군": [
+     "겸백면",
+     "노동면",
+     "득량면",
+     "문덕면",
+     "미력면",
+     "벌교읍",
+     "보성읍",
+     "복내면",
+     "웅치면",
+     "율어면",
+     "조성면",
+     "회천면"
+    ],
+    "순천시": [
+     "송광면"
+    ],
+    "장흥군": [
+     "장동면"
+    ],
+    "화순군": [
+     "이양면",
+     "청풍면",
+     "춘양면"
+    ]
+   },
    "osm_name": "보성변전소",
    "coord_exact": true,
    "match_km": 6.2
@@ -20723,6 +23918,20 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 10,
+   "supply": {
+    "신안군": [
+     "도초면",
+     "비금면",
+     "신의면",
+     "안좌면",
+     "암태면",
+     "자은면",
+     "장산면",
+     "증도면",
+     "팔금면",
+     "하의면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -20867,6 +24076,23 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 11,
+   "supply": {
+    "영광군": [
+     "군남면",
+     "군서면",
+     "대마면",
+     "묘량면",
+     "백수읍",
+     "법성면",
+     "불갑면",
+     "염산면",
+     "영광읍",
+     "홍농읍"
+    ],
+    "함평군": [
+     "해보면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -20985,6 +24211,19 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 7,
+   "supply": {
+    "진도군": [
+     "고군면",
+     "군내면",
+     "의신면",
+     "임회면",
+     "지산면",
+     "진도읍"
+    ],
+    "해남군": [
+     "문내면"
+    ]
+   },
    "osm_name": "진도변전소",
    "coord_exact": true,
    "match_km": 4.0
@@ -21112,6 +24351,17 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "목포시": [
+     "달동"
+    ],
+    "해남군": [
+     "문내면",
+     "산이면",
+     "화원면",
+     "황산면"
+    ]
+   },
    "osm_name": "화원변전소",
    "coord_exact": true,
    "match_km": 4.4
@@ -21213,6 +24463,22 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "광양시": [
+     "광양읍",
+     "광영동",
+     "도이동",
+     "마동",
+     "성황동",
+     "옥곡면",
+     "중군동",
+     "중동",
+     "진상면",
+     "진월면",
+     "황금동",
+     "황길동"
+    ]
+   },
    "osm_name": "백운변전소",
    "coord_exact": true,
    "match_km": 0.0
@@ -21373,6 +24639,31 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 17,
+   "supply": {
+    "고창군": [
+     "고수면",
+     "고창읍",
+     "공음면",
+     "대산면",
+     "무장면",
+     "부안면",
+     "성내면",
+     "성송면",
+     "신림면",
+     "심원면",
+     "아산면",
+     "해리면",
+     "흥덕면"
+    ],
+    "부안군": [
+     "줄포면"
+    ],
+    "정읍시": [
+     "고부면",
+     "소성면",
+     "입암면"
+    ]
+   },
    "osm_name": "고창변전소",
    "coord_exact": true,
    "match_km": 4.3
@@ -21427,6 +24718,15 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 5,
+   "supply": {
+    "고창군": [
+     "공음면",
+     "무장면",
+     "상하면",
+     "심원면",
+     "해리면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -21620,6 +24920,55 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 39,
+   "supply": {
+    "고창군": [
+     "성내면"
+    ],
+    "김제시": [
+     "부량면"
+    ],
+    "부안군": [
+     "백산면",
+     "보안면",
+     "주산면",
+     "줄포면"
+    ],
+    "정읍시": [
+     "감곡면",
+     "고부면",
+     "공평동",
+     "과교동",
+     "교암동",
+     "농소동",
+     "덕천면",
+     "망제동",
+     "북면",
+     "삼산동",
+     "상동",
+     "상평동",
+     "소성면",
+     "송산동",
+     "수성동",
+     "시기동",
+     "신월동",
+     "신정동",
+     "신태인읍",
+     "연지동",
+     "영원면",
+     "영파동",
+     "용계동",
+     "용산동",
+     "이평면",
+     "입암면",
+     "장명동",
+     "정우면",
+     "진산동",
+     "태인면",
+     "하모동",
+     "하북동",
+     "흑암동"
+    ]
+   },
    "osm_name": "정주변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -21794,6 +25143,34 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 18,
+   "supply": {
+    "고창군": [
+     "흥덕면"
+    ],
+    "김제시": [
+     "부량면"
+    ],
+    "부안군": [
+     "계화면",
+     "동진면",
+     "백산면",
+     "변산면",
+     "보안면",
+     "부안읍",
+     "상서면",
+     "주산면",
+     "줄포면",
+     "진서면",
+     "하서면",
+     "행안면"
+    ],
+    "정읍시": [
+     "고부면",
+     "신태인읍",
+     "영원면",
+     "이평면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -21931,6 +25308,38 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 20,
+   "supply": {
+    "무주군": [
+     "부남면",
+     "안성면"
+    ],
+    "완주군": [
+     "동상면",
+     "소양면"
+    ],
+    "임실군": [
+     "관촌면"
+    ],
+    "장수군": [
+     "계남면",
+     "계북면",
+     "장계면",
+     "천천면"
+    ],
+    "진안군": [
+     "동향면",
+     "마령면",
+     "백운면",
+     "부귀면",
+     "상전면",
+     "성수면",
+     "안천면",
+     "용담면",
+     "정천면",
+     "주천면",
+     "진안읍"
+    ]
+   },
    "osm_name": "진안변전소",
    "coord_exact": true,
    "match_km": 4.5
@@ -22119,6 +25528,68 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 50,
+   "supply": {
+    "김제시": [
+     "갈공동",
+     "검산동",
+     "공덕면",
+     "광활면",
+     "교동",
+     "금구면",
+     "금산면",
+     "난봉동",
+     "도장동",
+     "만경읍",
+     "명덕동",
+     "백구면",
+     "백산면",
+     "백학동",
+     "복죽동",
+     "봉남면",
+     "부량면",
+     "상동동",
+     "서암동",
+     "서정동",
+     "성덕면",
+     "순동",
+     "신곡동",
+     "신덕동",
+     "신월동",
+     "신풍동",
+     "양전동",
+     "연정동",
+     "오정동",
+     "옥산동",
+     "요촌동",
+     "용동",
+     "용지면",
+     "월봉동",
+     "월성동",
+     "입석동",
+     "장화동",
+     "제월동",
+     "죽산면",
+     "진봉면",
+     "하동",
+     "황산동",
+     "황산면",
+     "흥사동"
+    ],
+    "부안군": [
+     "동진면",
+     "백산면"
+    ],
+    "완주군": [
+     "이서면"
+    ],
+    "익산시": [
+     "오산면"
+    ],
+    "정읍시": [
+     "감곡면",
+     "신태인읍"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -22277,6 +25748,44 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 22,
+   "supply": {
+    "남원시": [
+     "덕과면",
+     "사매면"
+    ],
+    "순창군": [
+     "동계면"
+    ],
+    "완주군": [
+     "구이면",
+     "상관면"
+    ],
+    "임실군": [
+     "강진면",
+     "관촌면",
+     "덕치면",
+     "삼계면",
+     "성수면",
+     "신덕면",
+     "신평면",
+     "오수면",
+     "운암면",
+     "임실읍",
+     "지사면",
+     "청웅면"
+    ],
+    "장수군": [
+     "산서면"
+    ],
+    "정읍시": [
+     "산내면",
+     "산외면"
+    ],
+    "진안군": [
+     "백운면",
+     "성수면"
+    ]
+   },
    "osm_name": "임실변전소",
    "coord_exact": true,
    "match_km": 5.5
@@ -22477,6 +25986,46 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 30,
+   "supply": {
+    "김제시": [
+     "금산면",
+     "봉남면",
+     "부량면",
+     "신월동",
+     "양전동"
+    ],
+    "순창군": [
+     "복흥면",
+     "쌍치면"
+    ],
+    "완주군": [
+     "구이면"
+    ],
+    "정읍시": [
+     "감곡면",
+     "구룡동",
+     "금붕동",
+     "내장동",
+     "부전동",
+     "북면",
+     "산내면",
+     "산외면",
+     "상동",
+     "송산동",
+     "수성동",
+     "시기동",
+     "신정동",
+     "신태인읍",
+     "쌍암동",
+     "옹동면",
+     "용산동",
+     "장명동",
+     "정우면",
+     "칠보면",
+     "태인면",
+     "하북동"
+    ]
+   },
    "osm_name": "정공변전소",
    "coord_exact": true,
    "match_km": 1.3
@@ -22590,6 +26139,32 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "김제시": [
+     "금구면",
+     "금산면",
+     "백구면",
+     "봉남면",
+     "용지면",
+     "황산면"
+    ],
+    "완주군": [
+     "이서면"
+    ],
+    "익산시": [
+     "춘포면"
+    ],
+    "전주시 덕진구": [
+     "강흥동",
+     "도도동"
+    ],
+    "전주시 완산구": [
+     "용복동"
+    ],
+    "정읍시": [
+     "감곡면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -22734,6 +26309,46 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 34,
+   "supply": {
+    "남원시": [
+     "갈치동",
+     "고죽동",
+     "광치동",
+     "금동",
+     "내척동",
+     "노암동",
+     "대산면",
+     "덕과면",
+     "도통동",
+     "동충동",
+     "보절면",
+     "사매면",
+     "산곡동",
+     "송동면",
+     "수지면",
+     "식정동",
+     "신정동",
+     "신촌동",
+     "쌍교동",
+     "어현동",
+     "왕정동",
+     "용정동",
+     "월락동",
+     "이백면",
+     "조산동",
+     "주생면",
+     "주천면",
+     "죽항동",
+     "천거동",
+     "하정동",
+     "향교동",
+     "화정동"
+    ],
+    "임실군": [
+     "오수면",
+     "지사면"
+    ]
+   },
    "osm_name": "남원변전소",
    "coord_exact": true,
    "match_km": 1.3
@@ -22887,6 +26502,29 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 13,
+   "supply": {
+    "남원시": [
+     "보절면",
+     "산동면",
+     "아영면"
+    ],
+    "임실군": [
+     "지사면"
+    ],
+    "장수군": [
+     "계남면",
+     "계북면",
+     "번암면",
+     "산서면",
+     "장계면",
+     "장수읍",
+     "천천면"
+    ],
+    "진안군": [
+     "동향면",
+     "백운면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -23031,6 +26669,33 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 21,
+   "supply": {
+    "남원시": [
+     "갈치동",
+     "고죽동",
+     "노암동",
+     "덕과면",
+     "도통동",
+     "보절면",
+     "산내면",
+     "산동면",
+     "송동면",
+     "식정동",
+     "쌍교동",
+     "아영면",
+     "어현동",
+     "운봉읍",
+     "월락동",
+     "이백면",
+     "인월면",
+     "주천면",
+     "죽항동",
+     "향교동"
+    ],
+    "장수군": [
+     "번암면"
+    ]
+   },
    "osm_name": "신남원변전소",
    "coord_exact": true,
    "match_km": 2.2
@@ -23125,6 +26790,24 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 12,
+   "supply": {
+    "군산시": [
+     "개정동",
+     "개정면",
+     "나포면",
+     "대야면",
+     "서수면",
+     "성산면",
+     "옥산면",
+     "임피면",
+     "회현면"
+    ],
+    "익산시": [
+     "오산면",
+     "함라면",
+     "황등면"
+    ]
+   },
    "osm_name": "군산변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -23285,6 +26968,34 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 20,
+   "supply": {
+    "군산시": [
+     "대야면"
+    ],
+    "김제시": [
+     "갈공동",
+     "공덕면",
+     "광활면",
+     "만경읍",
+     "백구면",
+     "백산면",
+     "복죽동",
+     "상동동",
+     "서암동",
+     "성덕면",
+     "순동",
+     "신곡동",
+     "요촌동",
+     "용지면",
+     "진봉면",
+     "청하면",
+     "하동",
+     "흥사동"
+    ],
+    "익산시": [
+     "오산면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -23316,6 +27027,11 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 1,
+   "supply": {
+    "군산시": [
+     "옥도면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -23460,6 +27176,21 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 11,
+   "supply": {
+    "익산시": [
+     "낭산면",
+     "망성면",
+     "삼기면",
+     "성당면",
+     "여산면",
+     "용동면",
+     "용안면",
+     "웅포면",
+     "함라면",
+     "함열읍",
+     "황등면"
+    ]
+   },
    "coord_exact": false
   },
   {
@@ -23529,6 +27260,12 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
+   "supply": {
+    "서산시": [
+     "부석면",
+     "팔봉면"
+    ]
+   },
    "coord_exact": false
   }
  ]
@@ -23651,8 +27388,20 @@ function popup(s){
     <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch} · ${badge}</div>
     <div class="popup-line" style="font-size:14px"><span>⚡ 최대 연계가능</span><b style="color:${colorConn(conn)}">${conn.toFixed(1)} MW</b></div>
     <div class="popup-line muted" style="font-size:11.5px"><span>지역 여지(변전소 총여유)</span><span>${s.subst_free_mw.toFixed(0)} MW</span></div>${warn}
-    <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}`;
+    <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}${supplyHtml(s)}`;
 }
+
+function supplyHtml(s){
+  const sup=s.supply||{}; const areas=Object.keys(sup);
+  if(!areas.length) return '';
+  const total=areas.reduce((a,k)=>a+sup[k].length,0);
+  const body=areas.map(k=>`<div style="margin-bottom:4px"><b style="color:var(--tx)">${k}</b> <span class="muted">(${sup[k].length})</span><br><span class="muted">${sup[k].join(' · ')}</span></div>`).join('');
+  return `<div style="margin-top:7px;border-top:1px solid var(--line);padding-top:6px">
+    <div class="popup-line"><span>🏘 공급 읍/면/동</span><span><b>${total}개</b> <a href="javascript:void(0)" onclick="toggleSupply('${s.code}')" style="color:var(--accent2)">목록 ▾</a></span></div>
+    <div id="sup-${s.code}" style="display:none;max-height:150px;overflow:auto;margin-top:5px;font-size:11px;line-height:1.5">${body}</div>
+  </div>`;
+}
+window.toggleSupply=function(code){const el=document.getElementById('sup-'+code);if(el)el.style.display=el.style.display==='none'?'block':'none';};
 
 function renderTable(subs){
   const tb=document.querySelector('#tbl tbody'); tb.innerHTML='';
