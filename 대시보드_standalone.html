@@ -27279,6 +27279,14 @@
 </header>
 <div class="wrap">
   <aside class="side">
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:6px">📍 지번으로 가까운 변전소 찾기</div>
+      <div style="display:flex;gap:6px">
+        <input id="addrInput" placeholder="예: 파주시 문산읍 문산리 100" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:7px 9px;font-size:13px">
+        <button id="addrBtn" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer">찾기</button>
+      </div>
+      <div id="addrResult" style="margin-top:8px;font-size:12px"></div>
+    </div>
     <div class="tiles">
       <div class="tile"><div class="v" id="t_sub">–</div><div class="l">변전소 수</div></div>
       <div class="tile"><div class="v" id="t_free">–</div><div class="l">연계가능 변전소 (선로&gt;0)</div></div>
@@ -27290,8 +27298,8 @@
       <b>숫자 읽는 법</b> — <span style="color:var(--g2);font-weight:700">연계가능(선로 최대)</span> = 지금 태양광을 실제로 붙일 수 있는 양(변전소·변압기·선로 여유의 <b>병목</b>, 보통 선로당 ≤13MW). <span class="muted">지역여지(변전소 총여유)</span> = 그 변전소의 확장 잠재력(선로 증설 시). ※ 한전 <b>추정치</b>, 실제 연계는 별도 기술검토 필요.
     </div>
 
-    <h2>📅 월별 영업 캠페인 캘린더 <span class="muted">(연계가능량 근거 · 자동)</span></h2>
-    <div class="cal" id="cal"></div>
+    <h2 style="cursor:pointer" onclick="toggleCal()">📅 월별 영업 캠페인 캘린더 <span id="calArrow">▸</span> <span class="muted">(연계가능량 근거)</span></h2>
+    <div class="cal" id="cal" style="display:none"></div>
 
     <h2>🏢 지사 필터</h2>
     <select id="branchSel"><option value="">전체 지사</option></select>
@@ -27323,7 +27331,10 @@ const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","202
 const mLabel = s => { const [y,m]=s.split("-"); return (y==="2027"?"’27 ":"")+parseInt(m)+"월"; };
 function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
-let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[];
+let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null;
+// Kakao 지오코딩(지번검색) — 아래에 카카오 JavaScript 키를 넣으면 활성화됨
+window.KAKAO_KEY = "";
+(function(){ if(window.KAKAO_KEY){ const sc=document.createElement('script'); sc.src="//dapi.kakao.com/v2/maps/sdk.js?appkey="+window.KAKAO_KEY+"&libraries=services&autoload=false"; sc.onload=()=>kakao.maps.load(()=>{}); document.head.appendChild(sc); } })();
 
 (window.__DATA__ ? Promise.resolve(window.__DATA__)
   : fetch('capacity.json?_='+Date.now()).then(r=>r.json())
@@ -27346,6 +27357,9 @@ function init(d){
     BRANCHMARKERS.push(m);
   });
   buildBranchSelect();
+  document.getElementById('addrBtn').onclick=searchAddr;
+  document.getElementById('addrInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchAddr();});
+  const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
   renderCalendar();
   if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),12); m.openPopup(); toggleSupply(code); } },700); }
@@ -27442,6 +27456,39 @@ function buildBranchSelect(){
   DATA.branches.forEach(b=>{ const o=document.createElement('option'); o.value=b.name;o.textContent=b.name;sel.appendChild(o); });
   sel.onchange=render;
 }
+
+function toggleCal(){ const c=document.getElementById('cal'),a=document.getElementById('calArrow'); const open=c.style.display==='none'; c.style.display=open?'flex':'none'; a.textContent=open?'▾':'▸'; }
+function haversineJ(a,b){ const R=6371,p=Math.PI/180,dlat=(b[0]-a[0])*p,dlng=(b[1]-a[1])*p; const x=Math.sin(dlat/2)**2+Math.cos(a[0]*p)*Math.cos(b[0]*p)*Math.sin(dlng/2)**2; return 2*R*Math.asin(Math.sqrt(x)); }
+function searchAddr(){
+  const q=document.getElementById('addrInput').value.trim();
+  const box=document.getElementById('addrResult');
+  if(!q){ box.innerHTML=''; return; }
+  const m=q.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);   // 좌표 직접입력(테스트) 지원
+  if(m){ showNearest(parseFloat(m[1]),parseFloat(m[2]),q); return; }
+  if(!(window.kakao&&kakao.maps&&kakao.maps.services)){ box.innerHTML='<span style="color:var(--r)">⚠ 지오코딩 키 미설정 — Kakao JS 키 적용 후 지번 검색이 됩니다.</span>'; return; }
+  box.innerHTML='<span class="muted">검색 중…</span>';
+  new kakao.maps.services.Geocoder().addressSearch(q,(res,status)=>{
+    if(status===kakao.maps.services.Status.OK && res[0]){ showNearest(parseFloat(res[0].y),parseFloat(res[0].x),q); }
+    else { box.innerHTML='<span style="color:var(--r)">주소를 찾지 못했습니다 (지번/도로명으로 다시).</span>'; }
+  });
+}
+function showNearest(lat,lng,label){
+  const top=DATA.substations.map(s=>({s,d:haversineJ([lat,lng],[s.lat,s.lng])})).sort((a,b)=>a.d-b.d).slice(0,3);
+  const box=document.getElementById('addrResult');
+  box.innerHTML=`<div class="muted" style="margin-bottom:5px">📍 <b style="color:var(--tx)">${label}</b> 기준 가까운 변전소</div>`+
+    top.map((t,i)=>{ const s=t.s,conn=s.connect_max_mw||0,nm=s.osm_name||(s.name+' 변전소');
+      const dls=s.lines.slice(0,3).map(l=>`${l.dl_nm} ${(l.conn||0).toFixed(1)}`).join(' · ');
+      return `<div onclick="focusSub('${s.code}')" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between"><b>${i+1}. ${nm}</b><span style="color:${colorConn(conn)};font-weight:800">${conn.toFixed(1)} MW</span></div>
+        <div class="muted" style="font-size:11px;margin-top:2px">${s.region} · ${t.d.toFixed(1)}km · 담당 ${s.branch}</div>
+        <div style="font-size:11px;margin-top:3px">DL: <span class="muted">${dls}</span></div></div>`;
+    }).join('');
+  MAP.setView([lat,lng],12);
+  if(SEARCHMARKER) MAP.removeLayer(SEARCHMARKER);
+  SEARCHMARKER=L.circleMarker([lat,lng],{radius:8,color:'#fff',weight:2,fillColor:'#e6007a',fillOpacity:1}).addTo(MAP).bindPopup('📍 '+label).openPopup();
+}
+function focusSub(code){ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),13); m.openPopup(); } }
+window.toggleCal=toggleCal; window.searchAddr=searchAddr; window.focusSub=focusSub;
 </script>
 </body>
 </html>
