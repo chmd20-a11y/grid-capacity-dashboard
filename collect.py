@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-한전 계통 여유용량 수집기 (프로토타입: 6개 지사 권역) — v2 정밀좌표
+한전 계통 여유용량 수집기 — 7개 사업소 권역 + 전남동부권
 소스: cyber.kepco.co.kr (로그인·키 없이 작동)
  - 읍면동 목록:  resources_search_jibun_list.jsp
  - 변전소/선로 여유용량: resources_jibun_detail2_1.jsp (HTML, viewDetail 인자)
-여유용량 = viewDetail 인자 pos9/10/11 (vol1=변전소, vol2=주변압기, vol3=선로), 단위 kW.
-좌표: 변전소가 걸린 읍면동을 OSM Nominatim으로 지오코딩 → 평균(정밀). 지사=최근접.
+여유용량 = viewDetail 인자 vol1/vol2/vol3(변전소/주변압기/선로), 단위 kW.
+좌표: 읍면동 OSM 지오코딩 평균. 사업소=최근접. (enrich_osm.py가 실명·정확좌표로 보강)
 """
 import json, re, time, urllib.parse, urllib.request, http.cookiejar, hashlib, math, os
 from collections import Counter
@@ -71,11 +71,9 @@ def to_mw(x):
     try: return round(int(x) / 1000.0, 3)
     except: return 0.0
 
-def haversine(a, b):
-    R=6371; p=math.pi/180
-    dlat=(b[0]-a[0])*p; dlng=(b[1]-a[1])*p
-    x=math.sin(dlat/2)**2+math.cos(a[0]*p)*math.cos(b[0]*p)*math.sin(dlng/2)**2
-    return 2*R*math.asin(math.sqrt(x))
+def haversine(a,b):
+    R=6371;p=math.pi/180
+    return 2*R*math.asin(math.sqrt(math.sin((b[0]-a[0])*p/2)**2+math.cos(a[0]*p)*math.cos(b[0]*p)*math.sin((b[1]-a[1])*p/2)**2))
 
 # ---- 지오코딩 (OSM Nominatim, 캐시) ----
 def load_cache():
@@ -91,14 +89,13 @@ def _nomi(q):
     try:
         req = urllib.request.Request(url, headers={"User-Agent": GEO_UA, "Accept-Language": "ko"})
         data = json.loads(urllib.request.urlopen(req, timeout=25).read().decode("utf-8"))
-        time.sleep(1.1)   # Nominatim 정책 준수
+        time.sleep(1.1)
         if data: return [round(float(data[0]["lat"]),5), round(float(data[0]["lon"]),5)]
     except Exception:
         time.sleep(1.1)
     return None
 
 def geocode(addr, cache):
-    """addr = '광주 남구 봉선동' 형식. 실패 시 '군구 읍면동'로 폴백."""
     if addr in cache: return cache[addr]
     res = _nomi(addr)
     if res is None:
@@ -107,19 +104,33 @@ def geocode(addr, cache):
     cache[addr] = res
     return res
 
-BRANCHES = [
-    {"name":"본사(광주)","office":[35.1595,126.8526],"do":"광주광역시","si":"-기타지역","gus":["광산구","남구","동구","북구","서구"]},
-    {"name":"영암지사","office":[34.8000,126.6970],"do":"전라남도","si":"-기타지역","gus":["영암군"]},
-    {"name":"장흥지사","office":[34.6814,126.9070],"do":"전라남도","si":"-기타지역","gus":["장흥군"]},
-    {"name":"해남사업소","office":[34.5730,126.5990],"do":"전라남도","si":"-기타지역","gus":["해남군"]},
-    {"name":"파주지사","office":[37.7600,126.7800],"do":"경기도","si":"파주시","gus":[""]},
-    {"name":"평택지사","office":[36.9920,127.1130],"do":"경기도","si":"평택시","gus":[""]},
-    {"name":"강화사업소","office":[37.7470,126.4850],"do":"인천광역시","si":"-기타지역","gus":["강화군"]},
+# ---- 사업소(핀) + 수집대상 지역 ----
+OFFICES = [
+    {"name":"본사(광주)","lat":35.1595,"lng":126.8526},
+    {"name":"영암지사","lat":34.8000,"lng":126.6970},
+    {"name":"장흥지사","lat":34.6814,"lng":126.9070},
+    {"name":"해남사업소","lat":34.5730,"lng":126.5990},
+    {"name":"파주지사","lat":37.7600,"lng":126.7800},
+    {"name":"평택지사","lat":36.9920,"lng":127.1130},
+    {"name":"강화사업소","lat":37.7470,"lng":126.4850},
+    {"name":"전남동부권","lat":34.9500,"lng":127.4900},   # 순천 중심(신규 타겟)
 ]
-CENTROID = {  # 지오코딩 실패 시 폴백
+SCRAPE = [
+    {"do":"광주광역시","si":"-기타지역","gus":["광산구","남구","동구","북구","서구"]},
+    {"do":"전라남도","si":"-기타지역","gus":["영암군","장흥군","해남군","구례군","곡성군","보성군","고흥군"]},
+    {"do":"전라남도","si":"순천시","gus":[""]},
+    {"do":"전라남도","si":"광양시","gus":[""]},
+    {"do":"전라남도","si":"여수시","gus":[""]},
+    {"do":"경기도","si":"파주시","gus":[""]},
+    {"do":"경기도","si":"평택시","gus":[""]},
+    {"do":"인천광역시","si":"-기타지역","gus":["강화군"]},
+]
+CENTROID = {  # 지오코딩 실패 폴백
     "광산구":[35.139,126.793],"남구":[35.133,126.902],"동구":[35.146,126.923],
     "북구":[35.174,126.912],"서구":[35.152,126.890],
     "영암군":[34.800,126.697],"장흥군":[34.681,126.907],"해남군":[34.573,126.599],
+    "구례군":[35.202,127.463],"곡성군":[35.282,127.292],"보성군":[34.771,127.080],"고흥군":[34.611,127.285],
+    "순천시":[34.950,127.487],"광양시":[34.940,127.696],"여수시":[34.760,127.662],
     "파주시":[37.760,126.780],"평택시":[36.992,127.113],"강화군":[37.720,126.460],
 }
 def jit(code, base, span=0.006):
@@ -127,23 +138,25 @@ def jit(code, base, span=0.006):
     return [round(base[0]+(((h//1000)%1000)/1000-0.5)*span,5),
             round(base[1]+((h%1000)/1000-0.5)*span,5)]
 
+def nearest_office(latlng):
+    return min(OFFICES,key=lambda o:haversine(latlng,[o["lat"],o["lng"]]))["name"]
+
 def main():
     warm()
     subs = {}
-    for br in BRANCHES:
-        do, si = br["do"], br["si"]
-        for gu in br["gus"]:
-            if do == "경기도":
+    for sc in SCRAPE:
+        do, si = sc["do"], sc["si"]
+        for gu in sc["gus"]:
+            if gu == "":   # 시 단위(si가 곧 권역): 순천/광양/여수/파주/평택
                 dongs = list_addr("addr_gu", do, si, "", ""); region = si
-            else:
+            else:          # 구/군 단위: 광주 구, 전남/인천 군
                 dongs = list_addr("addr_lidong", do, si, gu, ""); region = gu
             dongs = [d for d in dongs if d and d not in ("Unknown","-기타지역")]
-            print(f"[{br['name']}] {region}: 읍면동 {len(dongs)}개")
+            print(f"[{do} {region}] 읍면동 {len(dongs)}개")
             for dong in dongs:
-                gu_param = gu if do != "경기도" else ""
-                rows = fetch_detail(do, si, gu_param, dong)
+                rows = fetch_detail(do, si, gu, dong)
                 addr_str = f"{SHORTDO.get(do,do)} {region} {dong}"
-                found = 0
+                found=0
                 for a in rows:
                     subst_cd = a[12]
                     if not subst_cd: continue
@@ -152,7 +165,7 @@ def main():
                         r = {"code":subst_cd,"nm":a[0],"subst_capa":to_mw(a[14]),
                              "g_subst":to_mw(a[9]),"transformers":{},"lines":{},
                              "addrs":Counter(),"regions":Counter()}
-                        subs[subst_cd] = r
+                        subs[subst_cd]=r
                     r["subst_capa"]=max(r["subst_capa"],to_mw(a[14]))
                     r["g_subst"]=max(r["g_subst"],to_mw(a[9]))
                     r["addrs"][addr_str]+=1; r["regions"][region]+=1
@@ -164,19 +177,18 @@ def main():
                 if found: print(f"    {dong}: {found}")
                 time.sleep(0.1)
 
-    # ---- 지오코딩 ----
-    cache = load_cache()
-    uniq = sorted({a for r in subs.values() for a in r["addrs"]})
-    print(f"\n[지오코딩] 고유 읍면동 {len(uniq)}개 (캐시 {sum(1 for a in uniq if a in cache)}개)")
+    # 지오코딩
+    cache=load_cache()
+    uniq=sorted({a for r in subs.values() for a in r["addrs"]})
+    print(f"\n[지오코딩] 고유 읍면동 {len(uniq)}개 (캐시 {sum(1 for a in uniq if a in cache)})")
     for i,a in enumerate(uniq):
         if a not in cache:
-            geocode(a, cache)
-            if i%20==0: save_cache(cache); print(f"  ...{i}/{len(uniq)}")
+            geocode(a,cache)
+            if i%20==0: save_cache(cache)
     save_cache(cache)
-    ok=sum(1 for a in uniq if cache.get(a)); print(f"[지오코딩] 성공 {ok}/{len(uniq)}")
+    print(f"[지오코딩] 성공 {sum(1 for a in uniq if cache.get(a))}/{len(uniq)}")
 
-    # ---- 정리: 좌표(읍면동 평균)+최근접 지사+권역 ----
-    offices=[(b["name"],b["office"]) for b in BRANCHES]
+    # 정리
     out=[]
     for cd,r in subs.items():
         pts=[cache[a] for a in r["addrs"] if cache.get(a)]
@@ -185,9 +197,8 @@ def main():
         else:
             base=CENTROID.get(r["regions"].most_common(1)[0][0],[35.1,126.9]); lat,lng=jit(cd,base)
         region=r["regions"].most_common(1)[0][0]
-        branch=min(offices,key=lambda o:haversine([lat,lng],o[1]))[0]
         lines=list(r["lines"].values())
-        out.append({"code":cd,"name":r["nm"],"region":region,"branch":branch,
+        out.append({"code":cd,"name":r["nm"],"region":region,"branch":nearest_office([lat,lng]),
             "lat":lat,"lng":lng,"subst_capa_mw":r["subst_capa"],"subst_free_mw":r["g_subst"],
             "subst_free_pct":round(100.0*r["g_subst"]/r["subst_capa"],1) if r["subst_capa"] else 0,
             "transformers":list(r["transformers"].values()),
@@ -197,16 +208,15 @@ def main():
     out.sort(key=lambda x:-x["subst_free_mw"])
     kst=timezone(timedelta(hours=9))
     payload={"generated_at":datetime.now(kst).strftime("%Y-%m-%d %H:%M KST"),
-        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 7개 사업소 권역",
-        "unit":"MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=읍면동 지오코딩 평균 · 지사=최근접",
-        "branches":[{"name":b["name"],"lat":b["office"][0],"lng":b["office"][1]} for b in BRANCHES],
+        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 7개 사업소 권역 + 전남동부",
+        "unit":"MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=읍면동 지오코딩 평균 · 사업소=최근접",
+        "branches":[{"name":o["name"],"lat":o["lat"],"lng":o["lng"]} for o in OFFICES],
         "substations":out}
     json.dump(payload,open("capacity.json","w",encoding="utf-8"),ensure_ascii=False,indent=1)
-    bc=Counter(s["branch"] for s in out)
-    print(f"\n=== 완료: 변전소 {len(out)}개, 지오코딩 {sum(1 for s in out if s['geocoded'])}개 ===")
-    print("지사별:",dict(bc))
-    for s in out[:8]:
-        print(f"  {s['branch']:9s} {s['region']:5s} {s['name']:6s} 여유{s['subst_free_mw']:6.1f}MW 연계{s['connect_max_mw']:5.1f} ({s['lat']},{s['lng']})")
+    from collections import Counter as C
+    print(f"\n=== 완료: 변전소 {len(out)}개 ===")
+    print("사업소별:",dict(C(x["branch"] for x in out)))
+    print("권역별:",dict(C(x["region"] for x in out)))
 
 if __name__=="__main__":
     main()

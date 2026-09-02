@@ -9,3 +9,4 @@ shot_b64.txt
 *.png
 .github/
 capacity_pre_osm.json
+capacity_pre_jn.json

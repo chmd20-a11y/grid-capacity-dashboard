@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-09-02 13:26 KST",
- "source": "한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 7개 사업소 권역",
- "unit": "MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=OSM 실측(매칭분)+읍면동근사(미매칭) · 지사=최근접",
+ "generated_at": "2026-09-02 15:55 KST",
+ "source": "한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 7개 사업소 권역 + 전남동부",
+ "unit": "MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=OSM 실측(매칭분)+읍면동근사(미매칭) · 사업소=최근접",
  "branches": [
   {
    "name": "본사(광주)",
@@ -37,6 +37,11 @@
    "name": "강화사업소",
    "lat": 37.747,
    "lng": 126.485
+  },
+  {
+   "name": "전남동부권",
+   "lat": 34.95,
+   "lng": 127.49
   }
  ],
  "substations": [
@@ -210,7 +215,6 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 22,
-   "branches": [],
    "osm_name": "송탄변전소",
    "coord_exact": true,
    "match_km": 1.5
@@ -244,7 +248,6 @@
    "connect_max_mw": 11.2,
    "geocoded": true,
    "dong_count": 3,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -276,7 +279,6 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "osm_name": "통진변전소",
    "coord_exact": true,
    "match_km": 11.6
@@ -362,7 +364,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 18,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -472,7 +473,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 3,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -591,7 +591,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 13,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -729,7 +728,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 20,
-   "branches": [],
    "osm_name": "평택변전소",
    "coord_exact": true,
    "match_km": 3.4
@@ -897,7 +895,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 11,
-   "branches": [],
    "osm_name": "추팔변전소",
    "coord_exact": true,
    "match_km": 3.4
@@ -976,7 +973,6 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 5,
-   "branches": [],
    "osm_name": "문발변전소",
    "coord_exact": true,
    "match_km": 6.4
@@ -1029,7 +1025,6 @@
    "connect_max_mw": 12.2,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -1087,7 +1082,6 @@
    "connect_max_mw": 11.8,
    "geocoded": true,
    "dong_count": 2,
-   "branches": [],
    "osm_name": "신파주변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -1194,7 +1188,6 @@
    "connect_max_mw": 12.7,
    "geocoded": true,
    "dong_count": 4,
-   "branches": [],
    "osm_name": "진위변전소",
    "coord_exact": true,
    "match_km": 3.7
@@ -1362,10 +1355,82 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 8,
-   "branches": [],
    "osm_name": "금촌변전소",
    "coord_exact": true,
    "match_km": 2.8
+  },
+  {
+   "code": "S620",
+   "name": "용*",
+   "region": "여수시",
+   "branch": "전남동부권",
+   "lat": 34.840422,
+   "lng": 127.683772,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 180.313,
+   "subst_free_pct": 90.2,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 39.993
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 40.32
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "공단",
+     "dl_capa": 13.0,
+     "g_dl": 12.857,
+     "conn": 12.857
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "동부",
+     "dl_capa": 13.0,
+     "g_dl": 12.694,
+     "conn": 12.694
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "대성",
+     "dl_capa": 13.0,
+     "g_dl": 11.409,
+     "conn": 11.409
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "삼사",
+     "dl_capa": 12.0,
+     "g_dl": 10.506,
+     "conn": 10.506
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "적량",
+     "dl_capa": 13.0,
+     "g_dl": 6.527,
+     "conn": 6.527
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "두암",
+     "dl_capa": 12.0,
+     "g_dl": 2.32,
+     "conn": 2.32
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 10,
+   "osm_name": "용성변전소",
+   "coord_exact": true,
+   "match_km": 3.7
   },
   {
    "code": "E406",
@@ -1446,7 +1511,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 12,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -1654,7 +1718,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 30,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -1731,7 +1794,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 5,
-   "branches": [],
    "osm_name": "소사벌변전소",
    "coord_exact": true,
    "match_km": 0.8
@@ -1848,7 +1910,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 5,
-   "branches": [],
    "osm_name": "청북변전소",
    "coord_exact": true,
    "match_km": 2.6
@@ -1955,8 +2016,167 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 19,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "5186",
+   "name": "순*",
+   "region": "순천시",
+   "branch": "전남동부권",
+   "lat": 34.950323,
+   "lng": 127.513443,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 160.879,
+   "subst_free_pct": 80.4,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 10.994
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 47.046
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 46.327
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.674
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "성가",
+     "dl_capa": 13.0,
+     "g_dl": 12.946,
+     "conn": 12.946
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "왕조",
+     "dl_capa": 13.0,
+     "g_dl": 12.92,
+     "conn": 12.92
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "해룡",
+     "dl_capa": 13.0,
+     "g_dl": 12.893,
+     "conn": 12.893
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "동부",
+     "dl_capa": 13.0,
+     "g_dl": 12.818,
+     "conn": 12.818
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "금당",
+     "dl_capa": 13.0,
+     "g_dl": 12.544,
+     "conn": 12.544
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "승평",
+     "dl_capa": 13.0,
+     "g_dl": 12.333,
+     "conn": 12.333
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "연향",
+     "dl_capa": 12.0,
+     "g_dl": 11.864,
+     "conn": 11.864
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "동천",
+     "dl_capa": 13.0,
+     "g_dl": 11.565,
+     "conn": 11.565
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "팔마",
+     "dl_capa": 13.0,
+     "g_dl": 11.525,
+     "conn": 11.525
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "공단",
+     "dl_capa": 13.0,
+     "g_dl": 11.494,
+     "conn": 11.494
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "역통",
+     "dl_capa": 13.0,
+     "g_dl": 12.972,
+     "conn": 10.994
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "시내",
+     "dl_capa": 13.0,
+     "g_dl": 12.842,
+     "conn": 10.994
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "서면",
+     "dl_capa": 13.0,
+     "g_dl": 3.691,
+     "conn": 3.691
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "운곡",
+     "dl_capa": 13.0,
+     "g_dl": 3.501,
+     "conn": 3.501
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "삼산",
+     "dl_capa": 13.0,
+     "g_dl": 3.366,
+     "conn": 3.366
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "석현",
+     "dl_capa": 13.0,
+     "g_dl": 2.622,
+     "conn": 2.622
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "순구",
+     "dl_capa": 11.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 19,
+   "osm_name": "순천변전소",
+   "coord_exact": true,
+   "match_km": 4.0
   },
   {
    "code": "S310",
@@ -1999,7 +2219,6 @@
    "connect_max_mw": 11.8,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -2165,7 +2384,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 10,
-   "branches": [],
    "osm_name": "강화변전소",
    "coord_exact": true,
    "match_km": 5.7
@@ -2347,8 +2565,99 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 15,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "5055",
+   "name": "여*",
+   "region": "여수시",
+   "branch": "전남동부권",
+   "lat": 34.813041,
+   "lng": 127.668906,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 148.741,
+   "subst_free_pct": 99.2,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 48.872
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 28.729
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 29.071
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "안산",
+     "dl_capa": 13.0,
+     "g_dl": 12.786,
+     "conn": 12.786
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "장성",
+     "dl_capa": 13.0,
+     "g_dl": 12.691,
+     "conn": 12.691
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "소호",
+     "dl_capa": 13.0,
+     "g_dl": 12.684,
+     "conn": 12.684
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "시내",
+     "dl_capa": 13.0,
+     "g_dl": 12.497,
+     "conn": 12.497
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "선원",
+     "dl_capa": 13.0,
+     "g_dl": 11.871,
+     "conn": 11.871
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "진남",
+     "dl_capa": 12.0,
+     "g_dl": 11.716,
+     "conn": 11.716
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "한화",
+     "dl_capa": 10.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "대림",
+     "dl_capa": 11.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.8,
+   "geocoded": true,
+   "dong_count": 15,
+   "osm_name": "여천변전소",
+   "coord_exact": true,
+   "match_km": 3.2
   },
   {
    "code": "D517",
@@ -2379,7 +2688,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "osm_name": "동평택에너지센터",
    "coord_exact": true,
    "match_km": 4.3
@@ -2437,7 +2745,6 @@
    "connect_max_mw": 10.1,
    "geocoded": true,
    "dong_count": 2,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -2476,7 +2783,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -2602,7 +2908,6 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 3,
-   "branches": [],
    "osm_name": "포승변전소",
    "coord_exact": true,
    "match_km": 4.5
@@ -2777,7 +3082,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 20,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -2809,7 +3113,6 @@
    "connect_max_mw": 8.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -2853,7 +3156,6 @@
    "connect_max_mw": 11.4,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -2885,7 +3187,6 @@
    "connect_max_mw": 7.7,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "osm_name": "만호변전소",
    "coord_exact": true,
    "match_km": 7.4
@@ -2992,7 +3293,6 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 30,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -3055,8 +3355,141 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 6,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "2684",
+   "name": "여*",
+   "region": "여수시",
+   "branch": "전남동부권",
+   "lat": 34.769947,
+   "lng": 127.69651,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 121.427,
+   "subst_free_pct": 81.0,
+   "transformers": [
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 29.069
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 47.9
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.458
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "4",
+     "dl_nm": "송현",
+     "dl_capa": 13.0,
+     "g_dl": 12.947,
+     "conn": 12.947
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "문수",
+     "dl_capa": 13.0,
+     "g_dl": 12.905,
+     "conn": 12.905
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "어항",
+     "dl_capa": 13.0,
+     "g_dl": 12.901,
+     "conn": 12.901
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "우두",
+     "dl_capa": 13.0,
+     "g_dl": 12.901,
+     "conn": 12.901
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "낙포",
+     "dl_capa": 13.0,
+     "g_dl": 12.901,
+     "conn": 12.901
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "한려",
+     "dl_capa": 13.0,
+     "g_dl": 12.694,
+     "conn": 12.694
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "충무",
+     "dl_capa": 13.0,
+     "g_dl": 12.401,
+     "conn": 12.401
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "종고",
+     "dl_capa": 13.0,
+     "g_dl": 12.126,
+     "conn": 12.126
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "오천",
+     "dl_capa": 13.0,
+     "g_dl": 11.814,
+     "conn": 11.814
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "금강",
+     "dl_capa": 12.0,
+     "g_dl": 11.717,
+     "conn": 11.717
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "한재",
+     "dl_capa": 12.0,
+     "g_dl": 11.185,
+     "conn": 11.185
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "호명",
+     "dl_capa": 13.0,
+     "g_dl": 9.476,
+     "conn": 9.476
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "돌산",
+     "dl_capa": 13.0,
+     "g_dl": 8.462,
+     "conn": 8.462
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "성두",
+     "dl_capa": 11.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 36,
+   "osm_name": "여수변전소",
+   "coord_exact": true,
+   "match_km": 2.7
   },
   {
    "code": "5057",
@@ -3153,8 +3586,78 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 19,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "S627",
+   "name": "화*",
+   "region": "여수시",
+   "branch": "전남동부권",
+   "lat": 34.820052,
+   "lng": 127.644326,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 117.916,
+   "subst_free_pct": 59.0,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 3.55
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 8.307
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 10.2
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "에어",
+     "dl_capa": 18.0,
+     "g_dl": 18.0,
+     "conn": 10.2
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "육구",
+     "dl_capa": 12.0,
+     "g_dl": 9.288,
+     "conn": 9.288
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신풍",
+     "dl_capa": 13.0,
+     "g_dl": 12.609,
+     "conn": 8.307
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "화치",
+     "dl_capa": 13.0,
+     "g_dl": 9.978,
+     "conn": 8.307
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "율촌",
+     "dl_capa": 13.0,
+     "g_dl": 0.83,
+     "conn": 0.83
+    }
+   ],
+   "connect_max_mw": 10.2,
+   "geocoded": true,
+   "dong_count": 6,
+   "osm_name": "화치변전소",
+   "coord_exact": true,
+   "match_km": 3.7
   },
   {
    "code": "2061",
@@ -3298,7 +3801,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 11,
-   "branches": [],
    "osm_name": "문산변전소",
    "coord_exact": true,
    "match_km": 2.7
@@ -3398,7 +3900,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 36,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -3517,7 +4018,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 24,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -3549,7 +4049,6 @@
    "connect_max_mw": 12.8,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -3614,7 +4113,6 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 7,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -3780,10 +4278,174 @@
    "connect_max_mw": 12.9,
    "geocoded": true,
    "dong_count": 9,
-   "branches": [],
    "osm_name": "신덕은변전소",
    "coord_exact": true,
    "match_km": 2.2
+  },
+  {
+   "code": "S604",
+   "name": "서**",
+   "region": "순천시",
+   "branch": "전남동부권",
+   "lat": 34.909038,
+   "lng": 127.479613,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 90.968,
+   "subst_free_pct": 60.6,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 28.866
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 21.806
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 19.131
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "용당",
+     "dl_capa": 13.0,
+     "g_dl": 12.932,
+     "conn": 12.932
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "순남",
+     "dl_capa": 13.0,
+     "g_dl": 12.73,
+     "conn": 12.73
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "덕암",
+     "dl_capa": 13.0,
+     "g_dl": 12.228,
+     "conn": 12.228
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "신성",
+     "dl_capa": 13.0,
+     "g_dl": 12.149,
+     "conn": 12.149
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "남정",
+     "dl_capa": 12.0,
+     "g_dl": 11.901,
+     "conn": 11.901
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "상사",
+     "dl_capa": 13.0,
+     "g_dl": 11.833,
+     "conn": 11.833
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "중앙",
+     "dl_capa": 12.0,
+     "g_dl": 11.482,
+     "conn": 11.482
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "매곡",
+     "dl_capa": 13.0,
+     "g_dl": 9.732,
+     "conn": 9.732
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "도사",
+     "dl_capa": 13.0,
+     "g_dl": 8.259,
+     "conn": 8.259
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "풍덕",
+     "dl_capa": 13.0,
+     "g_dl": 7.558,
+     "conn": 7.558
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "홍내",
+     "dl_capa": 13.0,
+     "g_dl": 1.109,
+     "conn": 1.109
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "야외",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "쌍지",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "창녕",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.9,
+   "geocoded": true,
+   "dong_count": 41,
+   "osm_name": "서순천변전소",
+   "coord_exact": true,
+   "match_km": 3.5
+  },
+  {
+   "code": "E051",
+   "name": "세*",
+   "region": "순천시",
+   "branch": "전남동부권",
+   "lat": 34.94347,
+   "lng": 127.55925,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 89.928,
+   "subst_free_pct": 89.9,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 39.928
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "세일",
+     "dl_capa": 12.0,
+     "g_dl": 1.928,
+     "conn": 1.928
+    }
+   ],
+   "connect_max_mw": 1.9,
+   "geocoded": true,
+   "dong_count": 2,
+   "coord_exact": false
   },
   {
    "code": "E283",
@@ -3821,8 +4483,148 @@
    "connect_max_mw": 10.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "S625",
+   "name": "소*",
+   "region": "여수시",
+   "branch": "전남동부권",
+   "lat": 34.776345,
+   "lng": 127.635659,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 88.999,
+   "subst_free_pct": 59.3,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 21.849
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 8.633
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 8.515
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "무선",
+     "dl_capa": 13.0,
+     "g_dl": 12.984,
+     "conn": 12.984
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "웅남",
+     "dl_capa": 13.0,
+     "g_dl": 12.556,
+     "conn": 12.556
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "남산",
+     "dl_capa": 12.0,
+     "g_dl": 12.0,
+     "conn": 12.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "허문",
+     "dl_capa": 12.0,
+     "g_dl": 12.0,
+     "conn": 12.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "상금",
+     "dl_capa": 12.0,
+     "g_dl": 12.0,
+     "conn": 12.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "오션",
+     "dl_capa": 12.0,
+     "g_dl": 12.0,
+     "conn": 12.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "화농",
+     "dl_capa": 12.0,
+     "g_dl": 8.97,
+     "conn": 8.97
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "선소",
+     "dl_capa": 13.0,
+     "g_dl": 12.727,
+     "conn": 8.633
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "신기",
+     "dl_capa": 13.0,
+     "g_dl": 12.705,
+     "conn": 8.515
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "웅부",
+     "dl_capa": 13.0,
+     "g_dl": 12.94,
+     "conn": 8.515
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "웅동",
+     "dl_capa": 11.0,
+     "g_dl": 1.448,
+     "conn": 1.448
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "남면",
+     "dl_capa": 13.0,
+     "g_dl": 0.687,
+     "conn": 0.687
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "장수",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "여양",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "안정",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 13.0,
+   "geocoded": true,
+   "dong_count": 24,
+   "osm_name": "소라변전소",
+   "coord_exact": true,
+   "match_km": 4.2
   },
   {
    "code": "S618",
@@ -3893,7 +4695,6 @@
    "connect_max_mw": 13.0,
    "geocoded": true,
    "dong_count": 11,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -3991,10 +4792,101 @@
    "connect_max_mw": 12.4,
    "geocoded": true,
    "dong_count": 5,
-   "branches": [],
    "osm_name": "선유변전소",
    "coord_exact": true,
    "match_km": 5.9
+  },
+  {
+   "code": "S606",
+   "name": "율*",
+   "region": "순천시",
+   "branch": "전남동부권",
+   "lat": 34.90013,
+   "lng": 127.574991,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 80.529,
+   "subst_free_pct": 53.7,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 33.612
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 38.555
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 8.362
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "대형",
+     "dl_capa": 12.0,
+     "g_dl": 11.926,
+     "conn": 11.926
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "통천",
+     "dl_capa": 12.0,
+     "g_dl": 4.722,
+     "conn": 4.722
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "호두",
+     "dl_capa": 13.0,
+     "g_dl": 3.192,
+     "conn": 3.192
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "제일",
+     "dl_capa": 12.0,
+     "g_dl": 2.964,
+     "conn": 2.964
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "장도",
+     "dl_capa": 13.0,
+     "g_dl": 2.686,
+     "conn": 2.686
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "포코",
+     "dl_capa": 10.0,
+     "g_dl": 1.0,
+     "conn": 1.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "대2",
+     "dl_capa": 18.0,
+     "g_dl": 18.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "대4",
+     "dl_capa": 12.0,
+     "g_dl": 12.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 11.9,
+   "geocoded": true,
+   "dong_count": 3,
+   "osm_name": "율촌변전소",
+   "coord_exact": true,
+   "match_km": 1.7
   },
   {
    "code": "D288",
@@ -4051,7 +4943,6 @@
    "connect_max_mw": 10.9,
    "geocoded": true,
    "dong_count": 2,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -4116,10 +5007,160 @@
    "connect_max_mw": 12.0,
    "geocoded": true,
    "dong_count": 9,
-   "branches": [],
    "osm_name": "서강화변전소",
    "coord_exact": true,
    "match_km": 3.7
+  },
+  {
+   "code": "2443",
+   "name": "태*",
+   "region": "광양시",
+   "branch": "전남동부권",
+   "lat": 34.940797,
+   "lng": 127.750152,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 73.338,
+   "subst_free_pct": 48.9,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 20.451
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 44.039
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 8.848
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "금호",
+     "dl_capa": 13.0,
+     "g_dl": 12.748,
+     "conn": 12.748
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "태광",
+     "dl_capa": 13.0,
+     "g_dl": 12.459,
+     "conn": 12.459
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "제철",
+     "dl_capa": 13.0,
+     "g_dl": 11.66,
+     "conn": 11.66
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "도이",
+     "dl_capa": 13.0,
+     "g_dl": 10.36,
+     "conn": 10.36
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "북부",
+     "dl_capa": 13.0,
+     "g_dl": 10.849,
+     "conn": 8.848
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "장자",
+     "dl_capa": 13.0,
+     "g_dl": 8.379,
+     "conn": 8.379
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "산업",
+     "dl_capa": 12.0,
+     "g_dl": 2.907,
+     "conn": 2.907
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "섬진",
+     "dl_capa": 12.0,
+     "g_dl": 2.174,
+     "conn": 2.174
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "동양",
+     "dl_capa": 12.0,
+     "g_dl": 2.1,
+     "conn": 2.1
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "한라",
+     "dl_capa": 12.0,
+     "g_dl": 1.818,
+     "conn": 1.818
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "명당",
+     "dl_capa": 10.0,
+     "g_dl": 0.033,
+     "conn": 0.033
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "태인",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.7,
+   "geocoded": true,
+   "dong_count": 9,
+   "osm_name": "태금변전소",
+   "coord_exact": true,
+   "match_km": 6.1
+  },
+  {
+   "code": "E230",
+   "name": "순*",
+   "region": "곡성군",
+   "branch": "본사(광주)",
+   "lat": 35.29253,
+   "lng": 127.17363,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 67.534,
+   "subst_free_pct": 33.8,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 39.804
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "입면",
+     "dl_capa": 19.0,
+     "g_dl": 8.807,
+     "conn": 8.807
+    }
+   ],
+   "connect_max_mw": 8.8,
+   "geocoded": true,
+   "dong_count": 2,
+   "coord_exact": false
   },
   {
    "code": "D504",
@@ -4150,8 +5191,120 @@
    "connect_max_mw": 9.6,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "Z851",
+   "name": "여*",
+   "region": "여수시",
+   "branch": "전남동부권",
+   "lat": 34.769947,
+   "lng": 127.69651,
+   "subst_capa_mw": 50.0,
+   "subst_free_mw": 50.0,
+   "subst_free_pct": 100.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 50.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "마송",
+     "dl_capa": 3.6,
+     "g_dl": 3.6,
+     "conn": 3.6
+    }
+   ],
+   "connect_max_mw": 3.6,
+   "geocoded": true,
+   "dong_count": 1,
+   "osm_name": "여수변전소",
+   "coord_exact": true,
+   "match_km": 19.2
+  },
+  {
+   "code": "S605",
+   "name": "구*",
+   "region": "구례군",
+   "branch": "전남동부권",
+   "lat": 35.195403,
+   "lng": 127.459,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 49.777,
+   "subst_free_pct": 49.8,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 19.108
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 30.669
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "광의",
+     "dl_capa": 13.0,
+     "g_dl": 12.586,
+     "conn": 12.586
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "용방",
+     "dl_capa": 13.0,
+     "g_dl": 12.339,
+     "conn": 12.339
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "냉천",
+     "dl_capa": 13.0,
+     "g_dl": 12.099,
+     "conn": 12.099
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "화엄",
+     "dl_capa": 13.0,
+     "g_dl": 7.145,
+     "conn": 7.145
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "압록",
+     "dl_capa": 13.0,
+     "g_dl": 1.587,
+     "conn": 1.587
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "문척",
+     "dl_capa": 13.0,
+     "g_dl": 0.185,
+     "conn": 0.185
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "회룡",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 12.6,
+   "geocoded": true,
+   "dong_count": 11,
+   "osm_name": "구례변전소",
+   "coord_exact": true,
+   "match_km": 3.0
   },
   {
    "code": "D368",
@@ -4194,7 +5347,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -4402,7 +5554,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 4,
-   "branches": [],
    "osm_name": "대불변전소",
    "coord_exact": true,
    "match_km": 11.8
@@ -4436,8 +5587,101 @@
    "connect_max_mw": 12.6,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "2429",
+   "name": "광*",
+   "region": "광양시",
+   "branch": "전남동부권",
+   "lat": 34.970101,
+   "lng": 127.622745,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 21.786,
+   "subst_free_pct": 21.8,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 1.46
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 2.515
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "창덕",
+     "dl_capa": 13.0,
+     "g_dl": 12.623,
+     "conn": 2.393
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "아일",
+     "dl_capa": 13.0,
+     "g_dl": 9.919,
+     "conn": 2.393
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "세풍",
+     "dl_capa": 13.0,
+     "g_dl": 11.785,
+     "conn": 2.393
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "황금",
+     "dl_capa": 12.0,
+     "g_dl": 0.482,
+     "conn": 0.482
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "중마",
+     "dl_capa": 13.0,
+     "g_dl": 2.316,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "광양",
+     "dl_capa": 13.0,
+     "g_dl": 12.931,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "골약",
+     "dl_capa": 13.0,
+     "g_dl": 1.168,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "항만",
+     "dl_capa": 10.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "옥룡",
+     "dl_capa": 13.0,
+     "g_dl": 2.563,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 2.4,
+   "geocoded": true,
+   "dong_count": 8,
+   "osm_name": "광양변전소",
+   "coord_exact": true,
+   "match_km": 2.0
   },
   {
    "code": "E157",
@@ -4487,8 +5731,120 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 5,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "S623",
+   "name": "승*",
+   "region": "순천시",
+   "branch": "전남동부권",
+   "lat": 35.043621,
+   "lng": 127.26511,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 15.541,
+   "subst_free_pct": 10.4,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 0.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 1.607
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "금영",
+     "dl_capa": 12.0,
+     "g_dl": 2.088,
+     "conn": 1.607
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "백록",
+     "dl_capa": 18.0,
+     "g_dl": 4.447,
+     "conn": 1.607
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "승주",
+     "dl_capa": 12.0,
+     "g_dl": 0.309,
+     "conn": 0.309
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "죽곡",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "석곡",
+     "dl_capa": 13.0,
+     "g_dl": 9.259,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "삼기",
+     "dl_capa": 12.0,
+     "g_dl": 0.165,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "창촌",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "쌍암",
+     "dl_capa": 12.0,
+     "g_dl": 1.331,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "외서",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "오산",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "문길",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 1.6,
+   "geocoded": true,
+   "dong_count": 16,
+   "osm_name": "승주변전소",
+   "coord_exact": true,
+   "match_km": 9.0
   },
   {
    "code": "5029",
@@ -4634,7 +5990,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 7,
-   "branches": [],
    "osm_name": "남창변전소",
    "coord_exact": true,
    "match_km": 6.5
@@ -4708,7 +6063,6 @@
    "connect_max_mw": 6.1,
    "geocoded": true,
    "dong_count": 2,
-   "branches": [],
    "osm_name": "삼호변전소",
    "coord_exact": true,
    "match_km": 11.5
@@ -4862,7 +6216,6 @@
    "connect_max_mw": 7.2,
    "geocoded": true,
    "dong_count": 32,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -4920,7 +6273,6 @@
    "connect_max_mw": 6.9,
    "geocoded": true,
    "dong_count": 8,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -4959,7 +6311,6 @@
    "connect_max_mw": 3.1,
    "geocoded": true,
    "dong_count": 2,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -5003,7 +6354,37 @@
    "connect_max_mw": 0.3,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
+   "coord_exact": false
+  },
+  {
+   "code": "2753",
+   "name": "하*",
+   "region": "광양시",
+   "branch": "전남동부권",
+   "lat": 35.07474,
+   "lng": 127.68703,
+   "subst_capa_mw": 180.0,
+   "subst_free_mw": 2.874,
+   "subst_free_pct": 1.6,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 1.648
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "악양",
+     "dl_capa": 13.0,
+     "g_dl": 0.043,
+     "conn": 0.043
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 2,
    "coord_exact": false
   },
   {
@@ -5061,7 +6442,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 9,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -5069,8 +6449,8 @@
    "name": "담*",
    "region": "북구",
    "branch": "본사(광주)",
-   "lat": 35.25247,
-   "lng": 126.91729,
+   "lat": 35.24632,
+   "lng": 126.98539,
    "subst_capa_mw": 150.0,
    "subst_free_mw": 0.0,
    "subst_free_pct": 0.0,
@@ -5079,6 +6459,11 @@
      "mtr_no": "1",
      "mtr_capa": 50.0,
      "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 5.296
     }
    ],
    "lines": [
@@ -5088,12 +6473,18 @@
      "dl_capa": 13.0,
      "g_dl": 7.086,
      "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "무정",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
     }
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 2,
-   "branches": [],
+   "dong_count": 3,
    "coord_exact": false
   },
   {
@@ -5243,7 +6634,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 12,
-   "branches": [],
    "osm_name": "영암변전소",
    "coord_exact": true,
    "match_km": 4.6
@@ -5403,11 +6793,10 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 11,
-   "branches": [],
+   "dong_count": 12,
    "osm_name": "장흥변전소",
    "coord_exact": true,
-   "match_km": 3.0
+   "match_km": 2.1
   },
   {
    "code": "2687",
@@ -5565,7 +6954,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 10,
-   "branches": [],
    "osm_name": "해남변전소",
    "coord_exact": true,
    "match_km": 2.5
@@ -5658,7 +7046,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 2,
-   "branches": [],
    "coord_exact": false
   },
   {
@@ -5768,16 +7155,15 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 6,
-   "branches": [],
    "coord_exact": false
   },
   {
    "code": "S626",
    "name": "보*",
-   "region": "장흥군",
+   "region": "보성군",
    "branch": "장흥지사",
-   "lat": 34.74699,
-   "lng": 126.98217,
+   "lat": 34.781965,
+   "lng": 127.086769,
    "subst_capa_mw": 250.0,
    "subst_free_mw": 0.0,
    "subst_free_pct": 0.0,
@@ -5786,6 +7172,26 @@
      "mtr_no": "3",
      "mtr_capa": 50.0,
      "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "5",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 6.218
     }
    ],
    "lines": [
@@ -5795,13 +7201,112 @@
      "dl_capa": 18.0,
      "g_dl": 0.678,
      "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "노동",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "5",
+     "dl_nm": "예당",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "5",
+     "dl_nm": "복내",
+     "dl_capa": 19.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "장동",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "웅치",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "주봉",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "태양",
+     "dl_capa": 12.0,
+     "g_dl": 8.606,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "춘양",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "대련",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "보성",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "득량",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "조양",
+     "dl_capa": 18.0,
+     "g_dl": 6.003,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "발전",
+     "dl_capa": 10.0,
+     "g_dl": 5.5,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "옥암",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
     }
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 1,
-   "branches": [],
-   "coord_exact": false
+   "dong_count": 14,
+   "osm_name": "보성변전소",
+   "coord_exact": true,
+   "match_km": 6.4
   },
   {
    "code": "S637",
@@ -5926,7 +7431,6 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 4,
-   "branches": [],
    "osm_name": "화원변전소",
    "coord_exact": true,
    "match_km": 7.5
@@ -5960,8 +7464,563 @@
    "connect_max_mw": 0.0,
    "geocoded": true,
    "dong_count": 1,
-   "branches": [],
    "coord_exact": false
+  },
+  {
+   "code": "2690",
+   "name": "곡*",
+   "region": "곡성군",
+   "branch": "본사(광주)",
+   "lat": 35.326706,
+   "lng": 127.230468,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 25.991
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "2",
+     "dl_nm": "겸면",
+     "dl_capa": 13.0,
+     "g_dl": 1.992,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "대평",
+     "dl_capa": 13.0,
+     "g_dl": 4.053,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "곡성",
+     "dl_capa": 13.0,
+     "g_dl": 10.74,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "금지",
+     "dl_capa": 13.0,
+     "g_dl": 2.489,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "풍산",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 7,
+   "osm_name": "곡성변전소",
+   "coord_exact": true,
+   "match_km": 6.2
+  },
+  {
+   "code": "2683",
+   "name": "화*",
+   "region": "곡성군",
+   "branch": "전남동부권",
+   "lat": 35.12081,
+   "lng": 127.21098,
+   "subst_capa_mw": 200.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "북면",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "남면",
+     "dl_capa": 12.0,
+     "g_dl": 1.663,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 2,
+   "coord_exact": false
+  },
+  {
+   "code": "2739",
+   "name": "벌*",
+   "region": "고흥군",
+   "branch": "전남동부권",
+   "lat": 34.853599,
+   "lng": 127.33043,
+   "subst_capa_mw": 150.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 5.974
+    },
+    {
+     "mtr_no": "3",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "조성",
+     "dl_capa": 12.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "연산",
+     "dl_capa": 19.0,
+     "g_dl": 5.743,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "시내",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "고흥",
+     "dl_capa": 18.0,
+     "g_dl": 1.16,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "남양",
+     "dl_capa": 18.0,
+     "g_dl": 3.148,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "동강",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "장도",
+     "dl_capa": 13.0,
+     "g_dl": 2.919,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "농공",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "금마",
+     "dl_capa": 19.0,
+     "g_dl": 2.05,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "반암",
+     "dl_capa": 12.0,
+     "g_dl": 4.05,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 12,
+   "osm_name": "벌교변전소",
+   "coord_exact": true,
+   "match_km": 6.2
+  },
+  {
+   "code": "S601",
+   "name": "고*",
+   "region": "고흥군",
+   "branch": "장흥지사",
+   "lat": 34.578158,
+   "lng": 127.25435,
+   "subst_capa_mw": 212.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 53.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 53.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 53.0,
+     "g_mtr": 20.866
+    },
+    {
+     "mtr_no": "4",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "두원",
+     "dl_capa": 13.0,
+     "g_dl": 3.549,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "해창",
+     "dl_capa": 18.0,
+     "g_dl": 0.212,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "우천",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "천학",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "항공",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "과역",
+     "dl_capa": 13.0,
+     "g_dl": 2.992,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "포두",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "도화",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "4",
+     "dl_nm": "팔영",
+     "dl_capa": 18.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "읍내",
+     "dl_capa": 13.0,
+     "g_dl": 4.795,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "우산",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "풍양",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "매곡",
+     "dl_capa": 13.0,
+     "g_dl": 4.909,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "나로도",
+     "dl_capa": 12.0,
+     "g_dl": 3.513,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "우주",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "중산",
+     "dl_capa": 18.0,
+     "g_dl": 3.826,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "풍남",
+     "dl_capa": 12.0,
+     "g_dl": 1.869,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 13,
+   "osm_name": "고흥변전소",
+   "coord_exact": true,
+   "match_km": 6.0
+  },
+  {
+   "code": "E396",
+   "name": "고*",
+   "region": "고흥군",
+   "branch": "장흥지사",
+   "lat": 34.578158,
+   "lng": 127.25435,
+   "subst_capa_mw": 0.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0,
+   "transformers": [
+    {
+     "mtr_no": "3",
+     "mtr_capa": 0.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 0.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "mtr_capa": 0.0,
+     "g_mtr": 0.0
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "3",
+     "dl_nm": "금산",
+     "dl_capa": 0.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "금일",
+     "dl_capa": 0.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "3",
+     "dl_nm": "도덕",
+     "dl_capa": 0.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "녹동",
+     "dl_capa": 0.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "대용량#2",
+     "dl_capa": 0.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "도양",
+     "dl_capa": 0.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "풍류",
+     "dl_capa": 0.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 5,
+   "osm_name": "고흥변전소",
+   "coord_exact": true,
+   "match_km": 5.4
+  },
+  {
+   "code": "S630",
+   "name": "백*",
+   "region": "광양시",
+   "branch": "전남동부권",
+   "lat": 34.959534,
+   "lng": 127.677677,
+   "subst_capa_mw": 100.0,
+   "subst_free_mw": 0.0,
+   "subst_free_pct": 0.0,
+   "transformers": [
+    {
+     "mtr_no": "1",
+     "mtr_capa": 50.0,
+     "g_mtr": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "mtr_capa": 50.0,
+     "g_mtr": 5.507
+    }
+   ],
+   "lines": [
+    {
+     "mtr_no": "1",
+     "dl_nm": "서이",
+     "dl_capa": 12.0,
+     "g_dl": 8.8,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "서삼",
+     "dl_capa": 13.0,
+     "g_dl": 3.81,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "신금",
+     "dl_capa": 13.0,
+     "g_dl": 1.049,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "물류",
+     "dl_capa": 13.0,
+     "g_dl": 9.744,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "광영",
+     "dl_capa": 12.0,
+     "g_dl": 11.001,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "세방",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "동부",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "성화",
+     "dl_capa": 13.0,
+     "g_dl": 12.051,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "1",
+     "dl_nm": "옥곡",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    },
+    {
+     "mtr_no": "2",
+     "dl_nm": "서일",
+     "dl_capa": 13.0,
+     "g_dl": 0.0,
+     "conn": 0.0
+    }
+   ],
+   "connect_max_mw": 0.0,
+   "geocoded": true,
+   "dong_count": 12,
+   "osm_name": "백운변전소",
+   "coord_exact": true,
+   "match_km": 0.0
   }
  ]
 }
