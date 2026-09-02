@@ -59,7 +59,7 @@
 <header>
   <h1>⚡ 계통 여유용량 영업 대시보드</h1>
   <span class="meta" id="meta">불러오는 중…</span>
-  <span class="meta pill" id="scope">7개 사업소 + 전남동부권</span>
+  <span class="meta pill" id="scope">전라도 전체 + 경기·충남 확장</span>
 </header>
 <div class="wrap">
   <aside class="side">
@@ -103,7 +103,7 @@
 </div>
 
 <script>
-const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04"];
+const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04","2027-05","2027-06"];
 const mLabel = s => { const [y,m]=s.split("-"); return (y==="2027"?"’27 ":"")+parseInt(m)+"월"; };
 function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }

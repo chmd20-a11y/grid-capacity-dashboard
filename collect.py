@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-한전 계통 여유용량 수집기 — 7개 사업소 권역 + 전남동부권
+한전 계통 여유용량 수집기 — 광역 확장판 (전라도 전체 + 경기/충남 확장 + 강화)
 소스: cyber.kepco.co.kr (로그인·키 없이 작동)
- - 읍면동 목록:  resources_search_jibun_list.jsp
- - 변전소/선로 여유용량: resources_jibun_detail2_1.jsp (HTML, viewDetail 인자)
-여유용량 = viewDetail 인자 vol1/vol2/vol3(변전소/주변압기/선로), 단위 kW.
-좌표: 읍면동 OSM 지오코딩 평균. 사업소=최근접. (enrich_osm.py가 실명·정확좌표로 보강)
+계층 자동 대응: 광역시 구 / 도의 군(-기타지역) / 시(구 있음: 시→구→읍면동) / 시(구 없음: 시→읍면동).
+여유용량 = viewDetail 인자 vol1/vol2/vol3(변전소/주변압기/선로), kW.
+좌표=읍면동 지오코딩 평균, 사업소=최근접. (enrich_osm.py가 실명·정확좌표 보강)
 """
 import json, re, time, urllib.parse, urllib.request, http.cookiejar, hashlib, math, os
 from collections import Counter
@@ -17,10 +16,10 @@ REF = BASE + "/resources_search2.jsp"
 UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 Safari/604.1"
 GEO_UA = "happysolar-grid-dashboard/1.0 (contact chmd20@gmail.com)"
 GEO_CACHE = "geocode_cache.json"
-SHORTDO = {"광주광역시":"광주","인천광역시":"인천","경기도":"경기","전라남도":"전남",
-           "서울특별시":"서울","부산광역시":"부산","대구광역시":"대구","대전광역시":"대전",
+SHORTDO = {"광주광역시":"광주","인천광역시":"인천","경기도":"경기","전라남도":"전남","전북특별자치도":"전북",
+           "충청남도":"충남","서울특별시":"서울","부산광역시":"부산","대구광역시":"대구","대전광역시":"대전",
            "울산광역시":"울산","세종특별자치시":"세종","경상남도":"경남","경상북도":"경북",
-           "충청남도":"충남","충청북도":"충북","전북특별자치도":"전북","강원특별자치도":"강원","제주특별자치도":"제주"}
+           "충청북도":"충북","강원특별자치도":"강원","제주특별자치도":"제주"}
 
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
 
@@ -41,20 +40,23 @@ def fresh_opener():
     return op
 
 def list_addr(target, do="", si="", gu="", lidong=""):
+    """(addrList, addr_type) 반환. addr_type은 서버가 채운 레벨(addr_gu/addr_lidong 등)."""
     try:
         d = json.loads(_get(BASE + "/resources_search_jibun_list.jsp",
             {"addr": target, "addr_do": do, "addr_si": si, "addr_gu": gu, "addr_lidong": lidong}))
-        return d.get("addrList", []) if d.get("status") == "true" else []
+        if d.get("status") == "true":
+            return d.get("addrList", []), d.get("addr", target)
     except Exception as e:
-        print("  list err:", e); return []
+        print("  list err:", e)
+    return [], target
 
 VD = re.compile(r"viewDetail\(([^)]*)\)")
 ARG = re.compile(r"'([^']*)'")
 
-def fetch_detail(do, si, gu, lidong, tries=4):
+def fetch_detail(do, si, gu, lidong, tries=3):
     for t in range(tries):
         try:
-            op = fresh_opener()   # detail은 세션당 1회만 유효 → 매번 새 세션
+            op = fresh_opener()
             html = _get(BASE + "/resources_jibun_detail2_1.jsp",
                 {"addr_do": do, "addr_si": si, "addr_gu": gu,
                  "addr_lidong": lidong, "addr_li": "", "addr_jibun": ""}, op=op)
@@ -64,7 +66,7 @@ def fetch_detail(do, si, gu, lidong, tries=4):
         rows = [a for a in rows if len(a) >= 20]
         if rows:
             return rows
-        time.sleep(0.4)
+        time.sleep(0.35)
     return []
 
 def to_mw(x):
@@ -75,14 +77,13 @@ def haversine(a,b):
     R=6371;p=math.pi/180
     return 2*R*math.asin(math.sqrt(math.sin((b[0]-a[0])*p/2)**2+math.cos(a[0]*p)*math.cos(b[0]*p)*math.sin((b[1]-a[1])*p/2)**2))
 
-# ---- 지오코딩 (OSM Nominatim, 캐시) ----
+# ---- 지오코딩 ----
 def load_cache():
     if os.path.exists(GEO_CACHE):
         try: return json.load(open(GEO_CACHE, encoding="utf-8"))
         except: return {}
     return {}
 def save_cache(c): json.dump(c, open(GEO_CACHE,"w",encoding="utf-8"), ensure_ascii=False)
-
 def _nomi(q):
     url = "https://nominatim.openstreetmap.org/search?" + urllib.parse.urlencode(
         {"q": q, "format": "json", "countrycodes": "kr", "limit": 1}, encoding="utf-8")
@@ -94,7 +95,6 @@ def _nomi(q):
     except Exception:
         time.sleep(1.1)
     return None
-
 def geocode(addr, cache):
     if addr in cache: return cache[addr]
     res = _nomi(addr)
@@ -104,7 +104,7 @@ def geocode(addr, cache):
     cache[addr] = res
     return res
 
-# ---- 사업소(핀) + 수집대상 지역 ----
+# ---- 사업소(핀) ----
 OFFICES = [
     {"name":"본사(광주)","lat":35.1595,"lng":126.8526},
     {"name":"영암지사","lat":34.8000,"lng":126.6970},
@@ -113,49 +113,58 @@ OFFICES = [
     {"name":"파주지사","lat":37.7600,"lng":126.7800},
     {"name":"평택지사","lat":36.9920,"lng":127.1130},
     {"name":"강화사업소","lat":37.7470,"lng":126.4850},
-    {"name":"전남동부권","lat":34.9500,"lng":127.4900},   # 순천 중심(신규 타겟)
+    {"name":"전남동부권","lat":34.9500,"lng":127.4900},
+    {"name":"전북권","lat":35.8242,"lng":127.1480},   # 전주 중심(신규 타겟)
 ]
+# 수집대상: (do, 포함 시/군 리스트 또는 "ALL")
 SCRAPE = [
-    {"do":"광주광역시","si":"-기타지역","gus":["광산구","남구","동구","북구","서구"]},
-    {"do":"전라남도","si":"-기타지역","gus":["영암군","장흥군","해남군","구례군","곡성군","보성군","고흥군"]},
-    {"do":"전라남도","si":"순천시","gus":[""]},
-    {"do":"전라남도","si":"광양시","gus":[""]},
-    {"do":"전라남도","si":"여수시","gus":[""]},
-    {"do":"경기도","si":"파주시","gus":[""]},
-    {"do":"경기도","si":"평택시","gus":[""]},
-    {"do":"인천광역시","si":"-기타지역","gus":["강화군"]},
+    ("광주광역시", ["광산구","남구","동구","북구","서구"]),
+    ("전라남도", "ALL"),
+    ("전북특별자치도", "ALL"),
+    ("경기도", ["파주시","평택시","화성시","수원시","용인시","연천군","남양주시","하남시","안양시"]),
+    ("충청남도", ["천안시","서산시"]),
+    ("인천광역시", ["강화군"]),
 ]
-CENTROID = {  # 지오코딩 실패 폴백
-    "광산구":[35.139,126.793],"남구":[35.133,126.902],"동구":[35.146,126.923],
-    "북구":[35.174,126.912],"서구":[35.152,126.890],
-    "영암군":[34.800,126.697],"장흥군":[34.681,126.907],"해남군":[34.573,126.599],
-    "구례군":[35.202,127.463],"곡성군":[35.282,127.292],"보성군":[34.771,127.080],"고흥군":[34.611,127.285],
-    "순천시":[34.950,127.487],"광양시":[34.940,127.696],"여수시":[34.760,127.662],
-    "파주시":[37.760,126.780],"평택시":[36.992,127.113],"강화군":[37.720,126.460],
-}
 def jit(code, base, span=0.006):
     h=int(hashlib.md5(code.encode()).hexdigest(),16)
     return [round(base[0]+(((h//1000)%1000)/1000-0.5)*span,5),
             round(base[1]+((h%1000)/1000-0.5)*span,5)]
-
 def nearest_office(latlng):
     return min(OFFICES,key=lambda o:haversine(latlng,[o["lat"],o["lng"]]))["name"]
+
+def build_cells(do, names):
+    """(do,si,gu,region,known_dongs) 리스트. known_dongs는 구없는 시에서 이미 확보한 읍면동."""
+    cells=[]
+    silist,_ = list_addr("addr_si", do)
+    for si in silist:
+        if si == "-기타지역":
+            gus,_ = list_addr("addr_gu", do, si)
+            for gu in gus:
+                if gu in ("Unknown","-기타지역"): continue
+                if names=="ALL" or gu in names:
+                    cells.append((do, si, gu, gu, None))       # 군/광역시구 → region=gu
+        else:  # 시
+            if names!="ALL" and si not in names: continue
+            items,itype = list_addr("addr_gu", do, si)
+            if itype=="addr_gu":       # 시에 구 있음
+                for gu in items:
+                    if gu in ("Unknown","-기타지역"): continue
+                    cells.append((do, si, gu, si, None))       # region=시명
+            else:                       # 시에 구 없음 → items=읍면동
+                cells.append((do, si, "", si, items))          # region=시명
+    return cells
 
 def main():
     warm()
     subs = {}
-    for sc in SCRAPE:
-        do, si = sc["do"], sc["si"]
-        for gu in sc["gus"]:
-            if gu == "":   # 시 단위(si가 곧 권역): 순천/광양/여수/파주/평택
-                dongs = list_addr("addr_gu", do, si, "", ""); region = si
-            else:          # 구/군 단위: 광주 구, 전남/인천 군
-                dongs = list_addr("addr_lidong", do, si, gu, ""); region = gu
-            dongs = [d for d in dongs if d and d not in ("Unknown","-기타지역")]
-            print(f"[{do} {region}] 읍면동 {len(dongs)}개")
+    for do, names in SCRAPE:
+        for (d, si, gu, region, known) in build_cells(do, names):
+            dongs = known if known is not None else list_addr("addr_lidong", d, si, gu)[0]
+            dongs = [x for x in dongs if x and x not in ("Unknown","-기타지역")]
+            print(f"[{d} {si if si!='-기타지역' else ''} {region}] 읍면동 {len(dongs)}개")
             for dong in dongs:
-                rows = fetch_detail(do, si, gu, dong)
-                addr_str = f"{SHORTDO.get(do,do)} {region} {dong}"
+                rows = fetch_detail(d, si, gu, dong)
+                addr_str = f"{SHORTDO.get(d,d)} {region} {dong}"
                 found=0
                 for a in rows:
                     subst_cd = a[12]
@@ -175,7 +184,7 @@ def main():
                         "dl_capa":to_mw(a[16]),"g_dl":to_mw(a[11]),"conn":round(conn,3)}
                     found+=1
                 if found: print(f"    {dong}: {found}")
-                time.sleep(0.1)
+                time.sleep(0.08)
 
     # 지오코딩
     cache=load_cache()
@@ -184,18 +193,17 @@ def main():
     for i,a in enumerate(uniq):
         if a not in cache:
             geocode(a,cache)
-            if i%20==0: save_cache(cache)
+            if i%25==0: save_cache(cache); print(f"  ...{i}/{len(uniq)}")
     save_cache(cache)
     print(f"[지오코딩] 성공 {sum(1 for a in uniq if cache.get(a))}/{len(uniq)}")
 
-    # 정리
     out=[]
     for cd,r in subs.items():
         pts=[cache[a] for a in r["addrs"] if cache.get(a)]
         if pts:
             lat=round(sum(p[0] for p in pts)/len(pts),5); lng=round(sum(p[1] for p in pts)/len(pts),5)
         else:
-            base=CENTROID.get(r["regions"].most_common(1)[0][0],[35.1,126.9]); lat,lng=jit(cd,base)
+            base=CENTROID_FALLBACK; lat,lng=jit(cd,base)
         region=r["regions"].most_common(1)[0][0]
         lines=list(r["lines"].values())
         out.append({"code":cd,"name":r["nm"],"region":region,"branch":nearest_office([lat,lng]),
@@ -208,7 +216,7 @@ def main():
     out.sort(key=lambda x:-x["subst_free_mw"])
     kst=timezone(timedelta(hours=9))
     payload={"generated_at":datetime.now(kst).strftime("%Y-%m-%d %H:%M KST"),
-        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 7개 사업소 권역 + 전남동부",
+        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 전라도 전체 + 경기·충남 확장",
         "unit":"MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=읍면동 지오코딩 평균 · 사업소=최근접",
         "branches":[{"name":o["name"],"lat":o["lat"],"lng":o["lng"]} for o in OFFICES],
         "substations":out}
@@ -216,7 +224,8 @@ def main():
     from collections import Counter as C
     print(f"\n=== 완료: 변전소 {len(out)}개 ===")
     print("사업소별:",dict(C(x["branch"] for x in out)))
-    print("권역별:",dict(C(x["region"] for x in out)))
+
+CENTROID_FALLBACK=[35.8,127.0]
 
 if __name__=="__main__":
     main()
