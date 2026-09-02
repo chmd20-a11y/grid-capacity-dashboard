@@ -34,7 +34,7 @@
    "lng": 127.113
   },
   {
-   "name": "강화도(신규타겟)",
+   "name": "강화사업소",
    "lat": 37.747,
    "lng": 126.485
   }
@@ -209,7 +209,8 @@
    ],
    "connect_max_mw": 12.8,
    "geocoded": true,
-   "dong_count": 22
+   "dong_count": 22,
+   "branches": []
   },
   {
    "code": "2486",
@@ -239,13 +240,14 @@
    ],
    "connect_max_mw": 11.2,
    "geocoded": true,
-   "dong_count": 3
+   "dong_count": 3,
+   "branches": []
   },
   {
    "code": "SB10",
    "name": "통*",
    "region": "강화군",
-   "branch": "강화도(신규타겟)",
+   "branch": "강화사업소",
    "lat": 37.74821,
    "lng": 126.48353,
    "subst_capa_mw": 250.0,
@@ -269,7 +271,8 @@
    ],
    "connect_max_mw": 12.0,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "2682",
@@ -351,7 +354,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 18
+   "dong_count": 18,
+   "branches": []
   },
   {
    "code": "2180",
@@ -459,7 +463,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 3
+   "dong_count": 3,
+   "branches": []
   },
   {
    "code": "5180",
@@ -576,7 +581,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 13
+   "dong_count": 13,
+   "branches": []
   },
   {
    "code": "2182",
@@ -712,7 +718,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 20
+   "dong_count": 20,
+   "branches": []
   },
   {
    "code": "S317",
@@ -876,7 +883,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 11
+   "dong_count": 11,
+   "branches": []
   },
   {
    "code": "S122",
@@ -951,7 +959,8 @@
    ],
    "connect_max_mw": 12.7,
    "geocoded": true,
-   "dong_count": 5
+   "dong_count": 5,
+   "branches": []
   },
   {
    "code": "S327",
@@ -1000,7 +1009,8 @@
    ],
    "connect_max_mw": 12.2,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S136",
@@ -1056,7 +1066,8 @@
    ],
    "connect_max_mw": 11.8,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "S347",
@@ -1159,7 +1170,8 @@
    ],
    "connect_max_mw": 12.7,
    "geocoded": true,
-   "dong_count": 4
+   "dong_count": 4,
+   "branches": []
   },
   {
    "code": "E400",
@@ -1323,7 +1335,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 8
+   "dong_count": 8,
+   "branches": []
   },
   {
    "code": "E406",
@@ -1403,7 +1416,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 12
+   "dong_count": 12,
+   "branches": []
   },
   {
    "code": "S628",
@@ -1609,7 +1623,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 30
+   "dong_count": 30,
+   "branches": []
   },
   {
    "code": "D321",
@@ -1684,7 +1699,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 5
+   "dong_count": 5,
+   "branches": []
   },
   {
    "code": "S338",
@@ -1797,7 +1813,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 5
+   "dong_count": 5,
+   "branches": []
   },
   {
    "code": "S617",
@@ -1900,7 +1917,8 @@
    ],
    "connect_max_mw": 12.8,
    "geocoded": true,
-   "dong_count": 19
+   "dong_count": 19,
+   "branches": []
   },
   {
    "code": "S310",
@@ -1942,13 +1960,14 @@
    ],
    "connect_max_mw": 11.8,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S322",
    "name": "강*",
    "region": "강화군",
-   "branch": "강화도(신규타겟)",
+   "branch": "강화사업소",
    "lat": 37.70456,
    "lng": 126.42335,
    "subst_capa_mw": 200.0,
@@ -2106,7 +2125,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 10
+   "dong_count": 10,
+   "branches": []
   },
   {
    "code": "2681",
@@ -2284,7 +2304,8 @@
    ],
    "connect_max_mw": 12.0,
    "geocoded": true,
-   "dong_count": 15
+   "dong_count": 15,
+   "branches": []
   },
   {
    "code": "D517",
@@ -2314,7 +2335,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S132",
@@ -2368,7 +2390,8 @@
    ],
    "connect_max_mw": 10.1,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "2635",
@@ -2405,7 +2428,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "2579",
@@ -2529,7 +2553,8 @@
    ],
    "connect_max_mw": 12.8,
    "geocoded": true,
-   "dong_count": 3
+   "dong_count": 3,
+   "branches": []
   },
   {
    "code": "E296",
@@ -2700,7 +2725,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 20
+   "dong_count": 20,
+   "branches": []
   },
   {
    "code": "2636",
@@ -2730,7 +2756,8 @@
    ],
    "connect_max_mw": 8.0,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "D467",
@@ -2772,7 +2799,8 @@
    ],
    "connect_max_mw": 11.4,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S350",
@@ -2802,7 +2830,8 @@
    ],
    "connect_max_mw": 7.7,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S619",
@@ -2905,7 +2934,8 @@
    ],
    "connect_max_mw": 12.8,
    "geocoded": true,
-   "dong_count": 30
+   "dong_count": 30,
+   "branches": []
   },
   {
    "code": "E087",
@@ -2966,7 +2996,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 6
+   "dong_count": 6,
+   "branches": []
   },
   {
    "code": "5057",
@@ -3062,7 +3093,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 19
+   "dong_count": 19,
+   "branches": []
   },
   {
    "code": "2061",
@@ -3205,7 +3237,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 11
+   "dong_count": 11,
+   "branches": []
   },
   {
    "code": "S636",
@@ -3301,7 +3334,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 36
+   "dong_count": 36,
+   "branches": []
   },
   {
    "code": "5056",
@@ -3418,7 +3452,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 24
+   "dong_count": 24,
+   "branches": []
   },
   {
    "code": "E383",
@@ -3448,7 +3483,8 @@
    ],
    "connect_max_mw": 12.8,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S624",
@@ -3511,7 +3547,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 7
+   "dong_count": 7,
+   "branches": []
   },
   {
    "code": "S124",
@@ -3675,7 +3712,8 @@
    ],
    "connect_max_mw": 12.9,
    "geocoded": true,
-   "dong_count": 9
+   "dong_count": 9,
+   "branches": []
   },
   {
    "code": "E283",
@@ -3712,7 +3750,8 @@
    ],
    "connect_max_mw": 10.0,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S618",
@@ -3782,7 +3821,8 @@
    ],
    "connect_max_mw": 13.0,
    "geocoded": true,
-   "dong_count": 11
+   "dong_count": 11,
+   "branches": []
   },
   {
    "code": "S130",
@@ -3878,7 +3918,8 @@
    ],
    "connect_max_mw": 12.4,
    "geocoded": true,
-   "dong_count": 5
+   "dong_count": 5,
+   "branches": []
   },
   {
    "code": "D288",
@@ -3934,13 +3975,14 @@
    ],
    "connect_max_mw": 10.9,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "D317",
    "name": "서**",
    "region": "강화군",
-   "branch": "강화도(신규타겟)",
+   "branch": "강화사업소",
    "lat": 37.73688,
    "lng": 126.37427,
    "subst_capa_mw": 100.0,
@@ -3997,7 +4039,8 @@
    ],
    "connect_max_mw": 12.0,
    "geocoded": true,
-   "dong_count": 9
+   "dong_count": 9,
+   "branches": []
   },
   {
    "code": "D504",
@@ -4027,7 +4070,8 @@
    ],
    "connect_max_mw": 9.6,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "D368",
@@ -4069,7 +4113,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "2689",
@@ -4275,7 +4320,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 4
+   "dong_count": 4,
+   "branches": []
   },
   {
    "code": "S603",
@@ -4305,7 +4351,8 @@
    ],
    "connect_max_mw": 12.6,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "E157",
@@ -4354,7 +4401,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 5
+   "dong_count": 5,
+   "branches": []
   },
   {
    "code": "5029",
@@ -4499,7 +4547,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 7
+   "dong_count": 7,
+   "branches": []
   },
   {
    "code": "D491",
@@ -4569,7 +4618,8 @@
    ],
    "connect_max_mw": 6.1,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "E439",
@@ -4719,7 +4769,8 @@
    ],
    "connect_max_mw": 7.2,
    "geocoded": true,
-   "dong_count": 32
+   "dong_count": 32,
+   "branches": []
   },
   {
    "code": "S602",
@@ -4775,7 +4826,8 @@
    ],
    "connect_max_mw": 6.9,
    "geocoded": true,
-   "dong_count": 8
+   "dong_count": 8,
+   "branches": []
   },
   {
    "code": "D292",
@@ -4812,7 +4864,8 @@
    ],
    "connect_max_mw": 3.1,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "S107",
@@ -4854,7 +4907,8 @@
    ],
    "connect_max_mw": 0.3,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "E233",
@@ -4910,7 +4964,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 9
+   "dong_count": 9,
+   "branches": []
   },
   {
    "code": "2774",
@@ -4940,7 +4995,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "2583",
@@ -5088,7 +5144,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 12
+   "dong_count": 12,
+   "branches": []
   },
   {
    "code": "E440",
@@ -5245,7 +5302,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 11
+   "dong_count": 11,
+   "branches": []
   },
   {
    "code": "2687",
@@ -5402,7 +5460,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 10
+   "dong_count": 10,
+   "branches": []
   },
   {
    "code": "E131",
@@ -5491,7 +5550,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 2
+   "dong_count": 2,
+   "branches": []
   },
   {
    "code": "E212",
@@ -5599,7 +5659,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 6
+   "dong_count": 6,
+   "branches": []
   },
   {
    "code": "S626",
@@ -5629,7 +5690,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   },
   {
    "code": "S637",
@@ -5753,7 +5815,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 4
+   "dong_count": 4,
+   "branches": []
   },
   {
    "code": "S608",
@@ -5783,7 +5846,8 @@
    ],
    "connect_max_mw": 0.0,
    "geocoded": true,
-   "dong_count": 1
+   "dong_count": 1,
+   "branches": []
   }
  ]
 }
