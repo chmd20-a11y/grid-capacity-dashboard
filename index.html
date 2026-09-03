@@ -124,8 +124,13 @@ function init(d){
   DATA=d;
   document.getElementById('meta').textContent = `생성: ${d.generated_at} · ${d.source}`;
   MAP = L.map('map',{zoomControl:true}).setView([35.8,126.9],7);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    maxZoom:18, attribution:'© OpenStreetMap'}).addTo(MAP);
+  // 바탕지도: 일반(OSM) / 위성(Esri) / 위성+지명 — 우상단에서 클릭 전환(무료, 키 불필요)
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'© OpenStreetMap'});
+  const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19, attribution:'© Esri · Maxar · Earthstar Geographics'});
+  const esriRef = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
+  const hybrid = L.layerGroup([sat, esriRef]);
+  osm.addTo(MAP);
+  L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed:false}).addTo(MAP);
   LAYER = L.layerGroup().addTo(MAP);
   PLAN_LAYER = L.layerGroup().addTo(MAP);
   // 지사 핀
