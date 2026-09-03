@@ -27275,7 +27275,7 @@
 <header>
   <h1>⚡ 계통 여유용량 영업 대시보드</h1>
   <span class="meta" id="meta">불러오는 중…</span>
-  <span class="meta pill" id="scope">전라도 전체 + 경기·충남 확장</span>
+  <span class="meta pill" id="scope">전국</span>
 </header>
 <div class="wrap">
   <aside class="side">
@@ -27375,9 +27375,9 @@ function render(){
   LAYER.clearLayers(); MARKERS={};
   subs.forEach(s=>{
     const conn=s.connect_max_mw||0;
-    const r=Math.max(5,Math.min(22,5+conn*1.25));
-    const m=L.circleMarker([s.lat,s.lng],{radius:r,color:'#0d1117',weight:1,
-      fillColor:colorConn(conn),fillOpacity:.85});
+    const r=Math.max(3,Math.min(10,3+conn*0.55));
+    const m=L.circleMarker([s.lat,s.lng],{radius:r,color:'#ffffff',weight:0.6,
+      fillColor:colorConn(conn),fillOpacity:.8});
     m.bindPopup(popup(s));
     m.addTo(LAYER); MARKERS[s.code]=m;
   });
@@ -27400,10 +27400,17 @@ function popup(s){
   const badge = s.coord_exact ? '<span class="pill" style="color:#66bd63">정확좌표·실명(OSM)</span>' : '<span class="pill">근사좌표</span>';
   const warn = conn<=0 ? '<div style="color:#d73027;font-size:12px;margin-top:3px">⚠ 현재 신규 연계 불가 (여유 0)</div>' : '';
   return `<div class="popup-t">${nm} <span class="muted">${s.code}</span></div>
-    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · 담당 ${s.branch} · ${badge}</div>
+    <div class="muted" style="font-size:11px;margin-bottom:6px">${s.region} · ${badge}</div>
     <div class="popup-line" style="font-size:14px"><span>⚡ 최대 연계가능</span><b style="color:${colorConn(conn)}">${conn.toFixed(1)} MW</b></div>
-    <div class="popup-line muted" style="font-size:11.5px"><span>지역 여지(변전소 총여유)</span><span>${s.subst_free_mw.toFixed(0)} MW</span></div>${warn}
+    <div class="popup-line muted" style="font-size:11.5px"><span>지역 여지(변전소 총여유)</span><span>${s.subst_free_mw.toFixed(0)} MW</span></div>${warn}${contactHtml(s)}
     <div style="margin:6px 0 3px;font-size:11px;color:#7d8ea3">배전선로별 연계가능량 (병목 반영, 상위)</div>${lines}${supplyHtml(s)}`;
+}
+function contactHtml(s){
+  const o=s.office||null;
+  const name=(o&&o.name)?o.name:'한전 고객센터';
+  const phone=(o&&o.phone)?o.phone:'123';
+  const tel=phone.replace(/[^0-9]/g,'')||'123';
+  return `<div class="popup-line" style="margin-top:5px;border-top:1px solid var(--line);padding-top:5px"><span>📞 문의(관할 한전)</span><a href="tel:${tel}" style="color:var(--accent2);font-weight:700">${name} · ${phone}</a></div>`;
 }
 
 function supplyHtml(s){
@@ -27471,21 +27478,33 @@ function searchAddr(retry){
     box.innerHTML='<span style="color:var(--r)">⚠ 지오코딩 키 미설정 — Kakao JS 키 적용 후 지번 검색이 됩니다.</span>'; return; }
   box.innerHTML='<span class="muted">검색 중…</span>';
   new kakao.maps.services.Geocoder().addressSearch(q,(res,status)=>{
-    if(status===kakao.maps.services.Status.OK && res[0]){ showNearest(parseFloat(res[0].y),parseFloat(res[0].x),q); }
-    else { box.innerHTML='<span style="color:var(--r)">주소를 찾지 못했습니다 (지번/도로명으로 다시).</span>'; }
+    if(status===kakao.maps.services.Status.OK && res[0]){
+      const r=res[0], a=r.address||r.road_address||{};
+      showNearest(parseFloat(r.y),parseFloat(r.x),q, a.region_2depth_name||'', a.region_3depth_name||'');
+    } else { box.innerHTML='<span style="color:var(--r)">주소를 찾지 못했습니다 (지번/도로명으로 다시).</span>'; }
   });
 }
-function showNearest(lat,lng,label){
-  const top=DATA.substations.map(s=>({s,d:haversineJ([lat,lng],[s.lat,s.lng])})).sort((a,b)=>a.d-b.d).slice(0,3);
+function subCard(t,i){
+  const s=t.s,conn=s.connect_max_mw||0,nm=s.osm_name||(s.name+' 변전소');
+  const dls=s.lines.slice(0,3).map(l=>`${l.dl_nm} ${(l.conn||0).toFixed(1)}`).join(' · ');
+  return `<div onclick="focusSub('${s.code}')" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
+    <div style="display:flex;justify-content:space-between"><b>${i+1}. ${nm}</b><span style="color:${colorConn(conn)};font-weight:800">${conn.toFixed(1)} MW</span></div>
+    <div class="muted" style="font-size:11px;margin-top:2px">${s.region} · ${t.d.toFixed(1)}km</div>
+    <div style="font-size:11px;margin-top:3px">DL: <span class="muted">${dls}</span></div></div>`;
+}
+function showNearest(lat,lng,label,gu,dong){
   const box=document.getElementById('addrResult');
-  box.innerHTML=`<div class="muted" style="margin-bottom:5px">📍 <b style="color:var(--tx)">${label}</b> 기준 가까운 변전소</div>`+
-    top.map((t,i)=>{ const s=t.s,conn=s.connect_max_mw||0,nm=s.osm_name||(s.name+' 변전소');
-      const dls=s.lines.slice(0,3).map(l=>`${l.dl_nm} ${(l.conn||0).toFixed(1)}`).join(' · ');
-      return `<div onclick="focusSub('${s.code}')" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
-        <div style="display:flex;justify-content:space-between"><b>${i+1}. ${nm}</b><span style="color:${colorConn(conn)};font-weight:800">${conn.toFixed(1)} MW</span></div>
-        <div class="muted" style="font-size:11px;margin-top:2px">${s.region} · ${t.d.toFixed(1)}km · 담당 ${s.branch}</div>
-        <div style="font-size:11px;margin-top:3px">DL: <span class="muted">${dls}</span></div></div>`;
-    }).join('');
+  const withD = s=>({s,d:haversineJ([lat,lng],[s.lat,s.lng])});
+  let list=null, head='';
+  if(dong){   // 한전ON식: 이 주소(동)를 실제 공급하는 변전소 우선
+    const sup=DATA.substations.filter(s=>{ const sp=s.supply||{};
+      return Object.entries(sp).some(([area,ds])=> ds.includes(dong) && (!gu || area.indexOf(gu)>-1 || gu.indexOf(area.split(' ')[0])>-1)); });
+    const conn=sup.filter(s=>(s.connect_max_mw||0)>0).map(withD).sort((a,b)=>a.d-b.d).slice(0,3);
+    if(conn.length){ list=conn; head=`<div class="muted" style="margin-bottom:5px">📍 <b style="color:var(--tx)">${label}</b> — <span style="color:var(--g2)">연계 가능 변전소</span> (이 주소 공급)</div>`; }
+  }
+  if(!list){ list=DATA.substations.map(withD).sort((a,b)=>a.d-b.d).slice(0,3);
+    head=`<div class="muted" style="margin-bottom:5px">📍 <b style="color:var(--tx)">${label}</b> 기준 가까운 변전소 <span style="color:var(--o)">(직접 공급정보 없음)</span></div>`; }
+  box.innerHTML=head+list.map((t,i)=>subCard(t,i)).join('');
   MAP.setView([lat,lng],12);
   if(SEARCHMARKER) MAP.removeLayer(SEARCHMARKER);
   SEARCHMARKER=L.circleMarker([lat,lng],{radius:8,color:'#fff',weight:2,fillColor:'#e6007a',fillOpacity:1}).addTo(MAP).bindPopup('📍 '+label).openPopup();
