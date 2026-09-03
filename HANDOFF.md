@@ -31,7 +31,7 @@
 5. **🔎 변전소명으로 검색** — 이름으로 변전소+증설계획 검색, 결과에 **지번주소·연계가능·연락처**.
 6. **🏗 신설/증설 계획** — 좌측 목록 + 지도 🏗 마커(위치 확실한 것만). 단계 필터(계획확정/사업승인/공사착수).
 7. **딥링크** — `#<변전소코드>`(팝업 자동열기), `?find=<주소>`(지번검색 자동실행).
-8. **⭕ 이격거리 원** — 지번 검색 시 그 지점에 **반경 100/200/300/500m 원**(기본 200m, 칩으로 선택) 표시. **`L.circle`(미터 단위)** 사용이라 **줌/축척을 바꿔도 항상 실제 거리 유지**(픽셀 고정 아님). 원 안에 드는 변전소는 "⭕ Nm 이내" 배지. 함수: `drawSepCircle()`, `renderSepChips()`, 전역 `SEP_CIRCLE/SEP_RADIUS/LAST_PT`.
+8. **⭕ 이격거리 원 + 드래그 핀** — 지번 검색 시 그 지점에 **반경 100/200/300/500m 원**(기본 200m, 칩 선택) 표시. **`L.circle`(미터 단위)** 사용이라 **줌/축척을 바꿔도 항상 실제 거리 유지**. 중심 핀은 **드래그 가능한 `L.marker`(📍, draggable:true)** — 드래그하면 원(`drag`→`SEP_CIRCLE.setLatLng`)과 가까운 변전소 목록(`dragend`→`showNearest(...,fromDrag=true)`)이 따라 갱신. 원 안 변전소는 "⭕ Nm 이내" 배지. 함수: `drawSepCircle()`,`renderSepChips()`, 전역 `SEP_CIRCLE/SEP_RADIUS/LAST_PT`, `showNearest(lat,lng,label,gu,dong,fromDrag)`.
 
 ---
 
