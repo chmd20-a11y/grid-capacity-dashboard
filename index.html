@@ -85,15 +85,13 @@
     <h2 style="cursor:pointer" onclick="toggleCal()">📅 월별 영업 캠페인 캘린더 <span id="calArrow">▸</span> <span class="muted">(연계가능량 근거)</span></h2>
     <div class="cal" id="cal" style="display:none"></div>
 
-    <h2>🏢 지사 필터</h2>
-    <select id="branchSel"><option value="">전체 지사</option></select>
-
-    <h2>🏆 실제 연계가능 랭킹 <span class="muted" id="rankcnt"></span></h2>
-    <div style="max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:10px">
-      <table id="tbl"><thead><tr>
-        <th>변전소</th><th>권역</th><th style="text-align:right">연계가능MW</th><th style="text-align:right">지역여지MW</th><th style="text-align:right">선로</th>
-      </tr></thead><tbody></tbody></table>
+    <h2>🏗 신설/증설 계획 <span class="muted" id="plancnt"></span></h2>
+    <div style="margin-bottom:6px;font-size:11.5px">
+      <label style="cursor:pointer"><input type="checkbox" id="planToggle" checked> 지도에 표시 <span class="muted">(위치확인 <span id="planloc">–</span>건)</span></label>
     </div>
+    <div id="planStageFilter" style="display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap"></div>
+    <div id="planList" style="max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px"></div>
+    <div style="margin-top:5px;font-size:10.5px;color:#7d8ea3">※ 신설 예정 변전소는 정확 위치·준공연도가 한전 공개목록엔 없어(첨부문서만) 지도표시는 위치확인분만. 전체 계획은 위 목록 참조.</div>
 
     <h2>범례</h2>
     <div class="legend">
@@ -103,7 +101,7 @@
       <span class="sw"><span class="dot" style="background:var(--y)"></span>1–5</span>
       <span class="sw"><span class="dot" style="background:var(--o)"></span>0–1</span>
       <span class="sw"><span class="dot" style="background:var(--r)"></span>0(연계불가)</span>
-      <div style="margin-top:8px">🏢 = 사업장 위치 &nbsp;·&nbsp; <span class="muted">연계가능↑ = 지금 붙일 수 있음 = 우선공략</span></div>
+      <div style="margin-top:8px">🏢 = 지사 · 🏗 = 신설/증설 계획 · <span style="color:var(--r)">🔴 = 연계불가(클릭 시 상세)</span></div>
       <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM). 그 외 읍면동 근사. 데이터: 한전 분산형전원 계통연계 조회(22.9kV 기준·실데이터).</div>
     </div>
   </aside>
@@ -115,14 +113,15 @@ const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","202
 const mLabel = s => { const [y,m]=s.split("-"); return (y==="2027"?"’27 ":"")+parseInt(m)+"월"; };
 function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
-let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null;
+let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null, PLANS=null, PLAN_LAYER=null, PLAN_STAGE="전체";
 // Kakao 지오코딩(지번검색) — 아래에 카카오 JavaScript 키를 넣으면 활성화됨
 window.KAKAO_KEY = "3c003211be49659008929069de83dced";
 (function(){ if(window.KAKAO_KEY){ const sc=document.createElement('script'); sc.src="//dapi.kakao.com/v2/maps/sdk.js?appkey="+window.KAKAO_KEY+"&libraries=services&autoload=false"; sc.onload=()=>kakao.maps.load(()=>{}); document.head.appendChild(sc); } })();
 
-(window.__DATA__ ? Promise.resolve(window.__DATA__)
-  : fetch('capacity.json?_='+Date.now()).then(r=>r.json())
-).then(init).catch(e=>{
+Promise.all([
+  window.__DATA__ ? Promise.resolve(window.__DATA__) : fetch('capacity.json?_='+Date.now()).then(r=>r.json()),
+  window.__PLANS__ ? Promise.resolve(window.__PLANS__) : fetch('plans.json?_='+Date.now()).then(r=>r.json()).catch(()=>({plans:[]}))
+]).then(([d,p])=>{ PLANS=p||{plans:[]}; init(d); }).catch(e=>{
   document.getElementById('meta').textContent='capacity.json 로드 실패 — 수집기 먼저 실행하세요';
 });
 
@@ -133,6 +132,7 @@ function init(d){
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     maxZoom:18, attribution:'© OpenStreetMap'}).addTo(MAP);
   LAYER = L.layerGroup().addTo(MAP);
+  PLAN_LAYER = L.layerGroup().addTo(MAP);
   // 지사 핀
   d.branches.forEach(b=>{
     const m=L.marker([b.lat,b.lng],{icon:L.divIcon({className:'',html:
@@ -140,32 +140,29 @@ function init(d){
       iconSize:[10,10],iconAnchor:[5,5]})}).addTo(MAP);
     BRANCHMARKERS.push(m);
   });
-  buildBranchSelect();
   document.getElementById('addrBtn').onclick=searchAddr;
   document.getElementById('addrInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchAddr();});
+  document.getElementById('planToggle').onchange=renderPlans;
   const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
   renderCalendar();
+  renderPlans();
   if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),12); m.openPopup(); toggleSupply(code); } },700); }
 }
 
-function filtered(){
-  const b=document.getElementById('branchSel').value;
-  return b? DATA.substations.filter(s=>s.branches.includes(b)) : DATA.substations;
-}
-
 function render(){
-  const subs=filtered();
+  const subs=DATA.substations;
   LAYER.clearLayers(); MARKERS={};
-  subs.forEach(s=>{
-    const conn=s.connect_max_mw||0;
-    const r=Math.max(3,Math.min(10,3+conn*0.55));
-    const m=L.circleMarker([s.lat,s.lng],{radius:r,color:'#ffffff',weight:0.6,
-      fillColor:colorConn(conn),fillOpacity:.8});
+  // 연계가능(초록) 먼저, 연계불가(빨강) 나중에 그려 위로 올라오게 → 시인성↑
+  const ordered=[...subs].sort((a,b)=>(((a.connect_max_mw||0)>0)?0:1)-(((b.connect_max_mw||0)>0)?0:1));
+  ordered.forEach(s=>{
+    const conn=s.connect_max_mw||0, dead=conn<=0;
+    const r = dead ? 6 : Math.max(4,Math.min(11,4+conn*0.55));
+    const m=L.circleMarker([s.lat,s.lng],{radius:r, color: dead?'#7a0d0d':'#ffffff',
+      weight: dead?1.6:0.6, fillColor:colorConn(conn), fillOpacity: dead?0.95:0.8});
     m.bindPopup(popup(s));
     m.addTo(LAYER); MARKERS[s.code]=m;
   });
-  // tiles (연계가능 기준)
   const usable=subs.filter(s=>(s.connect_max_mw||0)>0).length;
   const byRegion={}; subs.forEach(s=>byRegion[s.region]=(byRegion[s.region]||0)+(s.connect_max_mw||0));
   const topR=Object.entries(byRegion).sort((a,b)=>b[1]-a[1])[0];
@@ -174,7 +171,6 @@ function render(){
   document.getElementById('t_free').textContent=usable;
   document.getElementById('t_top').textContent=topR?topR[0]:'–';
   document.getElementById('t_line').textContent=freeLines;
-  renderTable(subs);
 }
 
 function popup(s){
@@ -209,23 +205,7 @@ function supplyHtml(s){
 }
 window.toggleSupply=function(code){const el=document.getElementById('sup-'+code);if(el)el.style.display=el.style.display==='none'?'block':'none';};
 
-function renderTable(subs){
-  const tb=document.querySelector('#tbl tbody'); tb.innerHTML='';
-  document.getElementById('rankcnt').textContent=`(${subs.length}개)`;
-  const sorted=[...subs].sort((a,b)=>(b.connect_max_mw||0)-(a.connect_max_mw||0));
-  sorted.forEach(s=>{
-    const conn=s.connect_max_mw||0;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td><span class="dot" style="background:${colorConn(conn)}"></span>${s.osm_name||s.name}${s.coord_exact?' <span style="color:#66bd63">✓</span>':''} <span class="muted">${s.code}</span></td>
-      <td>${s.region}</td><td class="num">${conn.toFixed(1)}</td>
-      <td class="num muted">${s.subst_free_mw.toFixed(0)}</td><td class="num">${s.lines.length}</td>`;
-    tr.onclick=()=>{ MAP.setView([s.lat,s.lng],12); MARKERS[s.code]&&MARKERS[s.code].openPopup(); };
-    tb.appendChild(tr);
-  });
-}
-
 function renderCalendar(){
-  // 지사(권역)별 실제 연계가능량 합 랭킹 → 큰 순으로 이른 달 배정
   const agg={};
   DATA.branches.forEach(b=>agg[b.name]={name:b.name,conn:0,cnt:0,usable:0,free:0,lat:b.lat,lng:b.lng});
   DATA.substations.forEach(s=>{ const a=agg[s.branch]; if(a){ const c=s.connect_max_mw||0; a.conn+=c; a.cnt++; if(c>0)a.usable++; a.free+=s.subst_free_mw; } });
@@ -237,16 +217,51 @@ function renderCalendar(){
     row.innerHTML=`<div class="m">${mLabel(MONTHS[i])}</div>
       <div><div class="nm">${a.name}</div><div class="sub">연계가능 변전소 ${a.usable}/${a.cnt}개 · 지역여지 ${Math.round(a.free).toLocaleString()}MW</div></div>
       <div class="val">${a.conn.toFixed(0)}<small>연계가능 MW</small></div>`;
-    row.onclick=()=>{ document.getElementById('branchSel').value=a.name; render(); MAP.setView([a.lat,a.lng],10); };
+    row.onclick=()=>{ MAP.setView([a.lat,a.lng],10); };
     cal.appendChild(row);
   });
 }
 
-function buildBranchSelect(){
-  const sel=document.getElementById('branchSel');
-  DATA.branches.forEach(b=>{ const o=document.createElement('option'); o.value=b.name;o.textContent=b.name;sel.appendChild(o); });
-  sel.onchange=render;
+const STAGE_COLOR={"계획확정":"#9aa7b4","사업승인":"#f0a53a","공사착수(건설중)":"#e6007a"};
+function renderPlans(){
+  const box=document.getElementById('planList'); if(!box||!PLANS) return;
+  const plans=PLANS.plans||[];
+  const located=plans.filter(p=>p.lat);
+  document.getElementById('planloc').textContent=located.length;
+  document.getElementById('plancnt').textContent=`(전체 ${plans.length}건)`;
+  PLAN_LAYER.clearLayers();
+  if(document.getElementById('planToggle').checked){
+    located.forEach(p=>{
+      const c=STAGE_COLOR[p.stage]||'#f0a53a';
+      const m=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:'<div style="font-size:16px;line-height:16px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))">🏗</div>',iconSize:[16,16],iconAnchor:[8,8]})});
+      m.bindPopup(`<div class="popup-t">🏗 ${p.name} <span class="muted">${p.voltage}</span></div>
+        <div class="popup-line"><span>사업단계</span><b style="color:${c}">${p.stage}</b></div>
+        <div class="popup-line muted" style="font-size:11.5px"><span>담당</span><span>${p.hq}${p.office?' · '+p.office:''}</span></div>
+        <div class="muted" style="font-size:11px;margin-top:4px">${p.saup}</div>
+        <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 신설/증설 계획 · 준공연도 미공개(계획 변동 가능)</div>`);
+      m.addTo(PLAN_LAYER);
+    });
+  }
+  const stages=["전체","계획확정","사업승인","공사착수(건설중)"];
+  const sf=document.getElementById('planStageFilter'); sf.innerHTML='';
+  stages.forEach(st=>{
+    const n = st==="전체"?plans.length:plans.filter(p=>p.stage===st).length;
+    const b=document.createElement('span'); b.textContent=`${st.replace('(건설중)','')}(${n})`;
+    b.style.cssText='cursor:pointer;padding:2px 7px;border-radius:12px;border:1px solid var(--line);'+(PLAN_STAGE===st?'background:var(--accent);color:#fff;font-weight:700':'color:var(--tx2)');
+    b.onclick=()=>{ PLAN_STAGE=st; renderPlans(); };
+    sf.appendChild(b);
+  });
+  const list = PLAN_STAGE==="전체"?plans:plans.filter(p=>p.stage===PLAN_STAGE);
+  box.innerHTML = list.map(p=>{
+    const c=STAGE_COLOR[p.stage]||'#f0a53a';
+    const attr = p.lat?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px"`:'style="border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px;opacity:.7"';
+    const loc = p.lat?'':' <span class="muted" style="font-size:10px">·위치미상</span>';
+    return `<div ${attr}><div><span style="color:${c}">●</span> <b>${p.name}</b> <span class="muted">${p.voltage}</span>${loc}</div>
+      <div class="muted" style="font-size:10.5px">${p.stage.replace('(건설중)','')} · ${p.hq}</div></div>`;
+  }).join('') || '<div class="muted" style="padding:8px">해당 없음</div>';
 }
+function focusPlan(lat,lng){ MAP.setView([lat,lng],12); }
+window.focusPlan=focusPlan;
 
 function toggleCal(){ const c=document.getElementById('cal'),a=document.getElementById('calArrow'); const open=c.style.display==='none'; c.style.display=open?'flex':'none'; a.textContent=open?'▾':'▸'; }
 function haversineJ(a,b){ const R=6371,p=Math.PI/180,dlat=(b[0]-a[0])*p,dlng=(b[1]-a[1])*p; const x=Math.sin(dlat/2)**2+Math.cos(a[0]*p)*Math.cos(b[0]*p)*Math.sin(dlng/2)**2; return 2*R*Math.asin(Math.sqrt(x)); }
