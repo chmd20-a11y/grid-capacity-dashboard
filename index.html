@@ -63,6 +63,14 @@
       </div>
       <div id="addrResult" style="margin-top:8px;font-size:12px"></div>
     </div>
+    <div style="margin-bottom:14px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:6px">🔎 변전소명으로 검색 <span class="muted" style="font-weight:400">(지번주소 표기)</span></div>
+      <div style="display:flex;gap:6px">
+        <input id="nameInput" placeholder="예: 여수 · 남양주 · 시종" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:7px 9px;font-size:13px">
+        <button id="nameBtn" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer">찾기</button>
+      </div>
+      <div id="nameResult" style="margin-top:8px;font-size:12px"></div>
+    </div>
     <div class="tiles">
       <div class="tile"><div class="v" id="t_sub">–</div><div class="l">변전소 수</div></div>
       <div class="tile"><div class="v" id="t_free">–</div><div class="l">연계가능 변전소 (선로&gt;0)</div></div>
@@ -129,6 +137,8 @@ function init(d){
   });
   document.getElementById('addrBtn').onclick=searchAddr;
   document.getElementById('addrInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchAddr();});
+  document.getElementById('nameBtn').onclick=searchByName;
+  document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchByName();});
   document.getElementById('planToggle').onchange=renderPlans;
   const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
@@ -202,7 +212,7 @@ function renderPlans(){
   const plans=PLANS.plans||[];
   // 이름검색(geo=ok)은 동명 엉뚱한 지점을 잡는 경우가 많아(약 40% 오류) 지도핀 제외.
   // 실제 기존 변전소에 고정된 증설분(geo=exist)만 신뢰해 표시.
-  const mapped = p => p.lat && p.geo==='exist';
+  const mapped = p => p.lat && (p.geo==='exist' || p.geo==='manual');
   const located=plans.filter(mapped);
   document.getElementById('planloc').textContent=located.length;
   document.getElementById('plancnt').textContent=`(전체 ${plans.length}건)`;
@@ -292,7 +302,38 @@ function showNearest(lat,lng,label,gu,dong){
   SEARCHMARKER=L.circleMarker([lat,lng],{radius:8,color:'#fff',weight:2,fillColor:'#e6007a',fillOpacity:1}).addTo(MAP).bindPopup('📍 '+label).openPopup();
 }
 function focusSub(code){ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),13); m.openPopup(); } }
-window.searchAddr=searchAddr; window.focusSub=focusSub;
+
+function searchByName(){
+  const q=document.getElementById('nameInput').value.trim();
+  const box=document.getElementById('nameResult');
+  if(!q){ box.innerHTML=''; return; }
+  const hit=s=>((s.osm_name||'')+(s.name||'')).replace(/\*/g,'').includes(q);
+  const subs=(DATA.substations||[]).filter(hit).sort((a,b)=>(b.connect_max_mw||0)-(a.connect_max_mw||0)).slice(0,8);
+  const plans=((PLANS&&PLANS.plans)||[]).filter(p=>(p.name||'').includes(q)).slice(0,6);
+  if(!subs.length && !plans.length){ box.innerHTML='<span style="color:var(--r)">일치하는 변전소가 없습니다.</span>'; return; }
+  let html='';
+  subs.forEach(s=>{
+    const conn=s.connect_max_mw||0, nm=s.osm_name||(s.name+' 변전소');
+    const addr=s.addr?`${s.addr}${s.coord_exact?'':' <span class="muted">(근사)</span>'}`:`${s.region} <span class="muted">(주소 미확인)</span>`;
+    const o=s.office||{}, tel=(o.phone||'').replace(/[^0-9]/g,'');
+    const contact=o.phone?`<div style="font-size:11px;margin-top:3px">📞 <a href="tel:${tel}" onclick="event.stopPropagation()" style="color:var(--accent2);font-weight:700">${o.name} · ${o.phone}</a></div>`:'';
+    html+=`<div onclick="focusSub('${s.code}')" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between"><b>${nm}</b><span style="color:${colorConn(conn)};font-weight:800">${conn.toFixed(1)} MW</span></div>
+      <div style="font-size:11px;margin-top:2px">📮 ${addr}</div>${contact}</div>`;
+  });
+  plans.forEach(p=>{
+    const canFocus=p.lat&&(p.geo==='exist'||p.geo==='manual');
+    const addr=p.addr?p.addr:'<span class="muted">위치 미확인</span>';
+    const attr=canFocus?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;`:'style="';
+    html+=`<div ${attr}background:var(--panel);border:1px dashed var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
+      <div><b>🏗 ${p.name}</b> <span class="muted">${p.voltage}</span> <span style="color:var(--accent2);font-size:11px">신설/증설 계획</span></div>
+      <div class="muted" style="font-size:11px;margin-top:2px">${p.stage.replace('(건설중)','')} · ${p.hq}</div>
+      <div style="font-size:11px;margin-top:2px">📮 ${addr}</div></div>`;
+  });
+  box.innerHTML=html;
+}
+
+window.searchAddr=searchAddr; window.searchByName=searchByName; window.focusSub=focusSub;
 </script>
 </body>
 </html>
