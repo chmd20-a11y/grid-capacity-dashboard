@@ -95,14 +95,48 @@ def _nomi(q):
     except Exception:
         time.sleep(1.1)
     return None
+KAKAO_REST = os.environ.get("KAKAO_REST_KEY", "")
+def _kakao_geo(q):
+    if not KAKAO_REST: return None
+    url = "https://dapi.kakao.com/v2/local/search/address.json?" + urllib.parse.urlencode({"query": q})
+    try:
+        req = urllib.request.Request(url, headers={"Authorization": "KakaoAK " + KAKAO_REST})
+        d = json.loads(urllib.request.urlopen(req, timeout=15).read().decode())
+        docs = d.get("documents", [])
+        time.sleep(0.05)
+        if docs: return [round(float(docs[0]["y"]),5), round(float(docs[0]["x"]),5)]
+    except Exception:
+        pass
+    return None
+
 def geocode(addr, cache):
     if addr in cache: return cache[addr]
-    res = _nomi(addr)
+    res = _kakao_geo(addr)          # 카카오 우선(전국 대량·빠름·정확)
     if res is None:
-        parts = addr.split(" ", 1)
-        if len(parts) == 2: res = _nomi(parts[1])
+        res = _nomi(addr)           # 폴백: OSM
+        if res is None:
+            parts = addr.split(" ", 1)
+            if len(parts) == 2: res = _nomi(parts[1])
     cache[addr] = res
     return res
+
+# ---- 관할 한전지사 연락처 (Kakao Local, 지역별 캐시) ----
+OFFICE_CACHE = "office_cache.json"
+def kakao_office(region):
+    if not KAKAO_REST: return None
+    url = "https://dapi.kakao.com/v2/local/search/keyword.json?" + urllib.parse.urlencode({"query": "한국전력공사 " + region, "size": 1})
+    try:
+        req = urllib.request.Request(url, headers={"Authorization": "KakaoAK " + KAKAO_REST})
+        d = json.loads(urllib.request.urlopen(req, timeout=15).read().decode())
+        docs = d.get("documents", [])
+        time.sleep(0.05)
+        if docs:
+            return {"name": docs[0].get("place_name",""),
+                    "addr": docs[0].get("road_address_name") or docs[0].get("address_name",""),
+                    "phone": docs[0].get("phone") or "123"}
+    except Exception:
+        pass
+    return None
 
 # ---- 사업소(핀) ----
 OFFICES = [
@@ -116,15 +150,12 @@ OFFICES = [
     {"name":"전남동부권","lat":34.9500,"lng":127.4900},
     {"name":"전북권","lat":35.8242,"lng":127.1480},   # 전주 중심(신규 타겟)
 ]
-# 수집대상: (do, 포함 시/군 리스트 또는 "ALL")
-SCRAPE = [
-    ("광주광역시", ["광산구","남구","동구","북구","서구"]),
-    ("전라남도", "ALL"),
-    ("전북특별자치도", "ALL"),
-    ("경기도", ["파주시","평택시","화성시","수원시","용인시","연천군","남양주시","하남시","안양시"]),
-    ("충청남도", ["천안시","서산시"]),
-    ("인천광역시", ["강화군"]),
-]
+# 수집대상: (do, 포함 시/군 리스트 또는 "ALL") — 전국 17개 시도
+SCRAPE = [(do, "ALL") for do in [
+    "서울특별시","부산광역시","대구광역시","인천광역시","광주광역시","대전광역시","울산광역시",
+    "세종특별자치시","경기도","강원특별자치도","충청북도","충청남도","전북특별자치도","전라남도",
+    "경상북도","경상남도","제주특별자치도",
+]]
 def jit(code, base, span=0.006):
     h=int(hashlib.md5(code.encode()).hexdigest(),16)
     return [round(base[0]+(((h//1000)%1000)/1000-0.5)*span,5),
@@ -200,6 +231,16 @@ def main():
     save_cache(cache)
     print(f"[지오코딩] 성공 {sum(1 for a in uniq if cache.get(a))}/{len(uniq)}")
 
+    # 관할 한전지사 연락처 (지역별 캐시)
+    ocache = json.load(open(OFFICE_CACHE,encoding="utf-8")) if os.path.exists(OFFICE_CACHE) else {}
+    regions = sorted({r["regions"].most_common(1)[0][0] for r in subs.values() if r["regions"]})
+    print(f"[연락처] 지역 {len(regions)}개 한전지사 조회")
+    for i,reg in enumerate(regions):
+        if reg not in ocache:
+            ocache[reg] = kakao_office(reg)
+            if i%20==0: json.dump(ocache,open(OFFICE_CACHE,"w",encoding="utf-8"),ensure_ascii=False)
+    json.dump(ocache,open(OFFICE_CACHE,"w",encoding="utf-8"),ensure_ascii=False)
+
     out=[]
     for cd,r in subs.items():
         pts=[cache[a] for a in r["addrs"] if cache.get(a)]
@@ -216,11 +257,12 @@ def main():
             "lines":sorted(lines,key=lambda x:-x["conn"]),
             "connect_max_mw":round(max([l["conn"] for l in lines],default=0),1),
             "geocoded":bool(pts),"dong_count":len(r["addrs"]),
-            "supply":{a:sorted(v) for a,v in sorted(r["supply"].items())}})
+            "supply":{a:sorted(v) for a,v in sorted(r["supply"].items())},
+            "office":ocache.get(region)})
     out.sort(key=lambda x:-x["subst_free_mw"])
     kst=timezone(timedelta(hours=9))
     payload={"generated_at":datetime.now(kst).strftime("%Y-%m-%d %H:%M KST"),
-        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 전라도 전체 + 경기·충남 확장",
+        "source":"한전 cyber.kepco.co.kr (분산형전원 계통연계 조회) — 전국",
         "unit":"MW · 여유용량=vol(변전소/주변압기/선로) · 좌표=읍면동 지오코딩 평균 · 사업소=최근접",
         "branches":[{"name":o["name"],"lat":o["lat"],"lng":o["lng"]} for o in OFFICES],
         "substations":out}

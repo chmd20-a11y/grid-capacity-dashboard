@@ -194,7 +194,7 @@ function contactHtml(s){
   const name=(o&&o.name)?o.name:'한전 고객센터';
   const phone=(o&&o.phone)?o.phone:'123';
   const tel=phone.replace(/[^0-9]/g,'')||'123';
-  return `<div class="popup-line" style="margin-top:5px;border-top:1px solid var(--line);padding-top:5px"><span>📞 문의(관할 한전)</span><a href="tel:${tel}" style="color:var(--accent2);font-weight:700">${name} · ${phone}</a></div>`;
+  return `<div class="popup-line" style="margin-top:5px;border-top:1px solid var(--line);padding-top:5px"><span>📞 선로확인 문의</span><a href="tel:${tel}" style="color:var(--accent2);font-weight:700">${name} · ${phone}</a></div>`;
 }
 
 function supplyHtml(s){
