@@ -27497,8 +27497,10 @@ function showNearest(lat,lng,label,gu,dong){
   const withD = s=>({s,d:haversineJ([lat,lng],[s.lat,s.lng])});
   let list=null, head='';
   if(dong){   // 한전ON식: 이 주소(동)를 실제 공급하는 변전소 우선
+    const st=x=>x.replace(/[0-9]+$/,'').replace(/(동|읍|면|리|가)$/,'');  // 옛지명(교하면)↔현행(교하동) 어근매칭
+    const sd=st(dong);
     const sup=DATA.substations.filter(s=>{ const sp=s.supply||{};
-      return Object.entries(sp).some(([area,ds])=> ds.includes(dong) && (!gu || area.indexOf(gu)>-1 || gu.indexOf(area.split(' ')[0])>-1)); });
+      return Object.entries(sp).some(([area,ds])=> (ds.includes(dong)||ds.some(d=>st(d)===sd)) && (!gu || area.indexOf(gu)>-1 || gu.indexOf(area.split(' ')[0])>-1)); });
     const conn=sup.filter(s=>(s.connect_max_mw||0)>0).map(withD).sort((a,b)=>a.d-b.d).slice(0,3);
     if(conn.length){ list=conn; head=`<div class="muted" style="margin-bottom:5px">📍 <b style="color:var(--tx)">${label}</b> — <span style="color:var(--g2)">연계 가능 변전소</span> (이 주소 공급)</div>`; }
   }
