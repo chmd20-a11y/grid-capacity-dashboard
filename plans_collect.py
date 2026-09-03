@@ -117,6 +117,15 @@ def main():
         if i%30==0: json.dump(cache,open(GEO_CACHE,"w",encoding="utf-8"),ensure_ascii=False)
     json.dump(cache,open(GEO_CACHE,"w",encoding="utf-8"),ensure_ascii=False)
 
+    # 수동 등록 계획 병합(한전 공개목록에 아직 없는 신설 건). 이름 중복 시 수동본 우선.
+    if os.path.exists("manual_plans.json"):
+        man = (json.load(open("manual_plans.json",encoding="utf-8")).get("plans") or [])
+        names = {p["name"] for p in plans}
+        for mp in man:
+            if mp.get("name") not in names:
+                plans.append(mp)
+        print(f"[수동병합] {len(man)}건 (신규 {sum(1 for mp in man if mp.get('name') not in names)}건)")
+
     # plans 전체 유지(목록용). 좌표 있는 것만 지도표시.
     from datetime import datetime,timezone,timedelta
     kst=timezone(timedelta(hours=9))
