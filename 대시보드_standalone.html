@@ -28,14 +28,6 @@
   .tile .v{font-size:22px;font-weight:800}
   .tile .l{font-size:11px;color:var(--tx2);margin-top:2px}
   h2{font-size:13px;color:var(--tx2);margin:18px 0 8px;letter-spacing:.3px;text-transform:uppercase}
-  .cal{display:flex;flex-direction:column;gap:6px}
-  .cal .row{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 11px;cursor:pointer}
-  .cal .row:hover{border-color:var(--accent)}
-  .cal .m{font-weight:800;font-size:14px;color:var(--accent2)}
-  .cal .nm{font-weight:700}
-  .cal .sub{font-size:11px;color:var(--tx2);margin-top:1px}
-  .cal .val{text-align:right;font-weight:800}
-  .cal .val small{display:block;font-weight:500;color:var(--tx2);font-size:10px}
   select{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;width:100%}
   table{width:100%;border-collapse:collapse;font-size:12.5px}
   th,td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line)}
@@ -94800,16 +94792,13 @@
       <b>숫자 읽는 법</b> — <span style="color:var(--g2);font-weight:700">연계가능(선로 최대)</span> = 지금 태양광을 실제로 붙일 수 있는 양(변전소·변압기·선로 여유의 <b>병목</b>, 보통 선로당 ≤13MW). <span class="muted">지역여지(변전소 총여유)</span> = 그 변전소의 확장 잠재력(선로 증설 시). ※ 한전 <b>추정치</b>, 실제 연계는 별도 기술검토 필요.
     </div>
 
-    <h2 style="cursor:pointer" onclick="toggleCal()">📅 월별 영업 캠페인 캘린더 <span id="calArrow">▸</span> <span class="muted">(연계가능량 근거)</span></h2>
-    <div class="cal" id="cal" style="display:none"></div>
-
     <h2>🏗 신설/증설 계획 <span class="muted" id="plancnt"></span></h2>
     <div style="margin-bottom:6px;font-size:11.5px">
       <label style="cursor:pointer"><input type="checkbox" id="planToggle" checked> 지도에 표시 <span class="muted">(위치확인 <span id="planloc">–</span>건)</span></label>
     </div>
     <div id="planStageFilter" style="display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap"></div>
     <div id="planList" style="max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px"></div>
-    <div style="margin-top:5px;font-size:10.5px;color:#7d8ea3">※ 신설 예정 변전소는 정확 위치·준공연도가 한전 공개목록엔 없어(첨부문서만) 지도표시는 위치확인분만. 전체 계획은 위 목록 참조.</div>
+    <div style="margin-top:5px;font-size:10.5px;color:#7d8ea3">※ 지도핀은 <b>기존 변전소 증설분</b>(위치 확실)만 표시. 신설 예정 변전소는 한전이 정확 위치·준공연도를 공개목록에 안 넣어(첨부문서만) 목록에만 표기(·위치미상). 전체 계획은 위 목록 참조.</div>
 
     <h2>범례</h2>
     <div class="legend">
@@ -94827,8 +94816,6 @@
 </div>
 
 <script>
-const MONTHS = ["2026-09","2026-10","2026-11","2026-12","2027-01","2027-02","2027-03","2027-04","2027-05","2027-06"];
-const mLabel = s => { const [y,m]=s.split("-"); return (y==="2027"?"’27 ":"")+parseInt(m)+"월"; };
 function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null, PLANS=null, PLAN_LAYER=null, PLAN_STAGE="전체";
@@ -94863,7 +94850,6 @@ function init(d){
   document.getElementById('planToggle').onchange=renderPlans;
   const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
-  renderCalendar();
   renderPlans();
   if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),12); m.openPopup(); toggleSupply(code); } },700); }
 }
@@ -94928,28 +94914,14 @@ function supplyHtml(s){
 }
 window.toggleSupply=function(code){const el=document.getElementById('sup-'+code);if(el)el.style.display=el.style.display==='none'?'block':'none';};
 
-function renderCalendar(){
-  const agg={};
-  DATA.branches.forEach(b=>agg[b.name]={name:b.name,conn:0,cnt:0,usable:0,free:0,lat:b.lat,lng:b.lng});
-  DATA.substations.forEach(s=>{ const a=agg[s.branch]; if(a){ const c=s.connect_max_mw||0; a.conn+=c; a.cnt++; if(c>0)a.usable++; a.free+=s.subst_free_mw; } });
-  const ranked=Object.values(agg).sort((x,y)=>y.conn-x.conn);
-  const cal=document.getElementById('cal'); cal.innerHTML='';
-  ranked.forEach((a,i)=>{
-    if(i>=MONTHS.length) return;
-    const row=document.createElement('div'); row.className='row';
-    row.innerHTML=`<div class="m">${mLabel(MONTHS[i])}</div>
-      <div><div class="nm">${a.name}</div><div class="sub">연계가능 변전소 ${a.usable}/${a.cnt}개 · 지역여지 ${Math.round(a.free).toLocaleString()}MW</div></div>
-      <div class="val">${a.conn.toFixed(0)}<small>연계가능 MW</small></div>`;
-    row.onclick=()=>{ MAP.setView([a.lat,a.lng],10); };
-    cal.appendChild(row);
-  });
-}
-
 const STAGE_COLOR={"계획확정":"#9aa7b4","사업승인":"#f0a53a","공사착수(건설중)":"#e6007a"};
 function renderPlans(){
   const box=document.getElementById('planList'); if(!box||!PLANS) return;
   const plans=PLANS.plans||[];
-  const located=plans.filter(p=>p.lat);
+  // 이름검색(geo=ok)은 동명 엉뚱한 지점을 잡는 경우가 많아(약 40% 오류) 지도핀 제외.
+  // 실제 기존 변전소에 고정된 증설분(geo=exist)만 신뢰해 표시.
+  const mapped = p => p.lat && p.geo==='exist';
+  const located=plans.filter(mapped);
   document.getElementById('planloc').textContent=located.length;
   document.getElementById('plancnt').textContent=`(전체 ${plans.length}건)`;
   PLAN_LAYER.clearLayers();
@@ -94979,8 +94951,8 @@ function renderPlans(){
   const list = PLAN_STAGE==="전체"?plans:plans.filter(p=>p.stage===PLAN_STAGE);
   box.innerHTML = list.map(p=>{
     const c=STAGE_COLOR[p.stage]||'#f0a53a';
-    const attr = p.lat?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px"`:'style="border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px;opacity:.7"';
-    const loc = p.lat?'':' <span class="muted" style="font-size:10px">·위치미상</span>';
+    const attr = mapped(p)?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px"`:'style="border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px;opacity:.7"';
+    const loc = mapped(p)?'':' <span class="muted" style="font-size:10px">·위치미상</span>';
     return `<div ${attr}><div><span style="color:${c}">●</span> <b>${p.name}</b> <span class="muted">${p.voltage}</span>${loc}</div>
       <div class="muted" style="font-size:10.5px">${p.stage.replace('(건설중)','')} · ${p.hq}</div></div>`;
   }).join('') || '<div class="muted" style="padding:8px">해당 없음</div>';
@@ -94988,7 +94960,6 @@ function renderPlans(){
 function focusPlan(lat,lng){ MAP.setView([lat,lng],12); }
 window.focusPlan=focusPlan;
 
-function toggleCal(){ const c=document.getElementById('cal'),a=document.getElementById('calArrow'); const open=c.style.display==='none'; c.style.display=open?'flex':'none'; a.textContent=open?'▾':'▸'; }
 function haversineJ(a,b){ const R=6371,p=Math.PI/180,dlat=(b[0]-a[0])*p,dlng=(b[1]-a[1])*p; const x=Math.sin(dlat/2)**2+Math.cos(a[0]*p)*Math.cos(b[0]*p)*Math.sin(dlng/2)**2; return 2*R*Math.asin(Math.sqrt(x)); }
 function searchAddr(retry){
   retry = (typeof retry==='number')?retry:0;
@@ -95011,10 +94982,13 @@ function searchAddr(retry){
 function subCard(t,i){
   const s=t.s,conn=s.connect_max_mw||0,nm=s.osm_name||(s.name+' 변전소');
   const dls=s.lines.slice(0,3).map(l=>`${l.dl_nm} ${(l.conn||0).toFixed(1)}`).join(' · ');
+  const o=s.office||{};
+  const tel=(o.phone||'').replace(/[^0-9]/g,'');
+  const contact = o.phone?`<div style="font-size:11px;margin-top:3px">📞 <a href="tel:${tel}" onclick="event.stopPropagation()" style="color:var(--accent2);font-weight:700">${o.name} · ${o.phone}</a></div>`:'';
   return `<div onclick="focusSub('${s.code}')" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
     <div style="display:flex;justify-content:space-between"><b>${i+1}. ${nm}</b><span style="color:${colorConn(conn)};font-weight:800">${conn.toFixed(1)} MW</span></div>
     <div class="muted" style="font-size:11px;margin-top:2px">${s.region} · ${t.d.toFixed(1)}km</div>
-    <div style="font-size:11px;margin-top:3px">DL: <span class="muted">${dls}</span></div></div>`;
+    <div style="font-size:11px;margin-top:3px">DL: <span class="muted">${dls}</span></div>${contact}</div>`;
 }
 function showNearest(lat,lng,label,gu,dong){
   const box=document.getElementById('addrResult');
@@ -95036,7 +95010,7 @@ function showNearest(lat,lng,label,gu,dong){
   SEARCHMARKER=L.circleMarker([lat,lng],{radius:8,color:'#fff',weight:2,fillColor:'#e6007a',fillOpacity:1}).addTo(MAP).bindPopup('📍 '+label).openPopup();
 }
 function focusSub(code){ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),13); m.openPopup(); } }
-window.toggleCal=toggleCal; window.searchAddr=searchAddr; window.focusSub=focusSub;
+window.searchAddr=searchAddr; window.focusSub=focusSub;
 </script>
 </body>
 </html>
