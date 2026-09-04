@@ -48,20 +48,125 @@
   .popup-line{display:flex;justify-content:space-between;gap:14px;font-size:12px}
   .muted{color:#7d8ea3}
 
+  /* ── 새 UI 컴포넌트 (GPS 버튼 · 검색 탭 · 토글 스위치 · 접기 legend) ── */
+  .gps-btn{display:flex;align-items:center;gap:10px;width:100%;
+    background:linear-gradient(135deg,#2f9e6f,#3aa0ff);color:#fff;border:none;
+    border-radius:12px;padding:12px 14px;cursor:pointer;text-align:left;
+    box-shadow:0 4px 14px rgba(47,158,111,.28);
+    font-family:inherit;transition:transform .12s, box-shadow .2s;margin-bottom:12px}
+  .gps-btn:hover{box-shadow:0 6px 18px rgba(47,158,111,.4)}
+  .gps-btn:active{transform:scale(.98)}
+  .gps-btn .ic{font-size:22px}
+  .gps-btn .tx{display:flex;flex-direction:column;line-height:1.25}
+  .gps-btn .tx b{font-size:14px;font-weight:800}
+  .gps-btn .tx small{font-size:11px;opacity:.85}
+
+  .search-block{margin-bottom:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .search-tabs{display:flex;background:var(--panel2);border-bottom:1px solid var(--line)}
+  .search-tab{flex:1;background:transparent;border:none;color:var(--tx2);
+    font-family:inherit;font-size:13px;font-weight:700;padding:10px 8px;cursor:pointer;
+    border-bottom:2px solid transparent;transition:all .15s}
+  .search-tab.on{color:var(--tx);border-bottom-color:var(--accent);background:var(--panel)}
+  .search-body{padding:12px}
+  .search-row{display:flex;gap:6px}
+  .search-row input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:9px 11px;font-size:14px}
+  .search-row button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 16px;font-weight:700;cursor:pointer;font-family:inherit}
+  .search-result{margin-top:8px;font-size:12px}
+  .search-result:empty{display:none}
+
+  /* iOS 스타일 토글 스위치 */
+  .toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12.5px;cursor:pointer;user-select:none}
+  .toggle{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0}
+  .toggle input{opacity:0;width:0;height:0}
+  .toggle .track{position:absolute;inset:0;background:#3a4653;border-radius:22px;transition:background .2s}
+  .toggle .thumb{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+  .toggle input:checked ~ .track{background:var(--accent)}
+  .toggle input:checked ~ .track .thumb{transform:translateX(18px)}
+
+  /* iOS 세그먼트 컨트롤 (계획 필터 · 4단 · X축 최대 활용) */
+  .stage-seg{display:flex;width:100%;box-sizing:border-box;
+    background:var(--panel2);border:1px solid var(--line);
+    border-radius:10px;padding:3px;gap:2px;margin-bottom:10px}
+  .stage-seg-item{flex:1;background:transparent;border:none;color:var(--tx2);
+    padding:8px 2px;border-radius:7px;cursor:pointer;line-height:1.25;
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+    font-family:inherit;transition:background .15s, color .15s, box-shadow .15s;
+    min-width:0}
+  .stage-seg-item .lbl{font-size:11.5px;font-weight:600;white-space:nowrap;letter-spacing:-.3px}
+  .stage-seg-item .cnt{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+  .stage-seg-item.on{background:var(--accent);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+  .stage-seg-item:not(.on):hover{background:rgba(255,255,255,.05);color:var(--tx)}
+  .stage-seg-item:active{transform:scale(.97)}
+
+  /* 접기 legend (details/summary) */
+  details.legend-fold{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:0;margin-bottom:12px;overflow:hidden}
+  details.legend-fold > summary{cursor:pointer;padding:10px 12px;font-size:12px;font-weight:700;color:var(--tx);list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none}
+  details.legend-fold > summary::-webkit-details-marker{display:none}
+  details.legend-fold > summary::after{content:"▾";color:var(--tx2);transition:transform .2s;font-size:14px}
+  details.legend-fold[open] > summary::after{transform:rotate(180deg)}
+  details.legend-fold > summary:hover{background:var(--panel2)}
+  details.legend-fold > .fold-body{padding:0 12px 12px;font-size:11.5px;color:var(--tx2);line-height:1.55}
+
+  /* ── Leaflet 컨트롤 다크 테마 재스킨 (데스크톱·모바일 공통) ─────── */
+  .leaflet-touch .leaflet-bar,.leaflet-bar{border:none !important;box-shadow:0 4px 14px rgba(0,0,0,.45) !important;background:transparent !important}
+  .leaflet-bar a,.leaflet-bar a:hover{
+    background:rgba(22,29,38,.96) !important;color:var(--tx) !important;
+    border:1px solid var(--line) !important;border-bottom-width:0 !important;
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    width:36px !important;height:36px !important;line-height:34px !important;font-size:20px !important;font-weight:700}
+  .leaflet-bar a:first-child{border-radius:10px 10px 0 0 !important}
+  .leaflet-bar a:last-child{border-radius:0 0 10px 10px !important;border-bottom-width:1px !important}
+  .leaflet-bar a:hover{background:var(--panel2) !important}
+  .leaflet-bar a.leaflet-disabled{opacity:.4}
+
+  .leaflet-control-layers{
+    background:rgba(22,29,38,.96) !important;color:var(--tx) !important;
+    border:1px solid var(--line) !important;border-radius:12px !important;
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    box-shadow:0 6px 20px rgba(0,0,0,.45) !important;
+    padding:4px !important;overflow:hidden}
+  .leaflet-control-layers-toggle{background-image:none !important;width:40px !important;height:40px !important;position:relative}
+  .leaflet-control-layers-toggle::before{content:"🗺";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .leaflet-control-layers-expanded{padding:8px !important;min-width:120px}
+  .leaflet-control-layers-list{display:flex;flex-direction:column;gap:2px}
+  .leaflet-control-layers label{
+    display:flex !important;align-items:center;gap:8px;
+    padding:8px 12px !important;margin:0 !important;
+    border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;
+    color:var(--tx2);transition:background .15s, color .15s;min-height:36px}
+  .leaflet-control-layers label:hover{background:var(--panel2);color:var(--tx)}
+  .leaflet-control-layers label:has(input:checked){background:var(--accent);color:#fff}
+  .leaflet-control-layers input[type=radio],.leaflet-control-layers input[type=checkbox]{
+    accent-color:var(--accent);width:14px;height:14px;margin:0 !important;cursor:pointer}
+  .leaflet-control-layers-separator{border-top:1px solid var(--line) !important;margin:4px 0 !important}
+  .leaflet-control-attribution{background:rgba(22,29,38,.85) !important;color:var(--tx2) !important;font-size:10px;padding:2px 6px !important;border-radius:6px 0 0 0}
+  .leaflet-control-attribution a{color:var(--accent2) !important}
+
   /* ── 모바일 전용 UI (데스크톱에선 숨김) ────────────────────────────── */
   .m-toggle,.m-backdrop,.m-side-close{display:none}
 
   @media (max-width:760px){
     body{overscroll-behavior:none}
-    header{padding:10px 14px 10px 60px;padding-top:calc(10px + env(safe-area-inset-top))}   /* 토글버튼 자리 확보 */
+    header{padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top))}
     header h1{font-size:15px}
-    header .meta{font-size:11px}
+    header #meta{display:none}   /* 긴 "생성:..." 타임스탬프는 모바일에서 hide → 3줄 wrap 방지 */
+    header .meta.pill{font-size:11px}
     .wrap{display:block;height:calc(100dvh - 50px - env(safe-area-inset-top));position:relative;min-height:0}
     #map{position:absolute;inset:0;height:100%;width:100%}
     .leaflet-control-attribution{font-size:9px}
-    .leaflet-control-zoom{margin-top:10px !important;margin-right:10px !important}
+    .leaflet-control-zoom{margin-top:64px !important;margin-left:10px !important}   /* 토글버튼과 겹치지 않게 아래로 밀어냄 */
     .leaflet-control-layers{margin-top:10px !important;margin-right:10px !important}
+    /* 모바일에선 레이어 컨트롤 압축 (접힘 아이콘 작게 · 펼쳐도 좁게) */
+    .leaflet-control-layers-toggle{width:36px !important;height:36px !important}
+    .leaflet-control-layers-toggle::before{font-size:18px !important}
+    .leaflet-control-layers-expanded{padding:6px !important;min-width:104px}
+    .leaflet-control-layers label{padding:6px 10px !important;font-size:12px !important;min-height:30px !important;gap:6px}
     .leaflet-popup-content{min-width:0;font-size:12.5px}
+
+    /* 드로어 열렸을 땐 토글 버튼 숨김 (내용 안 가리게) — 닫기는 백드롭·× 로 */
+    .side.open ~ .m-toggle{display:none}
+    /* 드로어 열림 상태에선 지도 +/- 줌 컨트롤도 가리기 (드로어 위로 튀어나오지 않게) */
+    .side.open ~ #map .leaflet-control-zoom{display:none}
 
     /* 사이드바 → 좌측 슬라이드 드로어 */
     .side{
@@ -72,16 +177,18 @@
       transition:transform .28s cubic-bezier(.22,1,.36,1);
       background:var(--panel);
       box-shadow:2px 0 20px rgba(0,0,0,.55);
-      padding-top:calc(14px + env(safe-area-inset-top));
+      padding-top:22px;   /* × 는 타이틀 라인 우측 · 찾기버튼과의 세로 여백 확보 */
       padding-bottom:calc(14px + env(safe-area-inset-bottom));
     }
     .side.open{transform:translateX(0)}
-    .side input,.side button{min-height:44px;font-size:14px}   /* 터치 타깃 */
+    .side input:not([type=checkbox]):not([type=radio]),
+    .side button:not(.m-side-close){min-height:44px;font-size:14px}   /* 터치 타깃 · 체크박스·라디오·× 닫기버튼 제외 */
+    .side input[type=checkbox]{width:16px;height:16px;vertical-align:middle;margin:0 6px 0 0;accent-color:var(--accent)}
 
-    /* 좌상단 토글 탭버튼 (지도 위에 떠 있음) */
+    /* 좌상단 토글 탭버튼 — 헤더 아래(지도 영역 안 상단좌측)에 붙임 */
     .m-toggle{
-      display:flex;position:fixed;
-      top:calc(10px + env(safe-area-inset-top));left:10px;
+      display:flex;position:absolute;
+      top:10px;left:10px;
       z-index:950;align-items:center;justify-content:center;
       width:44px;height:44px;border-radius:12px;
       background:rgba(22,29,38,.96);
@@ -102,14 +209,20 @@
     }
     .m-backdrop.on{background:rgba(0,0,0,.42);pointer-events:auto}
 
-    /* 드로어 안 x 닫기 (선택) */
+    /* 드로어 안 × 닫기 — 흰 배경 + 검정 × (드로어 톤과 대비 확실) */
     .m-side-close{
-      display:inline-flex;position:absolute;top:8px;right:10px;z-index:2;
+      display:inline-flex;position:absolute;
+      top:10px;right:12px;z-index:2;
       align-items:center;justify-content:center;
-      width:36px;height:36px;border-radius:50%;
-      background:var(--panel2);color:var(--tx);border:1px solid var(--line);
-      font-size:18px;cursor:pointer;line-height:1;
+      width:22px;height:22px;border-radius:5px;
+      background:#fff;color:#000;border:none;
+      font-size:14px;font-weight:800;line-height:1;
+      padding:0;cursor:pointer;
+      box-shadow:0 1px 4px rgba(0,0,0,.35);
+      transition:background .15s, transform .1s;
     }
+    .m-side-close:hover{background:#f0f0f0}
+    .m-side-close:active{transform:scale(.94)}
   }
 </style>
 </head>
@@ -121,22 +234,32 @@
 </header>
 <div class="wrap">
   <aside class="side">
-    <div style="margin-bottom:14px">
-      <div style="font-weight:700;font-size:13px;margin-bottom:6px">📍 지번으로 가까운 변전소 찾기</div>
-      <div style="display:flex;gap:6px">
-        <input id="addrInput" placeholder="예: 파주시 문산읍 문산리 100" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:7px 9px;font-size:13px">
-        <button id="addrBtn" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer">찾기</button>
+    <!-- B. GPS: 내 주변 변전소 (영업 현장 원탭) -->
+    <button class="gps-btn" id="gpsBtn" type="button">
+      <span class="ic">📡</span>
+      <span class="tx"><b>내 주변 변전소 찾기</b><small>현재 위치 기준 가까운 3곳</small></span>
+    </button>
+
+    <!-- A. 검색 탭 통합 (지번 | 변전소명) -->
+    <div class="search-block">
+      <div class="search-tabs" role="tablist">
+        <button class="search-tab on" type="button" data-stab="addr">📍 지번</button>
+        <button class="search-tab" type="button" data-stab="name">🔎 변전소명</button>
       </div>
-      <div id="addrResult" style="margin-top:8px;font-size:12px"></div>
-    </div>
-    <div style="margin-bottom:14px">
-      <div style="font-weight:700;font-size:13px;margin-bottom:6px">🔎 변전소명으로 검색 <span class="muted" style="font-weight:400">(지번주소 표기)</span></div>
-      <div style="display:flex;gap:6px">
-        <input id="nameInput" placeholder="예: 여수 · 남양주 · 시종" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:7px 9px;font-size:13px">
-        <button id="nameBtn" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer">찾기</button>
+      <div class="search-body">
+        <div class="search-row" data-sbody="addr">
+          <input id="addrInput" placeholder="예: 파주시 문산읍 문산리 100" inputmode="text" autocomplete="off">
+          <button id="addrBtn" type="button">찾기</button>
+        </div>
+        <div class="search-row" data-sbody="name" style="display:none">
+          <input id="nameInput" placeholder="예: 여수 · 남양주 · 시종" inputmode="text" autocomplete="off">
+          <button id="nameBtn" type="button">찾기</button>
+        </div>
+        <div id="addrResult" class="search-result"></div>
+        <div id="nameResult" class="search-result"></div>
       </div>
-      <div id="nameResult" style="margin-top:8px;font-size:12px"></div>
     </div>
+
     <div class="tiles">
       <div class="tile"><div class="v" id="t_sub">–</div><div class="l">변전소 수</div></div>
       <div class="tile"><div class="v" id="t_free">–</div><div class="l">연계가능 변전소 (선로&gt;0)</div></div>
@@ -144,29 +267,41 @@
       <div class="tile"><div class="v" id="t_line">–</div><div class="l">즉시연계 선로 (≥5MW)</div></div>
     </div>
 
-    <div class="legend" style="margin-bottom:12px">
-      <b>숫자 읽는 법</b> — <span style="color:var(--g2);font-weight:700">연계가능(선로 최대)</span> = 지금 태양광을 실제로 붙일 수 있는 양(변전소·변압기·선로 여유의 <b>병목</b>, 보통 선로당 ≤13MW). <span class="muted">지역여지(변전소 총여유)</span> = 그 변전소의 확장 잠재력(선로 증설 시). ※ 한전 <b>추정치</b>, 실제 연계는 별도 기술검토 필요.
-    </div>
+    <!-- C1. 숫자 읽는 법 (접기) -->
+    <details class="legend-fold">
+      <summary>📖 숫자 읽는 법 <span class="muted">— 연계가능 vs 지역여지</span></summary>
+      <div class="fold-body">
+        <span style="color:var(--g2);font-weight:700">연계가능(선로 최대)</span> = 지금 태양광을 실제로 붙일 수 있는 양(변전소·변압기·선로 여유의 <b>병목</b>, 보통 선로당 ≤13MW). <span class="muted">지역여지(변전소 총여유)</span> = 그 변전소의 확장 잠재력(선로 증설 시). ※ 한전 <b>추정치</b>, 실제 연계는 별도 기술검토 필요.
+      </div>
+    </details>
 
     <h2>🏗 신설/증설 계획 <span class="muted" id="plancnt"></span></h2>
-    <div style="margin-bottom:6px;font-size:11.5px">
-      <label style="cursor:pointer"><input type="checkbox" id="planToggle" checked> 지도에 표시 <span class="muted">(위치확인 <span id="planloc">–</span>건)</span></label>
-    </div>
-    <div id="planStageFilter" style="display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap"></div>
+    <!-- D. 지도에 표시 → iOS 스타일 토글 스위치 -->
+    <label class="toggle-row">
+      <span class="toggle">
+        <input type="checkbox" id="planToggle" checked>
+        <span class="track"><span class="thumb"></span></span>
+      </span>
+      <span>지도에 표시 <span class="muted">(위치확인 <span id="planloc">–</span>건)</span></span>
+    </label>
+    <div id="planStageFilter"></div>
     <div id="planList" style="max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px"></div>
     <div style="margin-top:5px;font-size:10.5px;color:#7d8ea3">※ 지도핀은 <b>기존 변전소 증설분</b>(위치 확실)만 표시. 신설 예정 변전소는 한전이 정확 위치·준공연도를 공개목록에 안 넣어(첨부문서만) 목록에만 표기(·위치미상). 전체 계획은 위 목록 참조.</div>
 
-    <h2>범례</h2>
-    <div class="legend">
-      <div style="margin-bottom:6px"><b>실제 연계가능</b> (원 크기·색 = 선로 최대 연계가능 MW)</div>
-      <span class="sw"><span class="dot" style="background:var(--g1)"></span>10MW+</span>
-      <span class="sw"><span class="dot" style="background:var(--g2)"></span>5–10</span>
-      <span class="sw"><span class="dot" style="background:var(--y)"></span>1–5</span>
-      <span class="sw"><span class="dot" style="background:var(--o)"></span>0–1</span>
-      <span class="sw"><span class="dot" style="background:var(--r)"></span>0(연계불가)</span>
-      <div style="margin-top:8px">🏢 = 지사 · 🏗 = 신설/증설 계획 · <span style="color:var(--r)">🔴 = 연계불가(클릭 시 상세)</span></div>
-      <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM). 그 외 읍면동 근사. 데이터: 한전 분산형전원 계통연계 조회(22.9kV 기준·실데이터).</div>
-    </div>
+    <!-- C2. 범례 (접기) -->
+    <details class="legend-fold" style="margin-top:12px">
+      <summary>📗 범례 · 색·아이콘 설명</summary>
+      <div class="fold-body">
+        <div style="margin-bottom:6px"><b style="color:var(--tx)">실제 연계가능</b> (원 크기·색 = 선로 최대 연계가능 MW)</div>
+        <span class="sw"><span class="dot" style="background:var(--g1)"></span>10MW+</span>
+        <span class="sw"><span class="dot" style="background:var(--g2)"></span>5–10</span>
+        <span class="sw"><span class="dot" style="background:var(--y)"></span>1–5</span>
+        <span class="sw"><span class="dot" style="background:var(--o)"></span>0–1</span>
+        <span class="sw"><span class="dot" style="background:var(--r)"></span>0(연계불가)</span>
+        <div style="margin-top:8px">🏢 = 지사 · 🏗 = 신설/증설 계획 · <span style="color:var(--r)">🔴 = 연계불가(클릭 시 상세)</span></div>
+        <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM). 그 외 읍면동 근사. 데이터: 한전 분산형전원 계통연계 조회(22.9kV 기준·실데이터).</div>
+      </div>
+    </details>
   </aside>
   <div id="map"></div>
 
@@ -204,7 +339,7 @@ function init(d){
   const esriRef = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
   const hybrid = L.layerGroup([sat, esriRef]);
   osm.addTo(MAP);
-  L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed:false}).addTo(MAP);
+  L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed: window.matchMedia('(max-width:760px)').matches}).addTo(MAP);
   LAYER = L.layerGroup().addTo(MAP);
   PLAN_LAYER = L.layerGroup().addTo(MAP);
   // 지사 핀
@@ -222,6 +357,8 @@ function init(d){
   const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
   renderPlans();
+  initSearchTabs();
+  initGpsButton();
   initMobileDrawer();
   if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),12); m.openPopup(); toggleSupply(code); } },700); }
 }
@@ -311,15 +448,20 @@ function renderPlans(){
       m.addTo(PLAN_LAYER);
     });
   }
+  // 세그먼트 컨트롤: 한 줄 · X축 균등 확장 · 라벨(풀네임) + 숫자 두 줄
   const stages=["전체","계획확정","사업승인","공사착수(건설중)"];
   const sf=document.getElementById('planStageFilter'); sf.innerHTML='';
+  const seg=document.createElement('div'); seg.className='stage-seg';
   stages.forEach(st=>{
     const n = st==="전체"?plans.length:plans.filter(p=>p.stage===st).length;
-    const b=document.createElement('span'); b.textContent=`${st.replace('(건설중)','')}(${n})`;
-    b.style.cssText='cursor:pointer;padding:2px 7px;border-radius:12px;border:1px solid var(--line);'+(PLAN_STAGE===st?'background:var(--accent);color:#fff;font-weight:700':'color:var(--tx2)');
+    const lbl = st.replace('(건설중)','');   // 공사착수(건설중) → 공사착수
+    const b=document.createElement('button'); b.type='button';
+    b.className='stage-seg-item'+(PLAN_STAGE===st?' on':'');
+    b.innerHTML=`<span class="lbl">${lbl}</span><span class="cnt">${n}</span>`;
     b.onclick=()=>{ PLAN_STAGE=st; renderPlans(); };
-    sf.appendChild(b);
+    seg.appendChild(b);
   });
+  sf.appendChild(seg);
   const list = PLAN_STAGE==="전체"?plans:plans.filter(p=>p.stage===PLAN_STAGE);
   box.innerHTML = list.map(p=>{
     const c=STAGE_COLOR[p.stage]||'#f0a53a';
@@ -415,6 +557,52 @@ function searchByName(){
 
 window.searchAddr=searchAddr; window.searchByName=searchByName; window.focusSub=focusSub;
 
+// ── A. 검색 탭 스위치 (지번 <-> 변전소명) ────────────────────
+function initSearchTabs(){
+  document.querySelectorAll('.search-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      const t = tab.dataset.stab;
+      document.querySelectorAll('.search-tab').forEach(x=>x.classList.toggle('on', x.dataset.stab===t));
+      document.querySelectorAll('.search-row').forEach(x=>x.style.display=(x.dataset.sbody===t?'flex':'none'));
+      // 결과 영역도 활성 탭 것만 보이게
+      document.getElementById('addrResult').style.display = (t==='addr'?'':'none');
+      document.getElementById('nameResult').style.display = (t==='name'?'':'none');
+      // 활성 input 포커스
+      const inp = document.querySelector(`.search-row[data-sbody="${t}"] input`);
+      if(inp) inp.focus();
+    });
+  });
+  // 초기: 이름 결과 숨김
+  document.getElementById('nameResult').style.display='none';
+}
+
+// ── B. GPS "내 주변" — 현재 위치 기준 가까운 변전소 3곳 ─────────
+function initGpsButton(){
+  const btn = document.getElementById('gpsBtn'); if(!btn) return;
+  btn.addEventListener('click',()=>{
+    if(!navigator.geolocation){ alert('이 브라우저는 위치 조회를 지원하지 않아요.'); return; }
+    const orig = btn.querySelector('.tx b').textContent;
+    btn.querySelector('.tx b').textContent = '위치 확인 중…';
+    btn.disabled = true;
+    navigator.geolocation.getCurrentPosition(pos=>{
+      btn.querySelector('.tx b').textContent = orig; btn.disabled = false;
+      const lat=pos.coords.latitude, lng=pos.coords.longitude;
+      // 지번 탭으로 전환 + 결과 시트에 그리기
+      document.querySelector('.search-tab[data-stab="addr"]').click();
+      showNearest(lat,lng,'📡 내 위치');
+      // 모바일 드로어 열려있다면 닫아서 지도 보이게
+      const side=document.querySelector('.side');
+      if(side && side.classList.contains('open')){
+        side.classList.remove('open');
+        document.getElementById('mBackdrop').classList.remove('on');
+      }
+    }, err=>{
+      btn.querySelector('.tx b').textContent = orig; btn.disabled = false;
+      alert('위치를 가져오지 못했어요: '+err.message);
+    }, {enableHighAccuracy:true, timeout:8000, maximumAge:60000});
+  });
+}
+
 // ── 모바일 드로어 토글 ─────────────────────────────────────────
 // 좌상단 ☰ 버튼 → 사이드바 좌측 슬라이드 열림/닫힘. 백드롭 탭도 닫힘 트리거.
 function initMobileDrawer(){
@@ -432,9 +620,8 @@ function initMobileDrawer(){
   function setDrawer(open){
     side.classList.toggle('open', open);
     bd.classList.toggle('on', open);
-    btn.classList.toggle('on', open);
-    btn.innerHTML = open ? '✕' : '☰';
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    // 열리면 CSS(.side.open ~ .m-toggle{display:none}) 로 자동 숨김 · 닫기는 백드롭 탭 or 드로어 안 × 버튼
   }
   btn.addEventListener('click', ()=>setDrawer(!side.classList.contains('open')));
   bd.addEventListener('click', ()=>setDrawer(false));

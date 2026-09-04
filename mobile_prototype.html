@@ -135,13 +135,32 @@
 </div>
 
 <script>
+// safeTop = 상태바/노치/아일랜드 아래로 컨텐츠 밀어낼 가상 safe-area-inset-top (px)
 const PRESETS = {
-  ip14pro:  {w:393, h:852, island:true,  notch:false, homeInd:true,  homeBtn:false, radius:56, screenRadius:42},
-  ip15pm:   {w:430, h:932, island:true,  notch:false, homeInd:true,  homeBtn:false, radius:60, screenRadius:46},
-  ipse:     {w:375, h:667, island:false, notch:true,  homeInd:false, homeBtn:true,  radius:40, screenRadius:26},
-  pixel7:   {w:412, h:915, island:false, notch:false, homeInd:true,  homeBtn:false, radius:44, screenRadius:32},
-  galaxy:   {w:360, h:800, island:false, notch:false, homeInd:true,  homeBtn:false, radius:44, screenRadius:32},
+  ip14pro:  {w:393, h:852, island:true,  notch:false, homeInd:true,  homeBtn:false, radius:56, screenRadius:42, safeTop:47},
+  ip15pm:   {w:430, h:932, island:true,  notch:false, homeInd:true,  homeBtn:false, radius:60, screenRadius:46, safeTop:47},
+  ipse:     {w:375, h:667, island:false, notch:true,  homeInd:false, homeBtn:true,  radius:40, screenRadius:26, safeTop:24},
+  pixel7:   {w:412, h:915, island:false, notch:false, homeInd:true,  homeBtn:false, radius:44, screenRadius:32, safeTop:24},
+  galaxy:   {w:360, h:800, island:false, notch:false, homeInd:true,  homeBtn:false, radius:44, screenRadius:32, safeTop:24},
 };
+
+// iframe(index.html) 은 브라우저상에서 env(safe-area-inset-top)=0 이라 아일랜드/노치를 인지 못함.
+// 프로토타입이 프리셋 별 safeTop 값을 iframe 문서에 <style> 로 주입해서 헤더가 아일랜드 밑으로 밀리게 함.
+function injectSafeArea(){
+  const frame = document.getElementById('frame');
+  const doc = frame && frame.contentDocument;
+  if(!doc || !doc.head) return;
+  const p = PRESETS[currentPreset]; if(!p) return;
+  const st = landscape ? 0 : p.safeTop;   // 가로 회전 시 상단 노치 없음
+  let s = doc.getElementById('__proto_safe_area__');
+  if(!s){ s = doc.createElement('style'); s.id='__proto_safe_area__'; doc.head.appendChild(s); }
+  // 헤더와 .wrap 높이만 아일랜드/노치를 반영 — 드로어(.side)와 × 는 부모(.wrap) 아래이므로 이중 처리 X
+  s.textContent = `
+    @media (max-width:760px){
+      header{ padding-top: ${10 + st}px !important; }
+      .wrap{ height: calc(100dvh - 50px - ${st}px) !important; }
+    }`;
+}
 
 let currentPreset = 'ip14pro';
 let landscape = false;
@@ -180,6 +199,9 @@ function applyPreset(){
   document.getElementById('status').innerHTML =
     '<b>' + name + '</b> · ' + w + '×' + h + ' · ' + (landscape ? '가로' : '세로') +
     (scale<1 ? ' · <span class="badge">×'+scale.toFixed(2)+' 축소보기</span>' : '');
+
+  // 기기 프리셋에 맞춰 iframe 문서에 가상 safe-area 재주입 (아일랜드/노치 대응)
+  injectSafeArea();
 }
 
 document.querySelectorAll('.btn[data-preset]').forEach(b=>{
@@ -190,6 +212,8 @@ document.getElementById('reload').addEventListener('click', ()=>{
   const f = document.getElementById('frame');
   f.src = f.src.split('?')[0] + '?_=' + Date.now();
 });
+// iframe 로드 완료 때마다 safe-area 재주입 (새로고침·초기 로드 모두 대응)
+document.getElementById('frame').addEventListener('load', injectSafeArea);
 
 document.getElementById('rotate').addEventListener('click', ()=>{
   landscape = !landscape;
