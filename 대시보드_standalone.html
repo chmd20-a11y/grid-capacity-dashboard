@@ -96039,9 +96039,11 @@ function renderPlans(){
   if(document.getElementById('planToggle').checked){
     located.filter(matchQ).forEach(p=>{
       const c=STAGE_COLOR[p.stage]||'#f0a53a';
+      // 증설(geo=exist)은 기존 변전소와 같은 좌표 → 변전소 원마커 우상단에 배지처럼 비켜 표시(원+네모 겹침 방지). 신설(manual)은 독립 위치라 중앙.
+      const expand = p.geo==='exist';
       const m=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:
         `<div style="width:22px;height:22px;border-radius:6px;background:${c};border:2px solid #fff;box-shadow:0 0 0 1.5px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1">🏗</div>`,
-        iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:500});
+        iconSize:[22,22],iconAnchor: expand?[-6,28]:[11,11]}),zIndexOffset:500});
       m.bindPopup(`<div class="popup-t">🏗 ${p.name} <span class="muted">${p.voltage}</span></div>
         <div class="popup-line"><span>사업단계</span><b style="color:${c}">${p.stage}</b></div>
         ${p.completion?`<div class="popup-line"><span>준공예정</span><b style="color:var(--g2)">${p.completion}년</b></div>`:''}
