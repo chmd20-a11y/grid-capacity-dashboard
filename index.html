@@ -288,6 +288,8 @@
       </span>
       <span>지도에 표시 <span class="muted">(위치확인 <span id="planloc">–</span>건)</span></span>
     </label>
+    <!-- Person A 추가: 계획 변전소 검색 필터 -->
+    <input id="planSearch" placeholder="계획 변전소 검색 (예: 김해 · 경기 · 영암 · 345kV)" style="width:100%;box-sizing:border-box;margin-bottom:8px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:8px 10px;font-size:13px">
     <div id="planStageFilter"></div>
     <div id="planList" style="max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px"></div>
     <div style="margin-top:5px;font-size:10.5px;color:#7d8ea3">※ 지도핀은 <b>기존 변전소 증설분</b>(위치 확실)만 표시. 신설 예정 변전소는 한전이 정확 위치·준공연도를 공개목록에 안 넣어(첨부문서만) 목록에만 표기(·위치미상). 전체 계획은 위 목록 참조.</div>
@@ -319,7 +321,7 @@
 <script>
 function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
-let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null, PLANS=null, PLAN_LAYER=null, PLAN_STAGE="전체";
+let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null, PLANS=null, PLAN_LAYER=null, PLAN_STAGE="전체", PLAN_Q="";
 let SEP_CIRCLE=null, SEP_RADIUS=0, LAST_PT=null;   // 이격거리 원(미터단위=축척 무관). 기본=끄기
 // Kakao 지오코딩(지번검색) — 아래에 카카오 JavaScript 키를 넣으면 활성화됨
 window.KAKAO_KEY = "3c003211be49659008929069de83dced";
@@ -359,6 +361,7 @@ function init(d){
   document.getElementById('nameBtn').onclick=searchByName;
   document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchByName();});
   document.getElementById('planToggle').onchange=renderPlans;
+  document.getElementById('planSearch').addEventListener('input',e=>{ PLAN_Q=e.target.value.trim().toLowerCase(); renderPlans(); });
   const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
   renderPlans();
@@ -436,12 +439,14 @@ function renderPlans(){
   // 이름검색(geo=ok)은 동명 엉뚱한 지점을 잡는 경우가 많아(약 40% 오류) 지도핀 제외.
   // 실제 기존 변전소에 고정된 증설분(geo=exist)만 신뢰해 표시.
   const mapped = p => p.lat && (p.geo==='exist' || p.geo==='manual');
+  const q=PLAN_Q;
+  const matchQ = p => !q || [p.name,p.addr,p.saup,p.hq,p.office,p.voltage,p.stage].filter(Boolean).join(' ').toLowerCase().includes(q);
   const located=plans.filter(mapped);
   document.getElementById('planloc').textContent=located.length;
-  document.getElementById('plancnt').textContent=`(전체 ${plans.length}건)`;
+  document.getElementById('plancnt').textContent = q ? `(검색 ${plans.filter(matchQ).length}건 / 전체 ${plans.length})` : `(전체 ${plans.length}건)`;
   PLAN_LAYER.clearLayers();
   if(document.getElementById('planToggle').checked){
-    located.forEach(p=>{
+    located.filter(matchQ).forEach(p=>{
       const c=STAGE_COLOR[p.stage]||'#f0a53a';
       const m=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:
         `<div style="width:22px;height:22px;border-radius:6px;background:${c};border:2px solid #fff;box-shadow:0 0 0 1.5px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1">🏗</div>`,
@@ -457,11 +462,14 @@ function renderPlans(){
     });
   }
   // 세그먼트 컨트롤: 한 줄 · X축 균등 확장 · 라벨(풀네임) + 숫자 두 줄
+  // Person A: matchQ 로 검색 필터링된 base 기준으로 카운트/리스트 계산
+  const base = plans.filter(matchQ);
   const stages=["전체","계획확정","사업승인","공사착수(건설중)"];
   const sf=document.getElementById('planStageFilter'); sf.innerHTML='';
   const seg=document.createElement('div'); seg.className='stage-seg';
   stages.forEach(st=>{
-    const n = st==="전체"?plans.length:plans.filter(p=>p.stage===st).length;
+    // 카운트는 base (검색 필터 반영) 기준 · 세그먼트 UI 유지
+    const n = st==="전체"?base.length:base.filter(p=>p.stage===st).length;
     const lbl = st.replace('(건설중)','');   // 공사착수(건설중) → 공사착수
     const b=document.createElement('button'); b.type='button';
     b.className='stage-seg-item'+(PLAN_STAGE===st?' on':'');
@@ -470,14 +478,15 @@ function renderPlans(){
     seg.appendChild(b);
   });
   sf.appendChild(seg);
-  const list = PLAN_STAGE==="전체"?plans:plans.filter(p=>p.stage===PLAN_STAGE);
+  // 목록도 base (검색 필터 반영) 기준
+  const list = PLAN_STAGE==="전체"?base:base.filter(p=>p.stage===PLAN_STAGE);
   box.innerHTML = list.map(p=>{
     const c=STAGE_COLOR[p.stage]||'#f0a53a';
     const attr = mapped(p)?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px"`:'style="border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px;opacity:.7"';
     const loc = mapped(p)?'':' <span class="muted" style="font-size:10px">·위치미상</span>';
     return `<div ${attr}><div><span style="color:${c}">●</span> <b>${p.name}</b> <span class="muted">${p.voltage}</span>${loc}${p.completion?` <span style="color:var(--g2);font-size:10px;font-weight:700">${p.completion}년 준공</span>`:''}</div>
       <div class="muted" style="font-size:10.5px">${p.stage.replace('(건설중)','')} · ${p.hq}</div></div>`;
-  }).join('') || '<div class="muted" style="padding:8px">해당 없음</div>';
+  }).join('') || `<div class="muted" style="padding:8px">${q?`'${q}' 검색 결과 없음`:'해당 없음'}</div>`;
 }
 function focusPlan(lat,lng){ MAP.setView([lat,lng],12); }
 window.focusPlan=focusPlan;
