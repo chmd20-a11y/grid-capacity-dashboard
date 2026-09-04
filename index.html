@@ -635,12 +635,13 @@ function contactHtml(s){
 }
 
 function supplyHtml(s){
-  const sup=s.supply||{}; const areas=Object.keys(sup);
+  const sup=s.supply3||s.supply||{}; const areas=Object.keys(sup);
   if(!areas.length) return '';
   const total=areas.reduce((a,k)=>a+sup[k].length,0);
+  const scope=s.supply3_far?'최근접':'반경 3km';   // 3km 안에 없으면 최근접 1개만
   const body=areas.map(k=>`<div style="margin-bottom:4px"><b style="color:var(--tx)">${k}</b> <span class="muted">(${sup[k].length})</span><br><span class="muted">${sup[k].join(' · ')}</span></div>`).join('');
   return `<div style="margin-top:7px;border-top:1px solid var(--line);padding-top:6px">
-    <div class="popup-line"><span>🏘 공급 읍/면/동</span><span><b>${total}개</b> <a href="javascript:void(0)" onclick="toggleSupply('${s.code}')" style="color:var(--accent2)">목록 ▾</a></span></div>
+    <div class="popup-line"><span>🏘 공급 읍/면/동 <span class="muted">(${scope})</span></span><span><b>${total}개</b> <a href="javascript:void(0)" onclick="toggleSupply('${s.code}')" style="color:var(--accent2)">목록 ▾</a></span></div>
     <div id="sup-${s.code}" style="display:none;max-height:150px;overflow:auto;margin-top:5px;font-size:11px;line-height:1.5">${body}</div>
   </div>`;
 }
