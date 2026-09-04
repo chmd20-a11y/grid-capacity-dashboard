@@ -107,6 +107,12 @@
   .a2-pane li b{color:var(--tx)}
   .a2-key{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:12px;font-weight:700;color:var(--tx)}
   #a2hsModal .help-foot{overflow-wrap:anywhere}   /* 긴 주소(URL)가 좁은 화면에서 줄바꿈되게 */
+  /* 홈추가 매뉴얼 — 단계 그림(인라인 SVG 일러스트) */
+  .a2-figs{margin:12px 0 2px}
+  .a2-fig{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px 9px;margin-bottom:8px}
+  .a2-fig svg{display:block;width:100%;height:auto}
+  .a2-figcap{font-size:11.5px;color:var(--tx2);margin:0 0 8px;line-height:1.45}
+  .a2-figcap b{color:var(--accent2)}
 
   .search-block{margin-bottom:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
   .search-tabs{display:flex;background:var(--panel2);border-bottom:1px solid var(--line)}
@@ -96024,12 +96030,6 @@
       <span class="tx"><b>내 주변 변전소 찾기</b><small>현재 위치 기준 가까운 3곳</small></span>
     </button>
 
-    <!-- 📲 홈 화면에 추가 (앱처럼 쓰기) 매뉴얼 열기 -->
-    <button class="a2hs-btn" id="a2hsBtn" type="button">
-      <span class="ic">📲</span>
-      <span class="tx"><b>홈 화면에 추가 (앱처럼 쓰기)</b><small>iPhone · Android 설치 방법 보기</small></span>
-    </button>
-
     <!-- A. 검색 탭 통합 (지번 | 변전소명) -->
     <div class="search-block">
       <div class="search-tabs" role="tablist">
@@ -96098,6 +96098,12 @@
         <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM). 그 외 읍면동 근사. 데이터: 한전 분산형전원 계통연계 조회(22.9kV 기준·실데이터).</div>
       </div>
     </details>
+
+    <!-- 📲 홈 화면에 추가 (앱처럼 쓰기) 매뉴얼 열기 — 사이드바 하단 -->
+    <button class="a2hs-btn" id="a2hsBtn" type="button" style="margin-top:14px">
+      <span class="ic">📲</span>
+      <span class="tx"><b>홈 화면에 추가 (앱처럼 쓰기)</b><small>iPhone · Android 설치 방법 보기</small></span>
+    </button>
   </aside>
   <div id="map"></div>
 
@@ -96176,6 +96182,40 @@
           <li>이름을 확인하고 우측 상단 <span class="a2-key">추가</span>를 누릅니다.</li>
           <li>홈 화면에 생긴 <b>⚡ 아이콘</b>을 누르면 대시보드가 바로 열립니다.</li>
         </ol>
+        <div class="a2-figs">
+          <figure class="a2-fig">
+            <div class="a2-figcap"><b>①</b> Safari 하단 가운데 <b>공유 버튼</b>을 누릅니다</div>
+            <svg viewBox="0 0 300 66" role="img" aria-label="Safari 하단 툴바의 공유 버튼 위치">
+              <text x="150" y="11" text-anchor="middle" fill="#2f9e6f" font-size="11" font-weight="800">여기 ▾</text>
+              <rect x="6" y="22" width="288" height="38" rx="10" fill="#1d2732" stroke="#2a3644"/>
+              <path d="M50 36l-8 6 8 6" fill="none" stroke="#9fb0c3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M96 36l8 6-8 6" fill="none" stroke="#9fb0c3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="150" cy="42" r="17" fill="none" stroke="#2f9e6f" stroke-width="2.5"/>
+              <rect x="143" y="42" width="14" height="13" rx="2.5" fill="none" stroke="#e8eef5" stroke-width="2"/>
+              <line x1="150" y1="32" x2="150" y2="48" stroke="#e8eef5" stroke-width="2" stroke-linecap="round"/>
+              <polyline points="145,37 150,32 155,37" fill="none" stroke="#e8eef5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M205 35h12v14l-6-4-6 4z" fill="none" stroke="#9fb0c3" stroke-width="2" stroke-linejoin="round"/>
+              <rect x="250" y="35" width="14" height="14" rx="2.5" fill="none" stroke="#9fb0c3" stroke-width="2"/>
+            </svg>
+          </figure>
+          <figure class="a2-fig">
+            <div class="a2-figcap"><b>②</b> 올라온 메뉴에서 <b>[홈 화면에 추가]</b>를 누릅니다</div>
+            <svg viewBox="0 0 300 130" role="img" aria-label="공유 시트에서 홈 화면에 추가 항목">
+              <rect x="6" y="6" width="288" height="118" rx="12" fill="#1d2732" stroke="#2a3644"/>
+              <text x="20" y="29" fill="#9fb0c3" font-size="12">복사</text>
+              <rect x="264" y="17" width="16" height="16" rx="4" fill="none" stroke="#3a4653" stroke-width="1.6"/>
+              <line x1="16" y1="43" x2="284" y2="43" stroke="#2a3644" stroke-width="1"/>
+              <rect x="10" y="49" width="280" height="32" rx="7" fill="rgba(47,158,111,.16)" stroke="#2f9e6f" stroke-width="1.8"/>
+              <text x="20" y="69" fill="#e8eef5" font-size="12.5" font-weight="700">홈 화면에 추가</text>
+              <circle cx="270" cy="65" r="10" fill="none" stroke="#e8eef5" stroke-width="1.6"/>
+              <line x1="270" y1="60" x2="270" y2="70" stroke="#e8eef5" stroke-width="1.6" stroke-linecap="round"/>
+              <line x1="265" y1="65" x2="275" y2="65" stroke="#e8eef5" stroke-width="1.6" stroke-linecap="round"/>
+              <line x1="16" y1="91" x2="284" y2="91" stroke="#2a3644" stroke-width="1"/>
+              <text x="20" y="112" fill="#9fb0c3" font-size="12">마크업</text>
+              <rect x="264" y="100" width="16" height="16" rx="4" fill="none" stroke="#3a4653" stroke-width="1.6"/>
+            </svg>
+          </figure>
+        </div>
         <div class="warn">⚠️ 반드시 <b>Safari</b>에서 하세요. 카톡·네이버 등 앱 안에서 열었다면, 그 화면 메뉴에서 <b>"Safari로 열기"</b> 후 진행하세요.</div>
       </div>
       <div class="a2-pane" id="a2pane-and">
@@ -96187,6 +96227,33 @@
           <li><span class="a2-key">추가</span> / <span class="a2-key">설치</span>를 누릅니다.</li>
           <li>홈 화면에 생긴 <b>⚡ 아이콘</b>을 누르면 대시보드가 바로 열립니다.</li>
         </ol>
+        <div class="a2-figs">
+          <figure class="a2-fig">
+            <div class="a2-figcap"><b>①</b> Chrome 우측 상단 <b>⋮ (점 3개)</b>를 누릅니다</div>
+            <svg viewBox="0 0 300 58" role="img" aria-label="Chrome 상단바의 점 3개 메뉴 위치">
+              <text x="266" y="11" text-anchor="middle" fill="#2f9e6f" font-size="11" font-weight="800">여기 ▾</text>
+              <rect x="6" y="18" width="288" height="34" rx="9" fill="#1d2732" stroke="#2a3644"/>
+              <rect x="18" y="26" width="212" height="18" rx="9" fill="#0f141a" stroke="#2a3644"/>
+              <text x="28" y="39" fill="#9fb0c3" font-size="10">chmd20-a11y.github.io/grid-capacity…</text>
+              <circle cx="266" cy="35" r="15" fill="none" stroke="#2f9e6f" stroke-width="2.5"/>
+              <circle cx="266" cy="28.5" r="2" fill="#e8eef5"/>
+              <circle cx="266" cy="35" r="2" fill="#e8eef5"/>
+              <circle cx="266" cy="41.5" r="2" fill="#e8eef5"/>
+            </svg>
+          </figure>
+          <figure class="a2-fig">
+            <div class="a2-figcap"><b>②</b> 메뉴에서 <b>[홈 화면에 추가]</b> 또는 <b>[앱 설치]</b>를 누릅니다</div>
+            <svg viewBox="0 0 300 122" role="img" aria-label="Chrome 메뉴에서 홈 화면에 추가 항목">
+              <rect x="146" y="6" width="148" height="110" rx="10" fill="#1d2732" stroke="#2a3644"/>
+              <text x="162" y="31" fill="#9fb0c3" font-size="12">방문 기록</text>
+              <line x1="154" y1="42" x2="286" y2="42" stroke="#2a3644" stroke-width="1"/>
+              <rect x="150" y="48" width="140" height="30" rx="7" fill="rgba(47,158,111,.16)" stroke="#2f9e6f" stroke-width="1.8"/>
+              <text x="162" y="67" fill="#e8eef5" font-size="12" font-weight="700">홈 화면에 추가</text>
+              <line x1="154" y1="88" x2="286" y2="88" stroke="#2a3644" stroke-width="1"/>
+              <text x="162" y="108" fill="#9fb0c3" font-size="12">설정</text>
+            </svg>
+          </figure>
+        </div>
         <div class="warn">💡 하단에 <b>"앱 설치"</b> 배너가 뜨면 그걸 눌러도 됩니다. 삼성 인터넷은 <b>메뉴 → 현재 페이지 추가 → 홈 화면</b>.</div>
       </div>
     </div>
