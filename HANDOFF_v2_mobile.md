@@ -50,9 +50,9 @@ python3 -m http.server 8901
 # → http://127.0.0.1:8901/mobile_prototype.html    (프레임 안 실동작 미리보기)
 # → http://127.0.0.1:8901/index.html                (원본 · DevTools 모바일 뷰)
 
-# 방식 B: main 에 병합 후 배포
+# 방식 B: main 에 병합 후 배포 (Fast-forward · conflict 없음 — 인수자 origin/main 최신 커밋까지 포함해서 사전 병합해둠)
 git checkout main
-git merge mobile/mobile-ui        # fast-forward or 3-way merge (충돌시 해결)
+git merge mobile/mobile-ui        # fast-forward (충돌 없음)
 git push origin main              # GitHub Pages 자동 재빌드
 ```
 
