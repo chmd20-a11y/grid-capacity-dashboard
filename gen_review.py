@@ -150,7 +150,7 @@ def main():
     body = f"""<div class="page">
 <header class="hero">
   <div class="eyebrow"><a href="https://chmd20-a11y.github.io/grid-capacity-dashboard/" style="color:inherit">← 계통 여유용량 대시보드</a> · 부속자료</div>
-  <h1>신설·증설 변전소 위치 검수</h1>
+  <h1>발전소 신설/증설 계획 위치 검수</h1>
   <p class="lede">지도에 표시되는 계획 변전소 <b>{total}곳</b>의 위치를 좌표 역지오코딩으로 전수 대조했습니다.
   표기 위치와 실제 행정구역 {ok_txt} — 전부 정상 위치입니다.</p>
   <div class="stats">
@@ -206,7 +206,7 @@ td.chk{color:var(--ok);font-weight:800;text-align:center}
     full = ("<!DOCTYPE html>\n<html lang=\"ko\">\n<head>\n<meta charset=\"utf-8\">\n"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
             "<meta http-equiv=\"Cache-Control\" content=\"no-cache\">\n"
-            "<title>신설·증설 변전소 위치 검수 · 해피솔라</title>\n"
+            "<title>발전소 신설/증설 계획 위치 검수 · 해피솔라</title>\n"
             f"<style>{css}</style>\n</head>\n<body>\n{body}\n</body>\n</html>")
     open(OUT, "w", encoding="utf-8").write(full)
     print(f"{OUT} 생성: {len(full)} bytes | 총 {total}곳(기존{n_ex}·고{n_hi}·중{n_me}) | 위치불일치 {mismatch}")

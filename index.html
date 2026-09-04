@@ -49,7 +49,9 @@
   .muted{color:#7d8ea3}
   #helpBtn{margin-left:auto;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
   #helpBtn:hover{background:#3ab183}
-  #reviewLink{background:var(--panel2);color:var(--tx);border:1px solid var(--accent);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none}
+  .plan-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:18px 0 8px}
+  .plan-head h2{margin:0}
+  #reviewLink{background:var(--panel2);color:var(--tx);border:1px solid var(--accent);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
   #reviewLink:hover{background:var(--accent);color:#fff}
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:flex-start;justify-content:center;z-index:9999;padding:24px 12px;overflow:auto}
   .modal-back.open{display:flex}
@@ -285,7 +287,6 @@
   <span class="meta" id="meta">불러오는 중…</span>
   <span class="meta pill" id="scope">전국</span>
   <button id="helpBtn" title="사용법 보기">❓ 사용법</button>
-  <a id="reviewLink" href="https://chmd20-a11y.github.io/grid-capacity-dashboard/위치검수.html" target="_blank" rel="noopener" title="계획 변전소 위치 검수 목록">📍 위치 검수</a>
 </header>
 <div class="wrap">
   <aside class="side">
@@ -334,7 +335,10 @@
       </div>
     </details>
 
-    <h2>🏗 신설/증설 계획 <span class="muted" id="plancnt"></span></h2>
+    <div class="plan-head">
+      <h2>🏗 발전소 신설/증설 계획 <span class="muted" id="plancnt"></span></h2>
+      <a id="reviewLink" href="https://chmd20-a11y.github.io/grid-capacity-dashboard/위치검수.html" target="_blank" rel="noopener" title="발전소 신설/증설 계획 위치 검수 목록">📍 위치 검수</a>
+    </div>
     <!-- D. 지도에 표시 → iOS 스타일 토글 스위치 -->
     <label class="toggle-row">
       <span class="toggle">
@@ -359,7 +363,7 @@
         <span class="sw"><span class="dot" style="background:var(--y)"></span>1–5</span>
         <span class="sw"><span class="dot" style="background:var(--o)"></span>0–1</span>
         <span class="sw"><span class="dot" style="background:var(--r)"></span>0(연계불가)</span>
-        <div style="margin-top:8px">🏢 = 지사 · 🏗 = 신설/증설 계획 · <span style="color:var(--r)">🔴 = 연계불가(클릭 시 상세)</span></div>
+        <div style="margin-top:8px">🏢 = 지사 · 🏗 = 발전소 신설/증설 계획 · <span style="color:var(--r)">🔴 = 연계불가(클릭 시 상세)</span></div>
         <div style="margin-top:6px;color:#7d8ea3">✓ = 실명·정확좌표(OSM). 그 외 읍면동 근사. 데이터: 한전 분산형전원 계통연계 조회(22.9kV 기준·실데이터).</div>
       </div>
     </details>
@@ -398,7 +402,7 @@
           <li>📍 <b>고객 땅 주소로 검색</b> — 좌측 '지번으로 가까운 변전소 찾기'에 지번을 넣으면 가장 가까운 변전소·연계가능량과 <b>관할 한전지사 전화번호</b>까지 바로 뜹니다.</li>
           <li>🔎 <b>지역·변전소명 검색</b>으로 특정 동네 상태를 확인합니다.</li>
           <li>📊 <b>상단 요약 4칸</b> — 지금 연계 가능한 변전소가 몇 곳인지, 어느 권역에 여지가 가장 많은지 한눈에.</li>
-          <li>🏗 <b>신설/증설 계획 검색</b> — 곧 여유가 생길 지역을 미리 선점(준공 예정 변전소 인근 사전 영업).</li>
+          <li>🏗 <b>발전소 신설/증설 계획 검색</b> — 곧 여유가 생길 지역을 미리 선점(준공 예정 변전소 인근 사전 영업).</li>
         </ul>
       </div>
       <div class="help-pane" id="pane-review">
@@ -415,7 +419,7 @@
         <div class="goal"><b>목표</b> — 지역 전력계통 현황과 확충 계획을 파악합니다.</div>
         <ul>
           <li>🗺 관할 지역 <b>변전소 위치·용량·여유</b>를 한 화면에서 조망합니다.</li>
-          <li>🏗 <b>신설/증설 계획</b>(계획확정·사업승인·공사착수 단계별, 준공연도) — 향후 계통 보강 일정을 지역개발·인허가 검토에 참고. 지도에 없는 계획도 <b>건설지사(지역)로 검색</b>됩니다.</li>
+          <li>🏗 <b>발전소 신설/증설 계획</b>(계획확정·사업승인·공사착수 단계별, 준공연도) — 향후 계통 보강 일정을 지역개발·인허가 검토에 참고. 지도에 없는 계획도 <b>건설지사(지역)로 검색</b>됩니다.</li>
           <li>📞 <b>민원·문의 대응</b> — 지번/변전소명 검색으로 관할 변전소·한전지사 연락처를 즉시 확인합니다.</li>
           <li>📑 <b>출처가 명확</b>합니다 — 한전 분산형전원 계통연계 조회(실데이터, 22.9kV 기준) + OSM 좌표. 근거자료로 활용 가능.</li>
         </ul>
@@ -669,7 +673,7 @@ function renderPlans(){
         ${p.addr?`<div class="popup-line muted" style="font-size:11.5px"><span>위치</span><span>${p.addr}</span></div>`:''}
         <div class="popup-line muted" style="font-size:11.5px"><span>담당</span><span>${p.hq}${p.office?' · '+p.office:''}</span></div>
         <div class="muted" style="font-size:11px;margin-top:4px">${p.saup}</div>
-        <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 신설/증설 계획 · 계획 변동 가능${p.completion?'':' · 준공연도 미공개'}</div>`);
+        <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 발전소 신설/증설 계획 · 계획 변동 가능${p.completion?'':' · 준공연도 미공개'}</div>`);
       m.addTo(PLAN_LAYER);
     });
   }
@@ -865,7 +869,7 @@ function searchByName(){
     const addr=p.addr?p.addr:'<span class="muted">위치 미확인</span>';
     const attr=canFocus?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;`:'style="';
     html+=`<div ${attr}background:var(--panel);border:1px dashed var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
-      <div><b>🏗 ${p.name}</b> <span class="muted">${p.voltage}</span> <span style="color:var(--accent2);font-size:11px">신설/증설 계획</span></div>
+      <div><b>🏗 ${p.name}</b> <span class="muted">${p.voltage}</span> <span style="color:var(--accent2);font-size:11px">발전소 신설/증설 계획</span></div>
       <div class="muted" style="font-size:11px;margin-top:2px">${p.stage.replace('(건설중)','')} · ${p.hq}${p.completion?` · <span style="color:var(--g2);font-weight:700">${p.completion}년 준공예정</span>`:''}</div>
       <div style="font-size:11px;margin-top:2px">📮 ${addr}</div></div>`;
   });
