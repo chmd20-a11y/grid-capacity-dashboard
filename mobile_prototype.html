@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모바일 프로토타입 · 계통 여유용량 대시보드</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#0a0d12;color:#e8eef5;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+
+  .app{display:flex;height:100vh;overflow:hidden}
+
+  /* ── 좌측 스테이지 (프레임) ────────────────────────────── */
+  .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow:auto;background:radial-gradient(1200px 800px at 50% 40%,#141a24 0%,#0a0d12 60%)}
+  .stage-title{position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:13px;color:#9fb0c3;letter-spacing:.4px;text-align:center}
+  .stage-title b{color:#e8eef5;letter-spacing:0}
+  .stage-title small{display:block;font-size:11px;color:#6d7d90;margin-top:2px}
+
+  /* iPhone 14 Pro 프레임 (기본) */
+  .device{position:relative;background:#0f141a;border-radius:56px;padding:14px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 0 2px #2a3441 inset, 0 0 0 12px #1a2029, 0 0 0 14px #0a0d12;
+    transition:width .3s ease, height .3s ease}
+  .device .screen{position:relative;overflow:hidden;border-radius:42px;background:#0f141a;width:100%;height:100%}
+  .device iframe{border:0;display:block;background:#0f141a}
+
+  /* Dynamic Island (iPhone 14 Pro) */
+  .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    width:120px;height:34px;background:#000;border-radius:24px;z-index:10;pointer-events:none}
+  /* iPhone SE 노치 대신 통화영역 상단바 */
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:150px;height:24px;background:#000;border-radius:0 0 18px 18px;z-index:10;pointer-events:none;display:none}
+  /* Home indicator (iPhone 14 Pro) */
+  .home-indicator{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+    width:130px;height:5px;border-radius:3px;background:rgba(255,255,255,.35);z-index:10;pointer-events:none}
+
+  /* SE 모드: 홈버튼 (물리) */
+  .home-btn{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+    width:44px;height:44px;border-radius:50%;background:#0f141a;
+    box-shadow:0 0 0 2px #2a3441 inset;z-index:5;display:none}
+
+  /* ── 우측 컨트롤 패널 ────────────────────────────── */
+  .panel{width:290px;flex-shrink:0;background:#12181f;border-left:1px solid #1e2732;padding:22px 20px;overflow-y:auto}
+  .panel h1{font-size:15px;margin:0 0 4px;font-weight:800}
+  .panel .sub{font-size:11.5px;color:#7d8ea3;margin-bottom:20px;line-height:1.55}
+
+  .grp{margin-bottom:22px}
+  .grp-title{font-size:10.5px;color:#7d8ea3;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;font-weight:700}
+  .row{display:flex;flex-direction:column;gap:6px}
+  .btn{background:#1d2732;border:1px solid #2a3644;color:#e8eef5;border-radius:9px;padding:10px 12px;font-size:13px;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;font-family:inherit;transition:all .15s}
+  .btn:hover{background:#243040;border-color:#38495a}
+  .btn.on{background:#2f9e6f;border-color:#2f9e6f;color:#fff;font-weight:700}
+  .btn .dim{font-size:11px;color:#7d8ea3;font-weight:400}
+  .btn.on .dim{color:rgba(255,255,255,.75)}
+
+  .toolbar{display:flex;gap:6px}
+  .toolbar .btn{flex:1;justify-content:center;padding:9px 8px;font-size:12px}
+
+  a.link{color:#3aa0ff;text-decoration:none;font-size:12px}
+  a.link:hover{text-decoration:underline}
+
+  .hint{background:#161d26;border:1px solid #2a3644;border-radius:9px;padding:10px 12px;font-size:11.5px;color:#9fb0c3;line-height:1.6}
+  .hint b{color:#e8eef5}
+
+  .badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;background:#243040;color:#9fb0c3;margin-left:4px}
+
+  @media (max-width:900px){
+    .app{flex-direction:column}
+    .panel{width:100%;border-left:none;border-top:1px solid #1e2732;max-height:40vh}
+    .stage{padding:14px}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- 좌측: 디바이스 프레임 스테이지 -->
+  <div class="stage">
+    <div class="stage-title"><b>모바일 프로토타입</b><small>iframe 안 index.html 이 실제 모바일 UI 로 렌더링됩니다 (터치·검색·시트 실동작)</small></div>
+    <div id="device" class="device" data-preset="ip14pro" style="width:414px;height:872px">
+      <div class="island" id="island"></div>
+      <div class="notch" id="notch"></div>
+      <div class="screen">
+        <iframe id="frame" src="index.html" allow="geolocation" width="100%" height="100%"></iframe>
+      </div>
+      <div class="home-indicator" id="homeInd"></div>
+      <div class="home-btn" id="homeBtn"></div>
+    </div>
+  </div>
+
+  <!-- 우측: 컨트롤 -->
+  <aside class="panel">
+    <h1>📱 미리보기 컨트롤</h1>
+    <div class="sub">데스크톱 화면 안에서 실제 모바일 UI를 그대로 조작할 수 있는 프로토타입 뷰어입니다. 아래 기기 선택 후 프레임 안에서 지도·검색·하단시트·마커탭까지 그대로 동작합니다.</div>
+
+    <div class="grp">
+      <div class="grp-title">기기 프리셋</div>
+      <div class="row">
+        <button class="btn on" data-preset="ip14pro" data-w="393" data-h="852">iPhone 14 Pro<span class="dim">393 × 852</span></button>
+        <button class="btn" data-preset="ip15pm" data-w="430" data-h="932">iPhone 15 Pro Max<span class="dim">430 × 932</span></button>
+        <button class="btn" data-preset="ipse" data-w="375" data-h="667">iPhone SE<span class="dim">375 × 667</span></button>
+        <button class="btn" data-preset="pixel7" data-w="412" data-h="915">Pixel 7<span class="dim">412 × 915</span></button>
+        <button class="btn" data-preset="galaxy" data-w="360" data-h="800">Galaxy S23<span class="dim">360 × 800</span></button>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-title">동작</div>
+      <div class="toolbar">
+        <button class="btn" id="reload" title="새로고침">🔄 새로고침</button>
+        <button class="btn" id="rotate" title="가로/세로 회전">↺ 회전</button>
+      </div>
+      <div style="margin-top:8px">
+        <a class="link" href="index.html" target="_blank">↗ 새 탭에서 원본 열기</a>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-title">현재 상태</div>
+      <div class="hint" id="status">iPhone 14 Pro · 393×852 · 세로</div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-title">확인 포인트</div>
+      <div class="hint" style="line-height:1.65">
+        · 지도 <b>풀스크린</b><br>
+        · 상단 <b>플로팅 검색바</b>(지번/변전소명 탭)<br>
+        · 하단 <b>시트</b> 핸들 드래그·탭 (peek→half→full)<br>
+        · 마커 탭 시 <b>시트 상세</b> (팝업 X)<br>
+        · 우하단 <b>📡 FAB</b> = 내 주변 (GPS)<br>
+        · <b>tel:</b> 전화 바로걸기
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+// safeTop = 상태바/노치/아일랜드 아래로 컨텐츠 밀어낼 가상 safe-area-inset-top (px)
+const PRESETS = {
+  ip14pro:  {w:393, h:852, island:true,  notch:false, homeInd:true,  homeBtn:false, radius:56, screenRadius:42, safeTop:47},
+  ip15pm:   {w:430, h:932, island:true,  notch:false, homeInd:true,  homeBtn:false, radius:60, screenRadius:46, safeTop:47},
+  ipse:     {w:375, h:667, island:false, notch:true,  homeInd:false, homeBtn:true,  radius:40, screenRadius:26, safeTop:24},
+  pixel7:   {w:412, h:915, island:false, notch:false, homeInd:true,  homeBtn:false, radius:44, screenRadius:32, safeTop:24},
+  galaxy:   {w:360, h:800, island:false, notch:false, homeInd:true,  homeBtn:false, radius:44, screenRadius:32, safeTop:24},
+};
+
+// iframe(index.html) 은 브라우저상에서 env(safe-area-inset-top)=0 이라 아일랜드/노치를 인지 못함.
+// 프로토타입이 프리셋 별 safeTop 값을 iframe 문서에 <style> 로 주입해서 헤더가 아일랜드 밑으로 밀리게 함.
+function injectSafeArea(){
+  const frame = document.getElementById('frame');
+  const doc = frame && frame.contentDocument;
+  if(!doc || !doc.head) return;
+  const p = PRESETS[currentPreset]; if(!p) return;
+  const st = landscape ? 0 : p.safeTop;   // 가로 회전 시 상단 노치 없음
+  let s = doc.getElementById('__proto_safe_area__');
+  if(!s){ s = doc.createElement('style'); s.id='__proto_safe_area__'; doc.head.appendChild(s); }
+  // 헤더와 .wrap 높이만 아일랜드/노치를 반영 — 드로어(.side)와 × 는 부모(.wrap) 아래이므로 이중 처리 X
+  s.textContent = `
+    @media (max-width:760px){
+      header{ padding-top: ${10 + st}px !important; }
+      .wrap{ height: calc(100dvh - 50px - ${st}px) !important; }
+    }`;
+}
+
+let currentPreset = 'ip14pro';
+let landscape = false;
+
+function applyPreset(){
+  const p = PRESETS[currentPreset]; if(!p) return;
+  const d = document.getElementById('device');
+  const w = landscape ? p.h : p.w;
+  const h = landscape ? p.w : p.h;
+
+  // 스테이지 안에 들어가도록 자동 스케일
+  const stage = document.querySelector('.stage');
+  const availW = stage.clientWidth - 56;
+  const availH = stage.clientHeight - 56;
+  // 프레임 padding·bezel 여유(약 40px)
+  const scaleW = availW / (w + 40);
+  const scaleH = availH / (h + 40);
+  const scale = Math.min(1, scaleW, scaleH);
+
+  d.style.width = w + 'px';
+  d.style.height = h + 'px';
+  d.style.borderRadius = p.radius + 'px';
+  d.style.transform = 'scale(' + scale.toFixed(3) + ')';
+  d.style.transformOrigin = 'center center';
+
+  d.querySelector('.screen').style.borderRadius = p.screenRadius + 'px';
+
+  document.getElementById('island').style.display  = p.island ? 'block' : 'none';
+  document.getElementById('notch').style.display   = p.notch ? 'block' : 'none';
+  document.getElementById('homeInd').style.display = p.homeInd ? 'block' : 'none';
+  document.getElementById('homeBtn').style.display = p.homeBtn ? 'block' : 'none';
+
+  document.querySelectorAll('.btn[data-preset]').forEach(b=>b.classList.toggle('on', b.dataset.preset===currentPreset));
+
+  const name = document.querySelector('.btn[data-preset="'+currentPreset+'"]').firstChild.textContent.trim();
+  document.getElementById('status').innerHTML =
+    '<b>' + name + '</b> · ' + w + '×' + h + ' · ' + (landscape ? '가로' : '세로') +
+    (scale<1 ? ' · <span class="badge">×'+scale.toFixed(2)+' 축소보기</span>' : '');
+
+  // 기기 프리셋에 맞춰 iframe 문서에 가상 safe-area 재주입 (아일랜드/노치 대응)
+  injectSafeArea();
+}
+
+document.querySelectorAll('.btn[data-preset]').forEach(b=>{
+  b.addEventListener('click', ()=>{ currentPreset = b.dataset.preset; applyPreset(); });
+});
+
+document.getElementById('reload').addEventListener('click', ()=>{
+  const f = document.getElementById('frame');
+  f.src = f.src.split('?')[0] + '?_=' + Date.now();
+});
+// iframe 로드 완료 때마다 safe-area 재주입 (새로고침·초기 로드 모두 대응)
+document.getElementById('frame').addEventListener('load', injectSafeArea);
+
+document.getElementById('rotate').addEventListener('click', ()=>{
+  landscape = !landscape;
+  applyPreset();
+});
+
+window.addEventListener('resize', applyPreset);
+window.addEventListener('load', applyPreset);
+setTimeout(applyPreset, 30);
+</script>
+</body>
+</html>
