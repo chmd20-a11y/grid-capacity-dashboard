@@ -177,7 +177,7 @@
       transition:transform .28s cubic-bezier(.22,1,.36,1);
       background:var(--panel);
       box-shadow:2px 0 20px rgba(0,0,0,.55);
-      padding-top:22px;   /* × 는 타이틀 라인 우측 · 찾기버튼과의 세로 여백 확보 */
+      padding-top:8px;   /* ← 닫기버튼은 sticky 로 자체 여백 확보 */
       padding-bottom:calc(14px + env(safe-area-inset-bottom));
     }
     .side.open{transform:translateX(0)}
@@ -209,20 +209,20 @@
     }
     .m-backdrop.on{background:rgba(0,0,0,.42);pointer-events:auto}
 
-    /* 드로어 안 × 닫기 — 흰 배경 + 검정 × (드로어 톤과 대비 확실) */
+    /* 드로어 안 ← 닫기 — sticky 로 스크롤 따라 상단 고정 · 우측 정렬 */
     .m-side-close{
-      display:inline-flex;position:absolute;
-      top:10px;right:12px;z-index:2;
+      display:flex;position:sticky;
+      top:8px;margin:0 12px 4px auto;z-index:2;
       align-items:center;justify-content:center;
-      width:22px;height:22px;border-radius:5px;
+      width:26px;height:26px;border-radius:7px;
       background:#fff;color:#000;border:none;
-      font-size:14px;font-weight:800;line-height:1;
+      font-size:16px;font-weight:800;line-height:1;
       padding:0;cursor:pointer;
-      box-shadow:0 1px 4px rgba(0,0,0,.35);
+      box-shadow:0 2px 6px rgba(0,0,0,.4);
       transition:background .15s, transform .1s;
     }
     .m-side-close:hover{background:#f0f0f0}
-    .m-side-close:active{transform:scale(.94)}
+    .m-side-close:active{transform:scale(.9)}
   }
 </style>
 </head>
@@ -683,7 +683,7 @@ function initMobileDrawer(){
   // 드로어 안 x 닫기 (모바일에서만 시각적으로 보이도록 CSS로 처리)
   if(!document.getElementById('mSideClose')){
     const x = document.createElement('button');
-    x.id='mSideClose'; x.className='m-side-close'; x.setAttribute('aria-label','닫기'); x.textContent='×';
+    x.id='mSideClose'; x.className='m-side-close'; x.setAttribute('aria-label','닫기'); x.textContent='←';
     side.prepend(x);
     x.addEventListener('click', ()=>setDrawer(false));
   }
