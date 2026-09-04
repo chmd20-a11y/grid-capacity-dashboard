@@ -95,6 +95,19 @@
    "addr": "충북 청주시 흥덕구(청주테크노폴리스~SK하이닉스 M15X 사이, SK로 인근)",
    "note": "출처: https://biz.heraldcorp.com/article/10515599 (medium)",
    "completion": "2025"
+  },
+  {
+   "saup": "345kV 남양주변전소 건설사업",
+   "name": "남양주변전소",
+   "voltage": "345kV",
+   "stage": "공사착수(건설중)",
+   "hq": "경인건설본부",
+   "office": "직할",
+   "lat": 37.67277,
+   "lng": 127.16419,
+   "geo": "manual",
+   "addr": "경기 남양주시 왕숙 도시첨단산업단지 내",
+   "note": "출처: https://search.brave.com/ (Realvalue 2026-06 기사) (medium)"
   }
  ]
 }
