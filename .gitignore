@@ -17,3 +17,4 @@ capacity_nation_raw.json
 capacity_pre_merge_backup.json
 refresh.sh
 capacity_current_good.json
+*.bak
