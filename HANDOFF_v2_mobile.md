@@ -10,16 +10,22 @@
 - **무엇**: `HANDOFF.md` §9 (모바일화 권장 방향) 진행 · 접근 A (기존 index.html 반응형 개선) 채택.
 - **결과**: 데스크톱 UI 는 그대로. 모바일(≤760px) 에선 지도 풀스크린 + 좌측 슬라이드 드로어 + iOS 스타일 컴포넌트로 전환.
 - **바뀐 파일**: `index.html` (수정), `mobile_prototype.html` (신규, 개발자용 뷰어).
-- **한 커밋** 으로 정리: `d5a14aa feat: 모바일 뷰 지원(좌측 드로어 토글)·지도중심 대한민국 재정렬`.
+- **주요 커밋**:
+  - `d5a14aa` 모바일 뷰 지원 (좌측 드로어 토글) · 지도중심 대한민국 재정렬
+  - `a3b7c92` 모바일 UI 컴포넌트 (GPS · 세그먼트 · 토글 · legend 접기)
+  - `d886a62` 지번검색 Nominatim(OSM) fallback (Kakao 미로드 시 자동 대체)
+  - `d741d35` 드로어 닫기버튼 ← 화살표 · sticky 스크롤 고정
 
 ---
 
 ## 2. 지금 되어 있는 기능 (모바일)
 
 - 지도 풀스크린 (`.side` 는 좌측 슬라이드 드로어)
-- 좌상단 ☰ 토글 → 드로어 오픈 · 백드롭·×·지도탭 3가지 닫기
+- 좌상단 ☰ 토글 → 드로어 오픈 · 백드롭·← 화살표·지도탭 3가지 닫기
+- **← 화살표 닫기버튼 sticky 상단 고정** (드로어 내부 스크롤 내려도 항상 노출 · 우측 정렬)
 - 📡 GPS "내 주변 변전소 찾기" (드로어 최상단 · `navigator.geolocation`)
 - 검색 탭 통합 (지번 ↔ 변전소명 하나의 탭 UI · 세로공간 절약)
+- **지번검색 이중화** — 우선 Kakao Geocoder, 실패/미로드 시 OSM Nominatim 자동 fallback (로컬 개발에서도 검색 작동)
 - iOS 토글 스위치 (`지도에 표시` 체크박스 대체)
 - iOS 세그먼트 컨트롤 (계획 필터 4단 균등 폭)
 - 접기 legend (`숫자 읽는 법`, `범례` — `<details>` 기본 접힘)
@@ -82,16 +88,19 @@ gh api repos/chmd20-a11y/grid-capacity-dashboard/pages/builds/latest | grep -E '
 - **하단 시트 (bottom sheet) 폐기 · 좌측 드로어 채택** — 사이드바 콘텐츠 재활용 (한 벌 유지). 시트 방식은 마커상세·검색·목록 각각 별도 렌더 필요해 코드 중복 컸음.
 - **마커 팝업 기본 Leaflet 유지** — 시트 폐기와 함께 popup 우회 로직도 제거. 데스크톱·모바일 코드 갈래 하나.
 - **계획 필터: 세그먼트 컨트롤 최종안** — 초기 pill(2줄 wrap) → 세그먼트로 정착. `width:100%; box-sizing:border-box` 강제로 X축 전폭.
+- **드로어 닫기: × → ← (sticky)** — `position:absolute` 로는 스크롤 시 함께 사라졌음. `position:sticky; top:8px; margin:0 12px 4px auto` 로 우측 상단 고정. 아이콘도 방향성 있는 ← 로 변경 (드로어가 왼쪽으로 접힌다는 은유). `.side` 는 이미 `transform` 이 걸려있어 sticky containing-block 이 자동으로 드로어 자체가 됨 (viewport 아님).
+- **지번검색 이중화 (Kakao → OSM)** — Kakao JS 키는 프로덕션 도메인 (`chmd20-a11y.github.io`) 에만 등록되어 로컬에선 로드 실패. 2초 대기 후 실패 시 `nominatim.openstreetmap.org` 로 자동 폴백. Kakao 성공 시 상세지번까지 정확 · Nominatim 은 시군구·읍면동 근사 좌표 (개발 편의로 충분).
 
 ---
 
 ## 6. 알려진 이슈
 
-### 6.1 Kakao 지오코딩 — 로컬 개발 한정
+### 6.1 Kakao 지오코딩 — 로컬 개발 한정 (fallback 으로 완화됨)
 - Kakao JS 키 (`3c003211be49659008929069de83dced`) 는 프로덕션 `chmd20-a11y.github.io` 에만 등록됨.
-- 로컬 (`127.0.0.1`, `localhost`) 에선 SDK 로드 거부 → 지번검색 ⚠ 문구.
-- 해결: Kakao 개발자콘솔 → 플랫폼 → Web 사이트 도메인에 로컬 URL 추가, 또는 프로덕션에서 테스트.
-- 좌표 직접입력 (`37.5, 127.0`) 은 Kakao 없이도 작동.
+- 로컬 (`127.0.0.1`, `localhost`) 에선 SDK 로드 거부.
+- **완화**: `d886a62` 이후 OSM Nominatim 자동 fallback → 로컬에서도 지번검색 작동 (시군구·읍면동 정확도). 프로덕션 정확도(상세지번)는 Kakao 가 여전히 담당.
+- 완전 해결: Kakao 개발자콘솔 → 플랫폼 → Web 사이트 도메인에 로컬 URL 추가.
+- 좌표 직접입력 (`37.5, 127.0`) 은 Kakao·Nominatim 없이도 작동.
 
 ### 6.2 성능 (미착수)
 - `capacity.json` 1.66MB — 셀룰러 초기 로딩 부담. 슬림화 미착수.
@@ -107,8 +116,10 @@ gh api repos/chmd20-a11y/grid-capacity-dashboard/pages/builds/latest | grep -E '
 - [ ] iPhone Safari · Android Chrome 실기기 접속
 - [ ] 헤더 타이틀 아일랜드/노치 아래로 밀려서 다 보이나
 - [ ] ☰ 탭 → 드로어 슬라이드 자연스러운가
-- [ ] 백드롭·×·지도탭 3가지 다 닫힘 트리거
+- [ ] 백드롭·← 화살표·지도탭 3가지 다 닫힘 트리거
+- [ ] 드로어 내부 스크롤 시 ← 버튼이 우측 상단에 계속 붙어있는가 (sticky)
 - [ ] 📡 GPS 위치 권한 팝업 → 허용 → 결과 카드
+- [ ] 지번검색 (`파주시 문산읍` 등) — 프로덕션은 Kakao 로 상세, 로컬은 OSM fallback 확인
 - [ ] 검색 탭 스위치 · input 포커스 시 키보드
 - [ ] 📖 📗 접기/펼치기
 - [ ] 토글 스위치 슬라이드 애니메이션
@@ -120,13 +131,13 @@ gh api repos/chmd20-a11y/grid-capacity-dashboard/pages/builds/latest | grep -E '
 
 ## 8. 다음 우선순위 (Nice-to-have)
 
-- **Nominatim (OSM 지오코딩) fallback** — Kakao SDK 미로드 시 자동 fallback → 로컬 개발 편의 + 프로덕션 안전망
 - **capacity.json 슬림화** — 지도용 필드만 담은 슬림 JSON + 마커 클릭 시 상세 lazy load
 - **최근 검색 3개 (localStorage)** — 영업 반복 사용 패턴
 - **PWA (홈화면 추가)** — manifest + service worker
 - **마커 클러스터링** — Leaflet.markercluster (저사양 대응)
+- ~~**Nominatim (OSM 지오코딩) fallback**~~ — ✅ `d886a62` 반영
 
 ---
 
 ### 요약
-> Fork 저장소 `yooona12/grid-capacity-dashboard` 의 `mobile-ui` 브랜치를 pull → 확인/병합 → `chmd20-a11y/main` 으로 push. **한 커밋 (d5a14aa)** 안에 모바일 UI 전부 · 데이터·파이프라인 무변경.
+> Fork 저장소 `yooona12/grid-capacity-dashboard` 의 `mobile-ui` 브랜치를 pull → 확인/병합 → `chmd20-a11y/main` 으로 push. **최신 HEAD = `d741d35`** (2026-09-04). 모바일 UI · 지번검색 이중화 · sticky ← 닫기버튼 전부 포함. 데이터·파이프라인 무변경.
