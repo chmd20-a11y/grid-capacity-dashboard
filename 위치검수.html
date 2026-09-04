@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache">
+<title>신설·증설 변전소 위치 검수 · 해피솔라</title>
+<style>*{box-sizing:border-box}
+:root{--bg:#0f141a;--panel:#161d26;--panel2:#1d2732;--line:#2a3644;--tx:#e8eef5;--tx2:#9fb0c3;--accent:#2f9e6f;--ok:#5cb85c}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:1000px;margin:0 auto;padding:32px 20px 64px}
+a{color:#7fc4ff;text-decoration:none}a:hover{text-decoration:underline}
+.ok{color:var(--ok)}.muted{color:#6c7d90}
+.hero{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
+h1{font-size:30px;margin:0 0 12px;font-weight:800;letter-spacing:-.01em}
+.lede{font-size:15px;color:var(--tx2);max-width:64ch;margin:0 0 22px}.lede b{color:var(--tx)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat .num{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat .lbl{font-size:11.5px;color:var(--tx2);margin-top:2px}
+.note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:13px 16px;font-size:13px;color:var(--tx2);margin-bottom:30px}
+.note b{color:var(--tx)}.note .k{font-weight:700}
+.grp{margin-bottom:30px}
+.grp-h{display:flex;align-items:center;gap:9px}
+.tier-dot{width:11px;height:11px;border-radius:50%;flex:none}
+h2{font-size:17px;margin:0;font-weight:800}h2 .cnt{font-size:13px;color:var(--tx2);font-weight:600;margin-left:4px}
+.grp-desc{font-size:12.5px;color:var(--tx2);margin:5px 0 12px 20px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--panel2);color:var(--tx2);font-weight:600;font-size:11.5px;letter-spacing:.03em}
+tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:var(--panel)}
+td.nm{font-weight:700}td.v{color:var(--tx2);font-variant-numeric:tabular-nums}td.c{font-variant-numeric:tabular-nums}
+td.loc{white-space:normal;color:var(--tx2);min-width:200px}
+td.src{max-width:180px;overflow:hidden;text-overflow:ellipsis}
+td.chk{color:var(--ok);font-weight:800;text-align:center}
+.foot{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:#6c7d90;line-height:1.7}
+@media (max-width:640px){h1{font-size:24px}.stats{grid-template-columns:repeat(2,1fr)}.page{padding:22px 14px 48px}}</style>
+</head>
+<body>
+<div class="page">
+<header class="hero">
+  <div class="eyebrow"><a href="https://chmd20-a11y.github.io/grid-capacity-dashboard/" style="color:inherit">← 계통 여유용량 대시보드</a> · 부속자료</div>
+  <h1>신설·증설 변전소 위치 검수</h1>
+  <p class="lede">지도에 표시되는 계획 변전소 <b>64곳</b>의 위치를 좌표 역지오코딩으로 전수 대조했습니다.
+  표기 위치와 실제 행정구역 <b class="ok">불일치 0곳</b> — 전부 정상 위치입니다.</p>
+  <div class="stats">
+    <div class="stat"><div class="num">64</div><div class="lbl">지도표시 위치</div></div>
+    <div class="stat"><div class="num ok">0</div><div class="lbl">위치 불일치</div></div>
+    <div class="stat"><div class="num">21</div><div class="lbl">기존 증설</div></div>
+    <div class="stat"><div class="num">43</div><div class="lbl">신설(고20·중23)</div></div>
+  </div>
+</header>
+<div class="note"><b>읽는 법</b> — <span class="k" style="color:#3aa0ff">기존 증설</span>은 실재 변전소라 위치가 확실합니다.
+  <span class="k" style="color:#5cb85c">고신뢰</span>는 산업부 실시계획 고시(정부 승인문서) 기반,
+  <span class="k" style="color:#f2c200">중신뢰</span>는 언론·업체 자료 기반입니다.
+  <b>검증 ✓</b> = 등록 좌표를 역으로 주소 변환해 표기 위치와 시·군이 일치함을 확인.
+  단, 신설 위치는 확정 전까지 변동될 수 있고 실제 연계는 한전 기술검토가 필요합니다.</div>
+<section class="grp"><div class="grp-h"><span class="tier-dot" style="background:#3aa0ff"></span><h2>기존 변전소 증설 (위치 확실) <span class="cnt">21곳</span></h2></div><p class="grp-desc">실재하는 변전소에 증설 — 좌표가 그 변전소 실위치</p><div class="tbl-wrap"><table><thead><tr><th>변전소</th><th>전압</th><th>단계</th><th>준공</th><th>위치(지번)</th><th>출처</th><th title="좌표 역지오코딩으로 위치 일치 확인">검증</th></tr></thead><tbody><tr><td class="nm">양구변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">강원 양구군 국토정중앙면 구암리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">주진변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">강원 평창군 평창읍 주진리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">화천변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">강원 화천군 상서면 구운리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">신광명변전소</td><td class="v">345kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">경기 광명시 광명동 606</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">거창변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">경남 거창군 거창읍 정장리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">신김해변전소</td><td class="v">345kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">경남 김해시 진례면 산본리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">합천변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">경남 합천군 합천읍 영창리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">안동 변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">경북 안동시 상아동 283-1</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">신양산변전소</td><td class="v">345kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">부산 기장군 철마면 안평리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">노량진변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">서울 동작구 노량진동 151-1</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">송도변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">인천 연수구 송도동 13-5</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">고흥변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전남 고흥군 풍양면 상림리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">순천변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전남 순천시 조례동 1276-3</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">영암 변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전남 영암군 덕진면 금강리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">장흥변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전남 장흥군 장흥읍 금산리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">진도변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전남 진도군 군내면 분토리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">해남변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전남 해남군 해남읍 용정리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">고창변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전북 고창군 고창읍 성두리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">임실변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전북 임실군 임실읍 갈마리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">장항변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">충남 서천군 마서면 덕암리</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr>
+<tr><td class="nm">풍세변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">충남 천안시 동남구 풍세면</td><td class="src"><span class="muted">—</span></td><td class="chk">✓</td></tr></tbody></table></div></section><section class="grp"><div class="grp-h"><span class="tier-dot" style="background:#5cb85c"></span><h2>신설 · 고신뢰 <span class="cnt">20곳</span></h2></div><p class="grp-desc">산업부 실시계획 고시(정부 승인문서) 또는 확실한 출처 — 번지 단위</p><div class="tbl-wrap"><table><thead><tr><th>변전소</th><th>전압</th><th>단계</th><th>준공</th><th>위치(지번)</th><th>출처</th><th title="좌표 역지오코딩으로 위치 일치 확인">검증</th></tr></thead><tbody><tr><td class="nm">주천변전소</td><td class="v">154kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">강원 영월군 주천면 신일리</td><td class="src">law.go.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신가평 FACTS변전소</td><td class="v">345kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 가평군 설악면(신가평변전소 부지)</td><td class="src">korea.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">HVDC 신가평변환소 건설</td><td class="v">500kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 가평군 설악면(신가평변전소 부지)</td><td class="src">korea.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">부발변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 이천시 부발읍 무촌리</td><td class="src">천지일보</td><td class="chk">✓</td></tr>
+<tr><td class="nm">HVDC 동서울 변환소</td><td class="v">500kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 하남시 감일동(동서울변전소)</td><td class="src">경기일보/경인일보</td><td class="chk">✓</td></tr>
+<tr><td class="nm">군북변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경상남도 함안군 군북면 사도리</td><td class="src">law.go.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">장위변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">서울특별시 성북구 장위동 50-27</td><td class="src">서울시</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신고리(새울)개폐소변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">울산광역시 울주군 서생면 신암리(신고리·새울원전</td><td class="src">새울원자력본부(울주군</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신부평 BTB HVDC 변환설비변전소</td><td class="v"></td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">인천광역시 부평구 갈산동 57-6(구</td><td class="src">인천투데이</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신송도변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">인천광역시 연수구 송도동(송도국제도시 11공구)</td><td class="src">인천투데이</td><td class="chk">✓</td></tr>
+<tr><td class="nm">서영광 변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c">2026년</td><td class="loc">전남 영광군 염산면 송암리</td><td class="src"><a href="https://www.ulex.co.kr/%EB%B2%95%EB%A5%A0/2100000224310-85650-%EC%A0%84%EC%9B%90%EA%B0%9C%EB%B0%9C%EC%82%AC" target="_blank" rel="noopener">ulex.co.kr ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">시종변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">전남 영암군 시종면 신학리</td><td class="src">산업통상자원부</td><td class="chk">✓</td></tr>
+<tr><td class="nm">포두 변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">전라남도 고흥군 포두면 길두리</td><td class="src">law.go.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">산이변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">전라남도 해남군 산이면 상공리</td><td class="src">뉴시스/우리뉴스</td><td class="chk">✓</td></tr>
+<tr><td class="nm">정읍변전소</td><td class="v">154kV</td><td>계획확정</td><td class="c"><span class="muted">—</span></td><td class="loc">전라북도 정읍시 감곡면 계룡리</td><td class="src">law.go.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">정읍변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">전라북도 정읍시 감곡면 계룡리</td><td class="src">law.go.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신정읍변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">전라북도 정읍시 용계동 811</td><td class="src">law.go.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">북김제변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">전북 김제시 용지면 봉의리</td><td class="src">154kV</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신성연변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">충청남도 서산시 성연면 오사리</td><td class="src">law.go.kr</td><td class="chk">✓</td></tr>
+<tr><td class="nm">음성천연가스S/Y변전소</td><td class="v">154kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">충청북도 음성군 음성읍 평곡리(음성천연가스발전소</td><td class="src">중부매일/대한전문건설신문</td><td class="chk">✓</td></tr></tbody></table></div></section><section class="grp"><div class="grp-h"><span class="tier-dot" style="background:#f2c200"></span><h2>신설 · 중신뢰 <span class="cnt">23곳</span></h2></div><p class="grp-desc">언론·업체 자료 등 출처 있음 — 읍·면 단위</p><div class="tbl-wrap"><table><thead><tr><th>변전소</th><th>전압</th><th>단계</th><th>준공</th><th>위치(지번)</th><th>출처</th><th title="좌표 역지오코딩으로 위치 일치 확인">검증</th></tr></thead><tbody><tr><td class="nm">옥계변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">강원 강릉시 옥계면(옥계 첨단소재융합</td><td class="src">강원특별자치도투자지원센터/강릉시청</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신태백 FACTS변전소</td><td class="v">765kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">강원 태백시 원동(신태백변전소 부지</td><td class="src">전기신문</td><td class="chk">✓</td></tr>
+<tr><td class="nm">남양주변전소</td><td class="v">345kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경기 남양주시 왕숙 도시첨단산업단지</td><td class="src"><a href="https://search.brave.com/" target="_blank" rel="noopener">search.brave.com ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">남양주변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">경기 남양주시 왕숙 도시첨단산업단지</td><td class="src"><a href="https://search.brave.com/" target="_blank" rel="noopener">search.brave.com ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">북통진변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 김포시 통진읍</td><td class="src">전원개발사업실시계획</td><td class="chk">✓</td></tr>
+<tr><td class="nm">권선(舊, 탑동)변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 수원시 권선구 탑동</td><td class="src">KEPCO</td><td class="chk">✓</td></tr>
+<tr><td class="nm">배곧(舊정왕)변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 시흥시 정왕동(배곧신도시)</td><td class="src">시흥타임즈</td><td class="chk">✓</td></tr>
+<tr><td class="nm">동용인변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 용인시 처인구 원삼면</td><td class="src">이투뉴스</td><td class="chk">✓</td></tr>
+<tr><td class="nm">HVDC 고덕변환소 2단계</td><td class="v">500kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 평택시 고덕면 (고덕국제화계획지구/삼성</td><td class="src">경향신문</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신송산변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">경기도 화성시 송산면</td><td class="src">345kV</td><td class="chk">✓</td></tr>
+<tr><td class="nm">HVDC 동해안 변환소 건설</td><td class="v">500kV</td><td>사업승인</td><td class="c">2026년</td><td class="loc">경북 울진군 북면 덕천리</td><td class="src"><a href="https://www.sunjin.co.kr/ourworks/500kv-hvdc-%EB%8F%99%ED%95%B4%EC%95%88-%EB%B3%80%ED%99%98%EC%86%8C-%ED%86%A0%EA%B1%B4%EA%B3%B5%EC%82%AC-%EC%82%AC%ED%9B%84%ED%99%98%EA%B2%BD%EC%98%81%ED%96%A5%EC%A1%B0%EC%82%AC/" target="_blank" rel="noopener">sunjin.co.kr ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">345KV 함안천연가스발전소S/Y 접속설비공사변전소</td><td class="v"></td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">경상남도 함안군 군북면 유현리·법수면</td><td class="src">경남도민일보</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신강서변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">부산광역시 강서구 에코델타시티(EDC) 일원</td><td class="src">부산일보</td><td class="chk">✓</td></tr>
+<tr><td class="nm">서송도변전소</td><td class="v">154kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">인천광역시 연수구 송도동 (송도국제도시)</td><td class="src">동송도변전소-서송도변전소</td><td class="chk">✓</td></tr>
+<tr><td class="nm">신장성변전소</td><td class="v">345kV</td><td>사업승인</td><td class="c">2029년</td><td class="loc">전남 장성군 동화면 구룡리</td><td class="src"><a href="https://www.jstnews.co.kr/news/articleView.html?idxno=8810" target="_blank" rel="noopener">jstnews.co.kr ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">득량변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">전라남도 보성군 득량면</td><td class="src">다음뉴스</td><td class="chk">✓</td></tr>
+<tr><td class="nm">동면변전소</td><td class="v">154kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">전라남도 화순군 동면</td><td class="src">한국시민기자협회</td><td class="chk">✓</td></tr>
+<tr><td class="nm">동비응변전소</td><td class="v">154kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">전라북도 군산시 새만금국가산업단지(5공구)</td><td class="src">정책브리핑/BusinessKorea</td><td class="chk">✓</td></tr>
+<tr><td class="nm">북임실변전소</td><td class="v">154kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">전북 임실군 신덕면</td><td class="src"><a href="http://www.jjn.co.kr/news/articleView.html?idxno=846056" target="_blank" rel="noopener">jjn.co.kr ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">대산개폐소변전소</td><td class="v">154kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">충남 서산시 대산읍(죽엽로 132</td><td class="src"><a href="https://lbox.kr/v2/statute-admin/%EC%A0%84%EC%9B%90%EA%B0%9C%EB%B0%9C%EC%82%AC%EC%97%85%EC%8B%A4%EC%8B%9C%EA%B3%84%ED%9A%8D%EC%8A%B9%EC%9D%B8(%EB%B3%80%EA%B2%BD)(154kV%EB%8C%80%EC%82%B0%EA%B0%9C%ED%8F%90%EC%86%8C%EB%B0%8F%EC%97%B0%EA%B4%80%EC%86%A1%EC%A0%84%EC%84%A0%EB%A1%9C%EA%B1%B4%EC%84%A4%EC%82%AC%EC%97%85%EB%93%B16%EA%B1%B4)" target="_blank" rel="noopener">lbox.kr ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">신청주변전소</td><td class="v">345kV</td><td>공사착수</td><td class="c">2025년</td><td class="loc">충북 청주시 흥덕구(청주테크노폴리스~SK하이닉스 M15X</td><td class="src"><a href="https://biz.heraldcorp.com/article/10515599" target="_blank" rel="noopener">biz.heraldcorp.com ↗</a></td><td class="chk">✓</td></tr>
+<tr><td class="nm">신석문변전소</td><td class="v">345kV</td><td>사업승인</td><td class="c"><span class="muted">—</span></td><td class="loc">충청남도 당진시 석문면(석문국가산업단지 내)</td><td class="src">당진시대</td><td class="chk">✓</td></tr>
+<tr><td class="nm">서오창변전소</td><td class="v">154kV</td><td>공사착수</td><td class="c"><span class="muted">—</span></td><td class="loc">충청북도 청주시 청원구 오창읍(서오창테크노밸리</td><td class="src">굿모닝충청</td><td class="chk">✓</td></tr></tbody></table></div></section>
+<footer class="foot">검증 방식: 각 위치의 위경도 → 역지오코딩 → 표기 지번의 시·군과 대조. 좌표 출처: 기존 증설=OSM 실측, 신설=산업부 고시 PDF 지번표/언론·업체 자료.
+<br>라이브 대시보드와 동일 데이터(plans.json)에서 생성 · 데이터 기준 2026-09-03 15:32 KST</footer>
+</div>
+</body>
+</html>

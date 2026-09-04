@@ -47,6 +47,8 @@
   @media (max-width:760px){ .wrap{flex-direction:column;height:auto} .side{width:100%;max-width:none;border-right:none;border-bottom:1px solid var(--line)} #map{height:56vh} }
   #helpBtn{margin-left:auto;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
   #helpBtn:hover{background:#3ab183}
+  #reviewLink{background:var(--panel2);color:var(--tx);border:1px solid var(--accent);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none}
+  #reviewLink:hover{background:var(--accent);color:#fff}
   .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:flex-start;justify-content:center;z-index:9999;padding:24px 12px;overflow:auto}
   .modal-back.open{display:flex}
   .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:660px;width:100%;margin:auto;box-shadow:0 12px 40px rgba(0,0,0,.5)}
@@ -74,6 +76,7 @@
   <span class="meta" id="meta">불러오는 중…</span>
   <span class="meta pill" id="scope">전국</span>
   <button id="helpBtn" title="사용법 보기">❓ 사용법</button>
+  <a id="reviewLink" href="https://chmd20-a11y.github.io/grid-capacity-dashboard/위치검수.html" target="_blank" rel="noopener" title="계획 변전소 위치 검수 목록">📍 위치 검수</a>
 </header>
 <div class="wrap">
   <aside class="side">
