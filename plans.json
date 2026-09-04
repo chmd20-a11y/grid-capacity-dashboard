@@ -3,7 +3,7 @@
  "source": "한전 송변전 건설 정보공개(계획확정/사업승인/공사착수) — 변전소 사업",
  "note": "신설 예정 변전소는 정확 위치가 공개되지 않아(첨부 PDF만) 지도표시는 일부만. 전체는 목록 참조.",
  "total": 231,
- "located": 39,
+ "located": 29,
  "plans": [
   {
    "saup": "345kV 신김해#2S/S 건설사업",
@@ -1318,7 +1318,12 @@
    "stage": "사업승인",
    "hq": "중부건설본부",
    "office": "광주전남건설지사",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 35.23543,
+   "lng": 126.711,
+   "addr": "전남 장성군 동화면 구룡리 산99-1번지 일원(산98·산104-1 포함, 63,986㎡)",
+   "completion": "2029",
+   "note": "출처: https://www.jstnews.co.kr/news/articleView.html?idxno=8810 (medium)"
   },
   {
    "saup": "154kV 서운남변전소 건설사업",
@@ -1594,7 +1599,12 @@
    "stage": "사업승인",
    "hq": "중부건설본부",
    "office": "광주전남건설지사",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 35.24377,
+   "lng": 126.34522,
+   "addr": "전남 영광군 염산면 송암리 680-1번지 일원",
+   "completion": "2026",
+   "note": "출처: https://www.ulex.co.kr/%EB%B2%95%EB%A5%A0/2100000224310-85650-%EC%A0%84%EC%9B%90%EA%B0%9C%EB%B0%9C%EC%82%AC (high)"
   },
   {
    "saup": "154kV 서충주변전소 건설사업",
@@ -1702,7 +1712,12 @@
    "stage": "사업승인",
    "hq": "HVDC건설본부",
    "office": "직할",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 37.08537,
+   "lng": 129.38766,
+   "addr": "경북 울진군 북면 덕천리 600번지 일원(한울원전본부 인근)",
+   "completion": "2026",
+   "note": "출처: https://www.sunjin.co.kr/ourworks/500kv-hvdc-%EB%8F%99%ED%95%B4%EC%95%88-%EB%B3%80%ED%99%98%EC%86%8C-%ED%86%A0%EA%B1%B4%EA%B3%B5%EC%82%AC-%EC%82%AC%ED%9B%84%ED%99%98%EA%B2%BD%EC%98%81%ED%96%A5%EC%A1%B0%EC%82%AC/ (medium)"
   },
   {
    "saup": "신부평 BTB HVDC 변환설비 건설사업",
@@ -1729,9 +1744,11 @@
    "stage": "공사착수(건설중)",
    "hq": "경인건설본부",
    "office": "직할",
-   "geo": "ok",
-   "lat": 37.19758,
-   "lng": 126.82982
+   "geo": "manual",
+   "lat": 37.67277,
+   "lng": 127.16419,
+   "addr": "경기 남양주시 왕숙 도시첨단산업단지 내",
+   "note": "출처: https://search.brave.com/ (Realvalue 2026-06 기사) (medium)"
   },
   {
    "saup": "345kV 신기흥변전소 건설사업",
@@ -1758,7 +1775,11 @@
    "stage": "공사착수(건설중)",
    "hq": "중부건설본부",
    "office": "전북건설지사",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 35.68397,
+   "lng": 127.17829,
+   "addr": "전북 임실군 신덕면",
+   "note": "출처: http://www.jjn.co.kr/news/articleView.html?idxno=846056 (medium)"
   },
   {
    "saup": "345kV 신고리(새울)개폐소 건설사업",
@@ -1922,7 +1943,11 @@
    "stage": "공사착수(건설중)",
    "hq": "중부건설본부",
    "office": "직할",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 36.93961,
+   "lng": 126.43432,
+   "addr": "충남 서산시 대산읍(죽엽로 132 일원)",
+   "note": "출처: https://lbox.kr/v2/statute-admin/%EC%A0%84%EC%9B%90%EA%B0%9C%EB%B0%9C%EC%82%AC%EC%97%85%EC%8B%A4%EC%8B%9C%EA%B3%84%ED%9A%8D%EC%8A%B9%EC%9D%B8(%EB%B3%80%EA%B2%BD)(154kV%EB%8C%80%EC%82%B0%EA%B0%9C%ED%8F%90%EC%86%8C%EB%B0%8F%EC%97%B0%EA%B4%80%EC%86%A1%EC%A0%84%EC%84%A0%EB%A1%9C%EA%B1%B4%EC%84%A4%EC%82%AC%EC%97%85%EB%93%B16%EA%B1%B4) (medium)"
   },
   {
    "saup": "154kV 광양항변전소 건설사업",
@@ -2086,7 +2111,12 @@
    "stage": "공사착수(건설중)",
    "hq": "중부건설본부",
    "office": "직할",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 36.62893,
+   "lng": 127.37586,
+   "addr": "충북 청주시 흥덕구(청주테크노폴리스~SK하이닉스 M15X 사이, SK로 인근)",
+   "completion": "2025",
+   "note": "출처: https://biz.heraldcorp.com/article/10515599 (medium)"
   },
   {
    "saup": "500kV HVDC 고덕변환소 2단계 건설사업",
