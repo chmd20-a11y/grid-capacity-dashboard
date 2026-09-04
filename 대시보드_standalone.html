@@ -45,6 +45,27 @@
   .popup-line{display:flex;justify-content:space-between;gap:14px;font-size:12px}
   .muted{color:#7d8ea3}
   @media (max-width:760px){ .wrap{flex-direction:column;height:auto} .side{width:100%;max-width:none;border-right:none;border-bottom:1px solid var(--line)} #map{height:56vh} }
+  #helpBtn{margin-left:auto;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
+  #helpBtn:hover{background:#3ab183}
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:flex-start;justify-content:center;z-index:9999;padding:24px 12px;overflow:auto}
+  .modal-back.open{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:660px;width:100%;margin:auto;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .modal-h{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);border-radius:16px 16px 0 0}
+  .modal-h h3{margin:0;font-size:16px}
+  .modal-x{background:none;border:none;color:var(--tx2);font-size:22px;cursor:pointer;line-height:1;padding:0 4px}
+  .modal-x:hover{color:var(--tx)}
+  .help-tabs{display:flex;gap:6px;padding:14px 20px 0;flex-wrap:wrap}
+  .help-tab{cursor:pointer;padding:7px 13px;border-radius:20px;border:1px solid var(--line);background:var(--panel2);color:var(--tx2);font-size:13px;font-weight:700}
+  .help-tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .help-body{padding:16px 20px 22px;font-size:13.5px;line-height:1.62}
+  .help-pane{display:none}
+  .help-pane.on{display:block}
+  .help-pane .goal{background:var(--panel2);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;margin-bottom:12px;color:var(--tx)}
+  .help-pane ul{margin:0;padding-left:2px;list-style:none}
+  .help-pane li{margin:9px 0;padding-left:2px}
+  .help-pane li b{color:var(--tx)}
+  .help-pane .warn{background:rgba(225,29,29,.1);border:1px solid rgba(225,29,29,.35);border-radius:8px;padding:9px 12px;margin-top:12px;color:#f4b4b4;font-size:12.5px}
+  .help-foot{padding:0 20px 18px;font-size:11.5px;color:#7d8ea3}
 </style>
 <script>window.__DATA__={
  "generated_at": "2026-09-03 15:29 KST",
@@ -95787,6 +95808,7 @@
   <h1>⚡ 계통 여유용량 영업 대시보드</h1>
   <span class="meta" id="meta">불러오는 중…</span>
   <span class="meta pill" id="scope">전국</span>
+  <button id="helpBtn" title="사용법 보기">❓ 사용법</button>
 </header>
 <div class="wrap">
   <aside class="side">
@@ -95844,6 +95866,53 @@
   <div id="map"></div>
 </div>
 
+<div class="modal-back" id="helpModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-h">
+      <h3>📖 대시보드 사용법</h3>
+      <button class="modal-x" id="helpClose" title="닫기">×</button>
+    </div>
+    <div class="help-tabs">
+      <span class="help-tab on" data-pane="sales">🧑‍💼 영업자용</span>
+      <span class="help-tab" data-pane="review">🔎 사업검토용</span>
+      <span class="help-tab" data-pane="admin">🏛 행정·공무용</span>
+    </div>
+    <div class="help-body">
+      <div class="help-pane on" id="pane-sales">
+        <div class="goal"><b>목표</b> — 여유 있는 지역을 찾아 태양광 영업 우선순위를 잡습니다.</div>
+        <ul>
+          <li>🗺 <b>지도 색이 신호등</b>입니다. <span style="color:var(--g2)">초록=여유 많음(공략 1순위)</span> · <span style="color:var(--y)">노랑=보통</span> · <span style="color:var(--r)">빨강=연계불가(제외)</span>. 원이 클수록 붙일 수 있는 양이 많습니다.</li>
+          <li>📍 <b>고객 땅 주소로 검색</b> — 좌측 '지번으로 가까운 변전소 찾기'에 지번을 넣으면 가장 가까운 변전소·연계가능량과 <b>관할 한전지사 전화번호</b>까지 바로 뜹니다.</li>
+          <li>🔎 <b>지역·변전소명 검색</b>으로 특정 동네 상태를 확인합니다.</li>
+          <li>📊 <b>상단 요약 4칸</b> — 지금 연계 가능한 변전소가 몇 곳인지, 어느 권역에 여지가 가장 많은지 한눈에.</li>
+          <li>🏗 <b>신설/증설 계획 검색</b> — 곧 여유가 생길 지역을 미리 선점(준공 예정 변전소 인근 사전 영업).</li>
+        </ul>
+      </div>
+      <div class="help-pane" id="pane-review">
+        <div class="goal"><b>목표</b> — 특정 부지에 태양광을 실제로 연계할 수 있는지 1차 판단합니다.</div>
+        <ul>
+          <li>🔢 <b>숫자 두 개를 구분</b>하세요. <b>연계가능(선로 최대)</b> = 지금 실제로 붙일 수 있는 양(변전소·변압기·선로 여유의 <b>병목값</b>, 보통 선로당 ≤13MW). <b>지역여지</b> = 변전소 총여유(선로 증설 시 잠재력). <b>총여유가 크다고 다 붙는 게 아닙니다.</b></li>
+          <li>📍 <b>이격거리 원</b>(100·200·300·500m) — 후보지 주소를 넣고 원으로 인접 변전소·거리를 가늠합니다. <b>핀을 드래그</b>해 정확한 검토 지점으로 옮길 수 있습니다.</li>
+          <li>🛰 <b>위성지도 전환</b>(지도 우상단) — 부지 형상·접근성·인접 시설을 확인합니다.</li>
+          <li>📋 <b>변전소 팝업</b> — 주변압기·선로별 여유와 공급 읍/면/동 목록을 보여줍니다.</li>
+        </ul>
+        <div class="warn">⚠️ 표시값은 <b>한전 추정치</b>입니다. 실제 연계는 한전 접속(기술)검토가 필요하며, 이 도구는 <b>후보지 1차 스크리닝용</b>입니다.</div>
+      </div>
+      <div class="help-pane" id="pane-admin">
+        <div class="goal"><b>목표</b> — 지역 전력계통 현황과 확충 계획을 파악합니다.</div>
+        <ul>
+          <li>🗺 관할 지역 <b>변전소 위치·용량·여유</b>를 한 화면에서 조망합니다.</li>
+          <li>🏗 <b>신설/증설 계획</b>(계획확정·사업승인·공사착수 단계별, 준공연도) — 향후 계통 보강 일정을 지역개발·인허가 검토에 참고. 지도에 없는 계획도 <b>건설지사(지역)로 검색</b>됩니다.</li>
+          <li>📞 <b>민원·문의 대응</b> — 지번/변전소명 검색으로 관할 변전소·한전지사 연락처를 즉시 확인합니다.</li>
+          <li>📑 <b>출처가 명확</b>합니다 — 한전 분산형전원 계통연계 조회(실데이터, 22.9kV 기준) + OSM 좌표. 근거자료로 활용 가능.</li>
+        </ul>
+        <div class="warn">⚠️ 변전소는 보안시설이라 일부는 <b>코드로만 표기</b>(실명 비공개)되며, 일부 좌표는 읍·면·동 <b>근사 위치</b>입니다.</div>
+      </div>
+    </div>
+    <div class="help-foot">헤더의 날짜 = 데이터 기준 시점 · 지도 마커/원/색상 해설은 좌측 패널 하단 <b>범례</b> 참조.</div>
+  </div>
+</div>
+
 <script>
 function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
@@ -95886,6 +95955,7 @@ function init(d){
   document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchByName();});
   document.getElementById('planToggle').onchange=renderPlans;
   document.getElementById('planSearch').addEventListener('input',e=>{ PLAN_Q=e.target.value.trim().toLowerCase(); renderPlans(); });
+  setupHelp();
   const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
   renderPlans();
@@ -96003,6 +96073,24 @@ function renderPlans(){
 }
 function focusPlan(lat,lng){ MAP.setView([lat,lng],12); }
 window.focusPlan=focusPlan;
+
+function setupHelp(){
+  const back=document.getElementById('helpModal');
+  const open=()=>back.classList.add('open');
+  const close=()=>back.classList.remove('open');
+  document.getElementById('helpBtn').onclick=open;
+  document.getElementById('helpClose').onclick=close;
+  back.addEventListener('click',e=>{ if(e.target===back) close(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+  document.querySelectorAll('.help-tab').forEach(t=>{
+    t.onclick=()=>{
+      document.querySelectorAll('.help-tab').forEach(x=>x.classList.remove('on'));
+      document.querySelectorAll('.help-pane').forEach(x=>x.classList.remove('on'));
+      t.classList.add('on');
+      document.getElementById('pane-'+t.dataset.pane).classList.add('on');
+    };
+  });
+}
 
 function haversineJ(a,b){ const R=6371,p=Math.PI/180,dlat=(b[0]-a[0])*p,dlng=(b[1]-a[1])*p; const x=Math.sin(dlat/2)**2+Math.cos(a[0]*p)*Math.cos(b[0]*p)*Math.sin(dlng/2)**2; return 2*R*Math.asin(Math.sqrt(x)); }
 function searchAddr(retry){
