@@ -499,16 +499,36 @@ function searchAddr(retry){
   if(!q){ box.innerHTML=''; return; }
   const m=q.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);   // 좌표 직접입력 지원
   if(m){ showNearest(parseFloat(m[1]),parseFloat(m[2]),q); return; }
+  // Kakao 우선 (2초 대기) · 로드 실패 시 Nominatim(OSM) fallback → 로컬 개발·도메인 미등록 환경에서도 검색 작동
   if(!(window.kakao&&kakao.maps&&kakao.maps.services)){
-    if(window.KAKAO_KEY && retry<14){ box.innerHTML='<span class="muted">지도 로딩 중…</span>'; setTimeout(()=>searchAddr(retry+1),500); return; }
-    box.innerHTML='<span style="color:var(--r)">⚠ 지오코딩 키 미설정 — Kakao JS 키 적용 후 지번 검색이 됩니다.</span>'; return; }
+    if(window.KAKAO_KEY && retry<5){ box.innerHTML='<span class="muted">지도 로딩 중…</span>'; setTimeout(()=>searchAddr(retry+1),400); return; }
+    return searchAddrNominatim(q);
+  }
   box.innerHTML='<span class="muted">검색 중…</span>';
   new kakao.maps.services.Geocoder().addressSearch(q,(res,status)=>{
     if(status===kakao.maps.services.Status.OK && res[0]){
       const r=res[0], a=r.address||r.road_address||{};
       showNearest(parseFloat(r.y),parseFloat(r.x),q, a.region_2depth_name||'', a.region_3depth_name||'');
-    } else { box.innerHTML='<span style="color:var(--r)">주소를 찾지 못했습니다 (지번/도로명으로 다시).</span>'; }
+    } else {
+      // Kakao 는 로드됐지만 결과 없음 — Nominatim 재시도 (예: 한전 근사주소·오래된 지명)
+      searchAddrNominatim(q);
+    }
   });
+}
+
+// OSM Nominatim fallback (무료·무키·CORS 허용 · Kakao 대비 정확도 낮으나 대부분 시군구·읍면동 커버)
+function searchAddrNominatim(q){
+  const box=document.getElementById('addrResult');
+  box.innerHTML='<span class="muted">검색 중 (OSM)…</span>';
+  const url=`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&countrycodes=kr&limit=1&accept-language=ko`;
+  fetch(url,{headers:{'Accept':'application/json'}})
+    .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
+    .then(arr=>{
+      if(!arr.length){ box.innerHTML='<span style="color:var(--r)">주소를 찾지 못했습니다 (더 넓게 · 시군구·읍면동 수준 or 좌표 입력).</span>'; return; }
+      const r=arr[0];
+      showNearest(parseFloat(r.lat), parseFloat(r.lon), q);
+    })
+    .catch(e=>{ box.innerHTML=`<span style="color:var(--r)">검색 실패 (${e.message}). 좌표로 시도: 예 "37.5, 127.0"</span>`; });
 }
 function subCard(t,i){
   const s=t.s,conn=s.connect_max_mw||0,nm=s.osm_name||(s.name+' 변전소');
