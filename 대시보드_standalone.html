@@ -93454,7 +93454,7 @@
  "source": "한전 송변전 건설 정보공개(계획확정/사업승인/공사착수) — 변전소 사업",
  "note": "신설 예정 변전소는 정확 위치가 공개되지 않아(첨부 PDF만) 지도표시는 일부만. 전체는 목록 참조.",
  "total": 231,
- "located": 39,
+ "located": 28,
  "plans": [
   {
    "saup": "345kV 신김해#2S/S 건설사업",
@@ -94769,7 +94769,12 @@
    "stage": "사업승인",
    "hq": "중부건설본부",
    "office": "광주전남건설지사",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 35.23543,
+   "lng": 126.711,
+   "addr": "전남 장성군 동화면 구룡리 산99-1번지 일원(산98·산104-1 포함, 63,986㎡)",
+   "completion": "2029",
+   "note": "출처: https://www.jstnews.co.kr/news/articleView.html?idxno=8810 (medium)"
   },
   {
    "saup": "154kV 서운남변전소 건설사업",
@@ -95045,7 +95050,12 @@
    "stage": "사업승인",
    "hq": "중부건설본부",
    "office": "광주전남건설지사",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 35.24377,
+   "lng": 126.34522,
+   "addr": "전남 영광군 염산면 송암리 680-1번지 일원",
+   "completion": "2026",
+   "note": "출처: https://www.ulex.co.kr/%EB%B2%95%EB%A5%A0/2100000224310-85650-%EC%A0%84%EC%9B%90%EA%B0%9C%EB%B0%9C%EC%82%AC (high)"
   },
   {
    "saup": "154kV 서충주변전소 건설사업",
@@ -95153,7 +95163,12 @@
    "stage": "사업승인",
    "hq": "HVDC건설본부",
    "office": "직할",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 37.08537,
+   "lng": 129.38766,
+   "addr": "경북 울진군 북면 덕천리 600번지 일원(한울원전본부 인근)",
+   "completion": "2026",
+   "note": "출처: https://www.sunjin.co.kr/ourworks/500kv-hvdc-%EB%8F%99%ED%95%B4%EC%95%88-%EB%B3%80%ED%99%98%EC%86%8C-%ED%86%A0%EA%B1%B4%EA%B3%B5%EC%82%AC-%EC%82%AC%ED%9B%84%ED%99%98%EA%B2%BD%EC%98%81%ED%96%A5%EC%A1%B0%EC%82%AC/ (medium)"
   },
   {
    "saup": "신부평 BTB HVDC 변환설비 건설사업",
@@ -95209,7 +95224,11 @@
    "stage": "공사착수(건설중)",
    "hq": "중부건설본부",
    "office": "전북건설지사",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 35.68397,
+   "lng": 127.17829,
+   "addr": "전북 임실군 신덕면",
+   "note": "출처: http://www.jjn.co.kr/news/articleView.html?idxno=846056 (medium)"
   },
   {
    "saup": "345kV 신고리(새울)개폐소 건설사업",
@@ -95373,7 +95392,11 @@
    "stage": "공사착수(건설중)",
    "hq": "중부건설본부",
    "office": "직할",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 36.93961,
+   "lng": 126.43432,
+   "addr": "충남 서산시 대산읍(죽엽로 132 일원)",
+   "note": "출처: https://lbox.kr/v2/statute-admin/%EC%A0%84%EC%9B%90%EA%B0%9C%EB%B0%9C%EC%82%AC%EC%97%85%EC%8B%A4%EC%8B%9C%EA%B3%84%ED%9A%8D%EC%8A%B9%EC%9D%B8(%EB%B3%80%EA%B2%BD)(154kV%EB%8C%80%EC%82%B0%EA%B0%9C%ED%8F%90%EC%86%8C%EB%B0%8F%EC%97%B0%EA%B4%80%EC%86%A1%EC%A0%84%EC%84%A0%EB%A1%9C%EA%B1%B4%EC%84%A4%EC%82%AC%EC%97%85%EB%93%B16%EA%B1%B4) (medium)"
   },
   {
    "saup": "154kV 광양항변전소 건설사업",
@@ -95537,7 +95560,12 @@
    "stage": "공사착수(건설중)",
    "hq": "중부건설본부",
    "office": "직할",
-   "geo": "none"
+   "geo": "manual",
+   "lat": 36.62893,
+   "lng": 127.37586,
+   "addr": "충북 청주시 흥덕구(청주테크노폴리스~SK하이닉스 M15X 사이, SK로 인근)",
+   "completion": "2025",
+   "note": "출처: https://biz.heraldcorp.com/article/10515599 (medium)"
   },
   {
    "saup": "500kV HVDC 고덕변환소 2단계 건설사업",
@@ -95632,6 +95660,9 @@
         <input id="addrInput" placeholder="예: 파주시 문산읍 문산리 100" style="flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:7px 9px;font-size:13px">
         <button id="addrBtn" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer">찾기</button>
       </div>
+      <div id="sepRadius" style="display:flex;gap:5px;margin-top:7px;align-items:center;flex-wrap:wrap">
+        <span class="muted" style="font-size:11px">⭕ 이격거리 원</span>
+      </div>
       <div id="addrResult" style="margin-top:8px;font-size:12px"></div>
     </div>
     <div style="margin-bottom:14px">
@@ -95680,6 +95711,7 @@
 function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?getCss('--y'):mw>0?getCss('--o'):getCss('--r'); }
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null, PLANS=null, PLAN_LAYER=null, PLAN_STAGE="전체";
+let SEP_CIRCLE=null, SEP_RADIUS=0, LAST_PT=null;   // 이격거리 원(미터단위=축척 무관). 기본=끄기
 // Kakao 지오코딩(지번검색) — 아래에 카카오 JavaScript 키를 넣으면 활성화됨
 window.KAKAO_KEY = "3c003211be49659008929069de83dced";
 (function(){ if(window.KAKAO_KEY){ const sc=document.createElement('script'); sc.src="//dapi.kakao.com/v2/maps/sdk.js?appkey="+window.KAKAO_KEY+"&libraries=services&autoload=false"; sc.onload=()=>kakao.maps.load(()=>{}); document.head.appendChild(sc); } })();
@@ -95719,6 +95751,7 @@ function init(d){
   const fp=new URLSearchParams(location.search).get('find'); if(fp){ document.getElementById('addrInput').value=fp; setTimeout(searchAddr,300); }
   render();
   renderPlans();
+  renderSepChips();
   if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),12); m.openPopup(); toggleSupply(code); } },700); }
 }
 
@@ -95801,9 +95834,11 @@ function renderPlans(){
         iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:500});
       m.bindPopup(`<div class="popup-t">🏗 ${p.name} <span class="muted">${p.voltage}</span></div>
         <div class="popup-line"><span>사업단계</span><b style="color:${c}">${p.stage}</b></div>
+        ${p.completion?`<div class="popup-line"><span>준공예정</span><b style="color:var(--g2)">${p.completion}년</b></div>`:''}
+        ${p.addr?`<div class="popup-line muted" style="font-size:11.5px"><span>위치</span><span>${p.addr}</span></div>`:''}
         <div class="popup-line muted" style="font-size:11.5px"><span>담당</span><span>${p.hq}${p.office?' · '+p.office:''}</span></div>
         <div class="muted" style="font-size:11px;margin-top:4px">${p.saup}</div>
-        <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 신설/증설 계획 · 준공연도 미공개(계획 변동 가능)</div>`);
+        <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 신설/증설 계획 · 계획 변동 가능${p.completion?'':' · 준공연도 미공개'}</div>`);
       m.addTo(PLAN_LAYER);
     });
   }
@@ -95821,7 +95856,7 @@ function renderPlans(){
     const c=STAGE_COLOR[p.stage]||'#f0a53a';
     const attr = mapped(p)?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px"`:'style="border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px;opacity:.7"';
     const loc = mapped(p)?'':' <span class="muted" style="font-size:10px">·위치미상</span>';
-    return `<div ${attr}><div><span style="color:${c}">●</span> <b>${p.name}</b> <span class="muted">${p.voltage}</span>${loc}</div>
+    return `<div ${attr}><div><span style="color:${c}">●</span> <b>${p.name}</b> <span class="muted">${p.voltage}</span>${loc}${p.completion?` <span style="color:var(--g2);font-size:10px;font-weight:700">${p.completion}년 준공</span>`:''}</div>
       <div class="muted" style="font-size:10.5px">${p.stage.replace('(건설중)','')} · ${p.hq}</div></div>`;
   }).join('') || '<div class="muted" style="padding:8px">해당 없음</div>';
 }
@@ -95855,10 +95890,10 @@ function subCard(t,i){
   const contact = o.phone?`<div style="font-size:11px;margin-top:3px">📞 <a href="tel:${tel}" onclick="event.stopPropagation()" style="color:var(--accent2);font-weight:700">${o.name} · ${o.phone}</a></div>`:'';
   return `<div onclick="focusSub('${s.code}')" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
     <div style="display:flex;justify-content:space-between"><b>${i+1}. ${nm}</b><span style="color:${colorConn(conn)};font-weight:800">${conn.toFixed(1)} MW</span></div>
-    <div class="muted" style="font-size:11px;margin-top:2px">${s.region} · ${t.d.toFixed(1)}km</div>
+    <div class="muted" style="font-size:11px;margin-top:2px">${s.region} · ${t.d.toFixed(1)}km${(SEP_RADIUS&&t.d*1000<=SEP_RADIUS)?` <span style="color:var(--g1);font-weight:700">⭕ ${SEP_RADIUS}m 이내</span>`:''}</div>
     <div style="font-size:11px;margin-top:3px">DL: <span class="muted">${dls}</span></div>${contact}</div>`;
 }
-function showNearest(lat,lng,label,gu,dong){
+function showNearest(lat,lng,label,gu,dong,fromDrag){
   const box=document.getElementById('addrResult');
   const withD = s=>({s,d:haversineJ([lat,lng],[s.lat,s.lng])});
   let list=null, head='';
@@ -95872,10 +95907,40 @@ function showNearest(lat,lng,label,gu,dong){
   }
   if(!list){ list=DATA.substations.map(withD).sort((a,b)=>a.d-b.d).slice(0,3);
     head=`<div class="muted" style="margin-bottom:5px">📍 <b style="color:var(--tx)">${label}</b> 기준 가까운 변전소 <span style="color:var(--o)">(직접 공급정보 없음)</span></div>`; }
-  box.innerHTML=head+list.map((t,i)=>subCard(t,i)).join('');
-  MAP.setView([lat,lng],12);
-  if(SEARCHMARKER) MAP.removeLayer(SEARCHMARKER);
-  SEARCHMARKER=L.circleMarker([lat,lng],{radius:8,color:'#fff',weight:2,fillColor:'#e6007a',fillOpacity:1}).addTo(MAP).bindPopup('📍 '+label).openPopup();
+  const sepTxt = SEP_RADIUS?`⭕ 반경 <b style="color:var(--tx)">${SEP_RADIUS}m</b> 이격원 · `:'';
+  const sepNote = `<div class="muted" style="font-size:11px;margin-bottom:5px">${sepTxt}<span style="color:var(--accent2)">📍 핀을 드래그해 위치 미세조정</span></div>`;
+  box.innerHTML=sepNote+head+list.map((t,i)=>subCard(t,i)).join('');
+  LAST_PT=[lat,lng];
+  if(!fromDrag){
+    if(SEARCHMARKER) MAP.removeLayer(SEARCHMARKER);
+    SEARCHMARKER=L.marker([lat,lng],{draggable:true, autoPan:true, icon:L.divIcon({className:'',
+      html:'<div style="font-size:28px;line-height:28px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.55));cursor:grab">📍</div>',
+      iconSize:[28,28], iconAnchor:[14,27]})}).addTo(MAP);
+    SEARCHMARKER.bindTooltip('드래그로 이동',{direction:'right',offset:[12,-12]});
+    SEARCHMARKER.on('drag', e=>{ if(SEP_CIRCLE) SEP_CIRCLE.setLatLng(e.latlng); });
+    SEARCHMARKER.on('dragend', ()=>{ const ll=SEARCHMARKER.getLatLng();
+      showNearest(ll.lat, ll.lng, ll.lat.toFixed(5)+', '+ll.lng.toFixed(5), '', '', true); });
+  }
+  drawSepCircle(lat,lng);
+  if(!fromDrag){ if(SEP_CIRCLE) MAP.fitBounds(SEP_CIRCLE.getBounds().pad(0.6)); else MAP.setView([lat,lng],12); }
+}
+function drawSepCircle(lat,lng){
+  if(SEP_CIRCLE){ MAP.removeLayer(SEP_CIRCLE); SEP_CIRCLE=null; }
+  if(!SEP_RADIUS) return;
+  SEP_CIRCLE=L.circle([lat,lng],{radius:SEP_RADIUS,color:'#e6007a',weight:2,fillColor:'#e6007a',fillOpacity:0.10,dashArray:'5,4'}).addTo(MAP);
+  SEP_CIRCLE.bindTooltip('이격 '+SEP_RADIUS+'m',{permanent:true,direction:'top',className:'sep-tip'});
+}
+function renderSepChips(){
+  const box=document.getElementById('sepRadius'); if(!box) return;
+  box.querySelectorAll('.sepchip').forEach(e=>e.remove());
+  [100,200,300,500,0].forEach(r=>{
+    const b=document.createElement('span'); b.className='sepchip';
+    b.textContent = r? r+'m' : '끄기';
+    const on = SEP_RADIUS===r;
+    b.style.cssText='cursor:pointer;padding:2px 9px;border-radius:12px;font-size:11px;border:1px solid var(--line);'+(on?'background:var(--accent);color:#fff;font-weight:700':'color:var(--tx2)');
+    b.onclick=()=>{ SEP_RADIUS=r; renderSepChips(); if(LAST_PT){ drawSepCircle(LAST_PT[0],LAST_PT[1]); if(SEP_CIRCLE) MAP.fitBounds(SEP_CIRCLE.getBounds().pad(0.6)); } };
+    box.appendChild(b);
+  });
 }
 function focusSub(code){ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),13); m.openPopup(); } }
 
@@ -95903,7 +95968,7 @@ function searchByName(){
     const attr=canFocus?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;`:'style="';
     html+=`<div ${attr}background:var(--panel);border:1px dashed var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
       <div><b>🏗 ${p.name}</b> <span class="muted">${p.voltage}</span> <span style="color:var(--accent2);font-size:11px">신설/증설 계획</span></div>
-      <div class="muted" style="font-size:11px;margin-top:2px">${p.stage.replace('(건설중)','')} · ${p.hq}</div>
+      <div class="muted" style="font-size:11px;margin-top:2px">${p.stage.replace('(건설중)','')} · ${p.hq}${p.completion?` · <span style="color:var(--g2);font-weight:700">${p.completion}년 준공예정</span>`:''}</div>
       <div style="font-size:11px;margin-top:2px">📮 ${addr}</div></div>`;
   });
   box.innerHTML=html;

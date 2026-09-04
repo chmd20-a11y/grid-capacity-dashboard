@@ -235,9 +235,11 @@ function renderPlans(){
         iconSize:[22,22],iconAnchor:[11,11]}),zIndexOffset:500});
       m.bindPopup(`<div class="popup-t">🏗 ${p.name} <span class="muted">${p.voltage}</span></div>
         <div class="popup-line"><span>사업단계</span><b style="color:${c}">${p.stage}</b></div>
+        ${p.completion?`<div class="popup-line"><span>준공예정</span><b style="color:var(--g2)">${p.completion}년</b></div>`:''}
+        ${p.addr?`<div class="popup-line muted" style="font-size:11.5px"><span>위치</span><span>${p.addr}</span></div>`:''}
         <div class="popup-line muted" style="font-size:11.5px"><span>담당</span><span>${p.hq}${p.office?' · '+p.office:''}</span></div>
         <div class="muted" style="font-size:11px;margin-top:4px">${p.saup}</div>
-        <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 신설/증설 계획 · 준공연도 미공개(계획 변동 가능)</div>`);
+        <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 신설/증설 계획 · 계획 변동 가능${p.completion?'':' · 준공연도 미공개'}</div>`);
       m.addTo(PLAN_LAYER);
     });
   }
@@ -255,7 +257,7 @@ function renderPlans(){
     const c=STAGE_COLOR[p.stage]||'#f0a53a';
     const attr = mapped(p)?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px"`:'style="border-bottom:1px solid var(--line);padding:6px 8px;font-size:11.5px;opacity:.7"';
     const loc = mapped(p)?'':' <span class="muted" style="font-size:10px">·위치미상</span>';
-    return `<div ${attr}><div><span style="color:${c}">●</span> <b>${p.name}</b> <span class="muted">${p.voltage}</span>${loc}</div>
+    return `<div ${attr}><div><span style="color:${c}">●</span> <b>${p.name}</b> <span class="muted">${p.voltage}</span>${loc}${p.completion?` <span style="color:var(--g2);font-size:10px;font-weight:700">${p.completion}년 준공</span>`:''}</div>
       <div class="muted" style="font-size:10.5px">${p.stage.replace('(건설중)','')} · ${p.hq}</div></div>`;
   }).join('') || '<div class="muted" style="padding:8px">해당 없음</div>';
 }
@@ -367,7 +369,7 @@ function searchByName(){
     const attr=canFocus?`onclick="focusPlan(${p.lat},${p.lng})" style="cursor:pointer;`:'style="';
     html+=`<div ${attr}background:var(--panel);border:1px dashed var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
       <div><b>🏗 ${p.name}</b> <span class="muted">${p.voltage}</span> <span style="color:var(--accent2);font-size:11px">신설/증설 계획</span></div>
-      <div class="muted" style="font-size:11px;margin-top:2px">${p.stage.replace('(건설중)','')} · ${p.hq}</div>
+      <div class="muted" style="font-size:11px;margin-top:2px">${p.stage.replace('(건설중)','')} · ${p.hq}${p.completion?` · <span style="color:var(--g2);font-weight:700">${p.completion}년 준공예정</span>`:''}</div>
       <div style="font-size:11px;margin-top:2px">📮 ${addr}</div></div>`;
   });
   box.innerHTML=html;
