@@ -71,8 +71,8 @@
     font-size:12px;color:var(--tx);box-shadow:0 4px 14px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);max-width:210px}
   #ownLegend.on{display:block}
   #ownLegend b{display:block;margin-bottom:5px;font-size:12.5px}
-  #ownLegend > div{display:flex;align-items:center;gap:6px;margin:3px 0}
-  #ownLegend .ow{width:14px;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,.5);flex:none}
+  #ownLegColors > div{display:flex;align-items:center;gap:6px;margin:3px 0}
+  #ownLegend .ow{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,.5);flex:none}
   #ownLegend .lg-note{display:block;margin-top:6px;font-size:10.5px;color:var(--tx2);line-height:1.5}
   @media (max-width:760px){ #ownLegend{right:8px;bottom:12px;font-size:11px;max-width:180px} }
   #helpBtn{margin-left:auto;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
@@ -418,10 +418,12 @@
     <b>🏠 필지 소유구분</b>
     <div id="ownLegLow" style="display:none;color:var(--y);line-height:1.5">🔍 <b>더 확대</b>하면 필지별<br>소유구분이 색으로 표시됩니다</div>
     <div id="ownLegColors">
-      <div><span class="ow" style="background:#cbedf8"></span> 개인</div>
-      <div><span class="ow" style="background:#e6d6f5"></span> 국유·법인</div>
-      <div><span class="ow" style="background:#fae2b3"></span> 종중·비법인</div>
-      <div class="lg-note">그 외 공유(시·도/시·군유지)·외국인 등 별색<br>색상=국토부 표준(근사) · 필지에 지번·면적 표기</div>
+      <div><span class="ow" style="background:#90d8f0"></span> 개인</div>
+      <div><span class="ow" style="background:#e0b8f8"></span> 법인</div>
+      <div><span class="ow" style="background:#f8e8b8"></span> 국유지</div>
+      <div><span class="ow" style="background:#e8f8b8"></span> 외국인</div>
+      <div><span class="ow" style="background:transparent;border-style:dashed"></span> 무색: 공유지·도로·미등기 등</div>
+      <div class="lg-note">색상 = VWorld 국토부 표준 그대로 · 필지에 지번·면적 표기<br>※ 국·공유지 다수는 무색(미채색)이라 개인/국/군 정밀구분엔 한계</div>
     </div>
   </div>
 </div>
@@ -609,7 +611,7 @@ function init(d){
   // 카카오 지오코딩은 이 옵션 영향 없음(SDK 자체 요청이라 분리됨).
   OWN_WMS=L.tileLayer.wms('https://api.vworld.kr/ned/wms/getPossessionWMS',{
     layers:'dt_d160',styles:'',format:'image/png',transparent:true,version:'1.3.0',
-    key:VWORLD_KEY,domain:'http://localhost',minZoom:15,opacity:0.62,
+    key:VWORLD_KEY,domain:'http://localhost',minZoom:15,maxNativeZoom:18,opacity:0.62,
     referrerPolicy:'no-referrer',
     attribution:'토지소유정보 © 국토교통부·VWorld'});
   L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed: window.matchMedia('(max-width:760px)').matches}).addTo(MAP);
