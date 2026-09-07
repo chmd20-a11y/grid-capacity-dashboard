@@ -69,6 +69,72 @@ def fetch_detail(do, si, gu, lidong, tries=3):
         time.sleep(0.35)
     return []
 
+# ── 한전 공식 OPEN API(분산전원연계정보) 상세조회 — 웹 스크랩 대체 ──────────
+# 실명(마스킹X)·구조화 JSON. 기준용량은 API에 없으나 접수(Pwr)+여유(vol)로 복원됨.
+KEPCO_API_KEY = os.environ.get("KEPCO_API_KEY", "")
+API_BASE = "https://bigdata.kepco.co.kr/openapi/v1/dispersedGeneration.do"
+METRO = {"서울특별시":"11","부산광역시":"26","대구광역시":"27","인천광역시":"28",
+         "광주광역시":"29","대전광역시":"30","울산광역시":"31","세종특별자치시":"36",
+         "경기도":"41","강원특별자치도":"51","충청북도":"43","충청남도":"44",
+         "전북특별자치도":"52","전라남도":"46","경상북도":"47","경상남도":"48","제주특별자치도":"50"}
+
+def _api_call(metroCd, dong, tries=4):
+    for _ in range(tries):
+        try:
+            p = {"apiKey": KEPCO_API_KEY, "returnType": "json", "metroCd": metroCd, "addrLidong": dong}
+            req = urllib.request.Request(API_BASE + "?" + urllib.parse.urlencode(p),
+                                         headers={"User-Agent": "Mozilla/5.0"})
+            d = json.loads(urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "replace"))
+            return d.get("data", [])
+        except urllib.error.HTTPError as e:
+            if e.code == 404: return []
+            time.sleep(0.5)
+        except Exception:
+            time.sleep(0.5)
+    return None   # None = 조회 실패(불확실)
+
+def api_detail(metroCd, dong):
+    """API로 (시도코드, 읍면동명) 조회 → 웹 viewDetail 호환 행(a[])으로 반환. (rows, 실제이름).
+    면↔읍 변이명을 항상 union(옛이름에 부분데이터가 남아 있어 조회누락 방지). 기준=접수+여유 복원."""
+    if not metroCd: return [], dong
+    raw = _api_call(metroCd, dong)
+    fail = raw is None
+    raw = raw or []
+    name = dong
+    alt = dong[:-1]+"읍" if dong.endswith("면") else (dong[:-1]+"면" if dong.endswith("읍") else None)
+    if alt:
+        r2 = _api_call(metroCd, alt, tries=2) or []
+        if r2:
+            seen = {(x.get("substCd"), x.get("mtrNo"), x.get("dlCd")) for x in raw}
+            added = 0
+            for x in r2:
+                k = (x.get("substCd"), x.get("mtrNo"), x.get("dlCd"))
+                if k not in seen:
+                    raw.append(x); seen.add(k); added += 1
+            if alt.endswith("읍"):   # 면→읍 승격: 읍이 현재명
+                name = alt
+            if added:
+                print(f"      ↻ 리네임 union {dong}+{alt} (+{added}행)")
+    if fail and not raw: return [], dong   # 조회 실패도 빈 리스트로(루프 안전·다른 동으로 재발견)
+    out = []
+    for r in raw:
+        try:
+            v1, v2, v3 = int(r.get("vol1", 0)), int(r.get("vol2", 0)), int(r.get("vol3", 0))
+            a = ["0"] * 20
+            a[0] = str(r.get("substNm", ""))     # 실명
+            a[1] = str(r.get("mtrNo", ""))
+            a[2] = str(r.get("dlNm", ""))
+            a[9], a[10], a[11] = str(v1), str(v2), str(v3)          # 변전소/변압기/선로 여유
+            a[12] = str(r.get("substCd", ""))
+            a[13] = str(r.get("dlCd", ""))
+            a[14] = str(int(r.get("substPwr", 0)) + v1)            # 기준=접수+여유
+            a[15] = str(int(r.get("mtrPwr", 0)) + v2)
+            a[16] = str(int(r.get("dlPwr", 0)) + v3)
+            out.append(a)
+        except (ValueError, TypeError):
+            continue
+    return out, name
+
 def fetch_detail_rn(do, si, gu, lidong):
     """리네임 대응: 원 이름이 0행이면 면↔읍 변이명으로 재시도(KEPCO 목록이 옛이름 '송악면'을
     주는데 상세조회는 현재명 '송악읍'만 되는 문제). (rows, 실제이름) 반환."""
@@ -209,7 +275,11 @@ def main():
             area = region if si == "-기타지역" else (f"{si} {gu}" if gu else si)
             print(f"[{d} {si if si!='-기타지역' else ''} {region}] 읍면동 {len(dongs)}개")
             for dong in dongs:
-                rows, dong = fetch_detail_rn(d, si, gu, dong)
+                if KEPCO_API_KEY:
+                    rows, dong = api_detail(METRO.get(d, ""), dong)   # 공식 API(실명·구조화)
+                else:
+                    rows, dong = fetch_detail_rn(d, si, gu, dong)     # 폴백: 웹 스크랩
+                rows = rows or []
                 addr_str = f"{SHORTDO.get(d,d)} {region} {dong}"
                 found=0
                 for a in rows:
