@@ -604,10 +604,13 @@ function init(d){
   osm.addTo(MAP);
   // 필지 소유구분 오버레이(국토부 토지소유정보 WMS · VWorld) — 줌16+에서 필지별 소유구분 색칠+지번·면적 라벨
   const VWORLD_KEY='9BF11E36-1DA3-4A68-9E7D-569D70370B58';
-  const OwnershipWMS=L.TileLayer.WMS.extend({createTile:function(c,d){var t=L.TileLayer.WMS.prototype.createTile.call(this,c,d);t.referrerPolicy='no-referrer';return t;}});  // 이 타일만 Referer 제거(VWorld 통과·카카오와 분리)
-  OWN_WMS=new OwnershipWMS('https://api.vworld.kr/ned/wms/getPossessionWMS',{
+  // referrerPolicy:'no-referrer' → 이 타일 요청만 Referer 미전송(Leaflet 1.7+ 내장, src 지정 前 설정).
+  // VWorld 키는 localhost 도메인잠금이라 github.io Referer면 INCORRECT_KEY로 거부됨 → Referer 제거해야 통과.
+  // 카카오 지오코딩은 이 옵션 영향 없음(SDK 자체 요청이라 분리됨).
+  OWN_WMS=L.tileLayer.wms('https://api.vworld.kr/ned/wms/getPossessionWMS',{
     layers:'dt_d160',styles:'',format:'image/png',transparent:true,version:'1.3.0',
     key:VWORLD_KEY,domain:'http://localhost',minZoom:15,opacity:0.62,
+    referrerPolicy:'no-referrer',
     attribution:'토지소유정보 © 국토교통부·VWorld'});
   L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed: window.matchMedia('(max-width:760px)').matches}).addTo(MAP);
   addMeasureControl();
