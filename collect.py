@@ -69,6 +69,21 @@ def fetch_detail(do, si, gu, lidong, tries=3):
         time.sleep(0.35)
     return []
 
+def fetch_detail_rn(do, si, gu, lidong):
+    """리네임 대응: 원 이름이 0행이면 면↔읍 변이명으로 재시도(KEPCO 목록이 옛이름 '송악면'을
+    주는데 상세조회는 현재명 '송악읍'만 되는 문제). (rows, 실제이름) 반환."""
+    rows = fetch_detail(do, si, gu, lidong)
+    if rows: return rows, lidong
+    alt = None
+    if lidong.endswith("면"): alt = lidong[:-1] + "읍"
+    elif lidong.endswith("읍"): alt = lidong[:-1] + "면"
+    if alt:
+        r2 = fetch_detail(do, si, gu, alt, tries=1)
+        if r2:
+            print(f"      ↻ 리네임 {lidong}→{alt} ({len(r2)}행)")
+            return r2, alt
+    return [], lidong
+
 def to_mw(x):
     try: return round(int(x) / 1000.0, 3)
     except: return 0.0
@@ -194,7 +209,7 @@ def main():
             area = region if si == "-기타지역" else (f"{si} {gu}" if gu else si)
             print(f"[{d} {si if si!='-기타지역' else ''} {region}] 읍면동 {len(dongs)}개")
             for dong in dongs:
-                rows = fetch_detail(d, si, gu, dong)
+                rows, dong = fetch_detail_rn(d, si, gu, dong)
                 addr_str = f"{SHORTDO.get(d,d)} {region} {dong}"
                 found=0
                 for a in rows:
