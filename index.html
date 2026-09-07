@@ -53,6 +53,17 @@
   .clus{border-radius:50%;background:rgba(22,29,38,.95);color:#fff;border:3px solid #3ddc84;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;box-shadow:0 0 0 1.5px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.55)}
   .clus-tip{background:rgba(22,29,38,.97)!important;color:#e8eef5!important;border:1px solid #2a3644!important;border-radius:9px!important;font-size:12px!important;line-height:1.5!important;box-shadow:0 4px 14px rgba(0,0,0,.5)!important;padding:6px 9px!important}
   .clus-tip::before{display:none!important}
+  /* 거리·면적 측정 도구 */
+  .measure-ctl a.on{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
+  .leaflet-container.measuring{cursor:crosshair}
+  #measureReadout{position:fixed;top:60px;left:calc(50% + 210px);transform:translateX(-50%);z-index:800;
+    background:rgba(22,29,38,.96);border:1px solid var(--line);border-radius:10px;padding:8px 13px;
+    font-size:12.5px;color:var(--tx);box-shadow:0 4px 14px rgba(0,0,0,.5);display:none;
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);max-width:92vw}
+  #measureReadout.on{display:block}
+  #measureReadout b{color:#3ddc84}
+  #measureReadout .mx{margin-left:8px;color:var(--accent2);cursor:pointer;font-weight:700}
+  @media (max-width:760px){ #measureReadout{left:50%;top:64px} }
   #helpBtn{margin-left:auto;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
   #helpBtn:hover{background:#3ab183}
   .plan-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:18px 0 8px}
@@ -387,6 +398,9 @@
 
   <!-- 모바일 전용: 드로어 열렸을 때 지도 위 백드롭 -->
   <div class="m-backdrop" id="mBackdrop"></div>
+
+  <!-- 거리·면적 측정 결과 표시(측정 모드일 때만) -->
+  <div id="measureReadout"></div>
 </div>
 
 <div class="modal-back" id="helpModal">
@@ -565,6 +579,7 @@ function init(d){
   const hybrid = L.layerGroup([sat, esriRef]);
   osm.addTo(MAP);
   L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed: window.matchMedia('(max-width:760px)').matches}).addTo(MAP);
+  addMeasureControl();
   // 변전소 마커: 축소 시 클러스터로 묶고(개수 표시), 확대/클릭 시 펼쳐짐
   LAYER = L.markerClusterGroup({
     maxClusterRadius: 55, showCoverageOnHover: false, spiderfyOnMaxZoom: false,
@@ -873,6 +888,49 @@ function renderSepChips(){
   });
 }
 function focusSub(code){ const m=MARKERS[code]; if(!m) return; LAYER.zoomToShowLayer(m, ()=>{ MAP.panTo(m.getLatLng()); m.openPopup(); }); }
+
+// ── 거리·면적 측정 도구 (부지 검토용) ─────────────────────────────
+let MEASURE={on:false, pts:[], layer:null};
+function fmtLen(m){ return m>=1000 ? (m/1000).toFixed(2)+' km' : Math.round(m)+' m'; }
+function fmtArea(m2){ const py=Math.round(m2/3.3058).toLocaleString();
+  if(m2>=1e6) return (m2/1e6).toFixed(2)+' ㎢ (≈'+py+'평)';
+  if(m2>=10000) return (m2/10000).toFixed(2)+' 만㎡ (≈'+py+'평)';
+  return Math.round(m2).toLocaleString()+' ㎡ (≈'+py+'평)'; }
+function geoArea(pts){ if(pts.length<3) return 0; const R=6378137,d=Math.PI/180; let a=0;
+  for(let i=0;i<pts.length;i++){ const p1=pts[i],p2=pts[(i+1)%pts.length];
+    a+=(p2.lng-p1.lng)*d*(2+Math.sin(p1.lat*d)+Math.sin(p2.lat*d)); } return Math.abs(a*R*R/2); }
+function measureDraw(){
+  MEASURE.layer.clearLayers();
+  const pts=MEASURE.pts;
+  if(pts.length>=3) L.polygon(pts,{color:'#2f9e6f',weight:1,fillColor:'#2f9e6f',fillOpacity:0.12,interactive:false}).addTo(MEASURE.layer);
+  if(pts.length>=2) L.polyline(pts,{color:'#e6007a',weight:3,dashArray:'6,4',interactive:false}).addTo(MEASURE.layer);
+  pts.forEach(p=>L.circleMarker(p,{radius:4,color:'#fff',weight:2,fillColor:'#e6007a',fillOpacity:1,interactive:false}).addTo(MEASURE.layer));
+  let dist=0; for(let i=1;i<pts.length;i++) dist+=MAP.distance(pts[i-1],pts[i]);
+  const r=document.getElementById('measureReadout');
+  r.innerHTML = pts.length<2 ? '📏 지도를 클릭해 점을 찍으세요 <span class="mx" onclick="toggleMeasure()">닫기</span>' :
+    `거리 <b>${fmtLen(dist)}</b>`+(pts.length>=3?` · 면적 <b>${fmtArea(geoArea(pts))}</b>`:'')+
+    ` <span class="mx" onclick="clearMeasure()">지우기</span><span class="mx" onclick="toggleMeasure()">닫기</span>`;
+}
+function measureClick(e){ MEASURE.pts.push(e.latlng); measureDraw(); }
+window.clearMeasure=function(){ MEASURE.pts=[]; measureDraw(); };
+window.toggleMeasure=function(){
+  MEASURE.on=!MEASURE.on;
+  const tog=document.getElementById('measureToggle'); if(tog) tog.classList.toggle('on',MEASURE.on);
+  document.getElementById('measureReadout').classList.toggle('on',MEASURE.on);
+  if(MEASURE.on){ if(!MEASURE.layer) MEASURE.layer=L.layerGroup().addTo(MAP);
+    MAP.on('click',measureClick); L.DomUtil.addClass(MAP._container,'measuring'); MEASURE.pts=[]; measureDraw(); }
+  else { MAP.off('click',measureClick); MEASURE.pts=[]; if(MEASURE.layer) MEASURE.layer.clearLayers();
+    L.DomUtil.removeClass(MAP._container,'measuring'); }
+};
+function addMeasureControl(){
+  const C=L.control({position:'topleft'});
+  C.onAdd=function(){ const d=L.DomUtil.create('div','leaflet-bar measure-ctl');
+    d.innerHTML='<a href="#" title="거리·면적 측정" id="measureToggle" style="font-size:18px">📏</a>';
+    L.DomEvent.disableClickPropagation(d);
+    L.DomEvent.on(d,'click',function(e){ L.DomEvent.preventDefault(e); toggleMeasure(); });
+    return d; };
+  C.addTo(MAP);
+}
 
 function searchByName(){
   const q=document.getElementById('nameInput').value.trim();
