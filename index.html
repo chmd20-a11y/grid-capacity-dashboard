@@ -312,7 +312,7 @@
           <span class="muted" style="font-size:11px">⭕ 이격거리 원</span>
         </div>
         <div class="search-row" data-sbody="name" style="display:none">
-          <input id="nameInput" placeholder="예: 여수 · 남양주 · 시종" inputmode="text" autocomplete="off">
+          <input id="nameInput" placeholder="예: 여수 · 남양주 · 한선(선로명)" inputmode="text" autocomplete="off">
           <button id="nameBtn" type="button">찾기</button>
         </div>
         <div id="addrResult" class="search-result"></div>
@@ -851,8 +851,10 @@ function searchByName(){
   const q=document.getElementById('nameInput').value.trim();
   const box=document.getElementById('nameResult');
   if(!q){ box.innerHTML=''; return; }
-  const hit=s=>((s.osm_name||'')+(s.name||'')).replace(/\*/g,'').includes(q);
-  const subs=(DATA.substations||[]).filter(hit).sort((a,b)=>(b.connect_max_mw||0)-(a.connect_max_mw||0)).slice(0,8);
+  const norm=t=>(t||'').replace(/\*/g,'');
+  const nameHit=s=>norm((s.osm_name||'')+(s.name||'')).includes(q);
+  const dlHit=s=>(s.lines||[]).filter(l=>norm(l.dl_nm).includes(q));   // DL(배전선로) 이름 매칭
+  const subs=(DATA.substations||[]).filter(s=>nameHit(s)||dlHit(s).length).sort((a,b)=>(b.connect_max_mw||0)-(a.connect_max_mw||0)).slice(0,8);
   const plans=((PLANS&&PLANS.plans)||[]).filter(p=>(p.name||'').includes(q)).slice(0,6);
   if(!subs.length && !plans.length){ box.innerHTML='<span style="color:var(--r)">일치하는 변전소가 없습니다.</span>'; return; }
   let html='';
@@ -861,9 +863,11 @@ function searchByName(){
     const addr=s.addr?`${s.addr}${s.coord_exact?'':' <span class="muted">(근사)</span>'}`:`${s.region} <span class="muted">(주소 미확인)</span>`;
     const o=s.office||{}, tel=(o.phone||'').replace(/[^0-9]/g,'');
     const contact=o.phone?`<div style="font-size:11px;margin-top:3px">📞 <a href="tel:${tel}" onclick="event.stopPropagation()" style="color:var(--accent2);font-weight:700">${o.name} · ${o.phone}</a></div>`:'';
+    const dm=dlHit(s).sort((a,b)=>(b.conn||0)-(a.conn||0)).slice(0,3);   // 검색어와 일치한 선로(연계가능 높은순)
+    const dlLine=dm.length?`<div style="font-size:11px;margin-top:3px">🔌 선로 ${dm.map(l=>`<b>${l.dl_nm}</b>(#${l.mtr_no}) <span style="color:${colorConn(l.conn)};font-weight:700">${(l.conn||0).toFixed(1)}MW</span>`).join(' · ')}</div>`:'';
     html+=`<div onclick="focusSub('${s.code}')" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:6px">
       <div style="display:flex;justify-content:space-between"><b>${nm}</b><span style="color:${colorConn(conn)};font-weight:800">${conn.toFixed(1)} MW</span></div>
-      <div style="font-size:11px;margin-top:2px">📮 ${addr}</div>${contact}</div>`;
+      <div style="font-size:11px;margin-top:2px">📮 ${addr}</div>${dlLine}${contact}</div>`;
   });
   plans.forEach(p=>{
     const canFocus=p.lat&&(p.geo==='exist'||p.geo==='manual');
