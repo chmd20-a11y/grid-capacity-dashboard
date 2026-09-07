@@ -275,10 +275,7 @@ def main():
             area = region if si == "-기타지역" else (f"{si} {gu}" if gu else si)
             print(f"[{d} {si if si!='-기타지역' else ''} {region}] 읍면동 {len(dongs)}개")
             for dong in dongs:
-                if KEPCO_API_KEY:
-                    rows, dong = api_detail(METRO.get(d, ""), dong)   # 공식 API(실명·구조화)
-                else:
-                    rows, dong = fetch_detail_rn(d, si, gu, dong)     # 폴백: 웹 스크랩
+                rows, dong = fetch_detail_rn(d, si, gu, dong)     # 웹(전 커버리지). 실명은 apply_realnames가 API로 입힘
                 rows = rows or []
                 addr_str = f"{SHORTDO.get(d,d)} {region} {dong}"
                 found=0
