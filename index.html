@@ -12,6 +12,8 @@
 <title>계통 여유용량 영업 대시보드 · 해피솔라</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <style>
   :root{
     --bg:#0f141a; --panel:#161d26; --panel2:#1d2732; --line:#2a3644;
@@ -47,6 +49,10 @@
   .popup-t{font-weight:800;font-size:14px;margin-bottom:4px}
   .popup-line{display:flex;justify-content:space-between;gap:14px;font-size:12px}
   .muted{color:#7d8ea3}
+  /* 마커 클러스터(축소 시 묶음) */
+  .clus{border-radius:50%;background:rgba(22,29,38,.95);color:#fff;border:3px solid #3ddc84;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;box-shadow:0 0 0 1.5px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.55)}
+  .clus-tip{background:rgba(22,29,38,.97)!important;color:#e8eef5!important;border:1px solid #2a3644!important;border-radius:9px!important;font-size:12px!important;line-height:1.5!important;box-shadow:0 4px 14px rgba(0,0,0,.5)!important;padding:6px 9px!important}
+  .clus-tip::before{display:none!important}
   #helpBtn{margin-left:auto;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
   #helpBtn:hover{background:#3ab183}
   .plan-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:18px 0 8px}
@@ -559,7 +565,19 @@ function init(d){
   const hybrid = L.layerGroup([sat, esriRef]);
   osm.addTo(MAP);
   L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed: window.matchMedia('(max-width:760px)').matches}).addTo(MAP);
-  LAYER = L.layerGroup().addTo(MAP);
+  // 변전소 마커: 축소 시 클러스터로 묶고(개수 표시), 확대/클릭 시 펼쳐짐
+  LAYER = L.markerClusterGroup({
+    maxClusterRadius: 55, showCoverageOnHover: false, spiderfyOnMaxZoom: false,
+    disableClusteringAtZoom: 12, chunkedLoading: true,
+    iconCreateFunction: makeClusterIcon
+  }).addTo(MAP);
+  // 클러스터 요약 툴팁(변전소 수·연계가능 합·지역여지 합)
+  LAYER.on('clustermouseover', function(e){
+    const k=e.layer.getAllChildMarkers();
+    const conn=k.reduce((a,m)=>a+(m.connMw||0),0), free=k.reduce((a,m)=>a+(m.freeMw||0),0);
+    e.layer.bindTooltip(`<b>변전소 ${k.length}개</b><br>연계가능 합 <b style="color:#3ddc84">${conn.toFixed(0)} MW</b><br>지역여지 합 ${free.toFixed(0)} MW`,
+      {direction:'top', offset:[0,-6], className:'clus-tip', opacity:1}).openTooltip();
+  });
   PLAN_LAYER = L.layerGroup().addTo(MAP);
   // 지사 핀
   d.branches.forEach(b=>{
@@ -583,12 +601,19 @@ function init(d){
   initGpsButton();
   initMobileDrawer();
   renderSepChips();   // Person A: 이격거리 원 반경 chips
-  if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),12); m.openPopup(); toggleSupply(code); } },700); }
+  if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ LAYER.zoomToShowLayer(m, ()=>{ m.openPopup(); toggleSupply(code); }); } },700); }
 }
 
+function makeClusterIcon(cluster){
+  const k=cluster.getAllChildMarkers(), n=k.length;
+  const avg=k.reduce((a,m)=>a+(m.connMw||0),0)/(n||1);   // 평균 연계가능 → 링 색
+  const size = n<10?36:n<40?44:52;
+  const html=`<div class="clus" style="border-color:${colorConn(avg)};width:${size}px;height:${size}px">${n}</div>`;
+  return L.divIcon({html, className:'clus-wrap', iconSize:[size,size]});
+}
 function render(){
   const subs=DATA.substations;
-  LAYER.clearLayers(); MARKERS={};
+  LAYER.clearLayers(); MARKERS={}; const _ms=[];
   // 연계가능(초록) 먼저, 연계불가(빨강) 나중에 그려 위로 올라오게 → 시인성↑
   const ordered=[...subs].sort((a,b)=>(((a.connect_max_mw||0)>0)?0:1)-(((b.connect_max_mw||0)>0)?0:1));
   ordered.forEach(s=>{
@@ -602,8 +627,10 @@ function render(){
     const m=L.marker([s.lat,s.lng],{icon:L.divIcon({className:'',html,iconSize:[d,d],iconAnchor:[d/2,d/2]}),
       zIndexOffset: dead?1000:0});
     m.bindPopup(popup(s));
-    m.addTo(LAYER); MARKERS[s.code]=m;
+    m.connMw=conn; m.freeMw=s.subst_free_mw||0;   // 클러스터 요약용
+    _ms.push(m); MARKERS[s.code]=m;
   });
+  LAYER.addLayers(_ms);   // 일괄 추가(클러스터 재계산 1회)
   const usable=subs.filter(s=>(s.connect_max_mw||0)>0).length;
   const byRegion={}; subs.forEach(s=>byRegion[s.region]=(byRegion[s.region]||0)+(s.connect_max_mw||0));
   const topR=Object.entries(byRegion).sort((a,b)=>b[1]-a[1])[0];
@@ -845,7 +872,7 @@ function renderSepChips(){
     box.appendChild(b);
   });
 }
-function focusSub(code){ const m=MARKERS[code]; if(m){ MAP.setView(m.getLatLng(),13); m.openPopup(); } }
+function focusSub(code){ const m=MARKERS[code]; if(!m) return; LAYER.zoomToShowLayer(m, ()=>{ MAP.panTo(m.getLatLng()); m.openPopup(); }); }
 
 function searchByName(){
   const q=document.getElementById('nameInput').value.trim();
