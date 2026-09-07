@@ -51,6 +51,7 @@
   .muted{color:#7d8ea3}
   /* 마커 클러스터(축소 시 묶음) */
   .clus{border-radius:50%;background:rgba(22,29,38,.95);color:#fff;border:3px solid #3ddc84;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;box-shadow:0 0 0 1.5px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.55)}
+  .plan-clus{border-radius:9px;background:#f0a53a;color:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;box-shadow:0 0 0 1.5px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.55)}
   .clus-tip{background:rgba(22,29,38,.97)!important;color:#e8eef5!important;border:1px solid #2a3644!important;border-radius:9px!important;font-size:12px!important;line-height:1.5!important;box-shadow:0 4px 14px rgba(0,0,0,.5)!important;padding:6px 9px!important}
   .clus-tip::before{display:none!important}
   /* 거리·면적 측정 도구 */
@@ -593,7 +594,15 @@ function init(d){
     e.layer.bindTooltip(`<b>변전소 ${k.length}개</b><br>연계가능 합 <b style="color:#3ddc84">${conn.toFixed(0)} MW</b><br>지역여지 합 ${free.toFixed(0)} MW`,
       {direction:'top', offset:[0,-6], className:'clus-tip', opacity:1}).openTooltip();
   });
-  PLAN_LAYER = L.layerGroup().addTo(MAP);
+  // 신설/증설 계획 마커도 클러스터(변전소와 구분되는 🏗 오렌지 클러스터)
+  PLAN_LAYER = L.markerClusterGroup({
+    maxClusterRadius: 50, showCoverageOnHover: false, spiderfyOnMaxZoom: false,
+    disableClusteringAtZoom: 12, iconCreateFunction: makePlanClusterIcon
+  }).addTo(MAP);
+  PLAN_LAYER.on('clustermouseover', function(e){
+    e.layer.bindTooltip(`🏗 신설/증설 계획 <b style="color:#f0a53a">${e.layer.getChildCount()}건</b>`,
+      {direction:'top', offset:[0,-6], className:'clus-tip', opacity:1}).openTooltip();
+  });
   // 지사 핀
   d.branches.forEach(b=>{
     const m=L.marker([b.lat,b.lng],{icon:L.divIcon({className:'',html:
@@ -619,6 +628,10 @@ function init(d){
   if(location.hash){ const code=decodeURIComponent(location.hash.slice(1)); setTimeout(()=>{ const m=MARKERS[code]; if(m){ LAYER.zoomToShowLayer(m, ()=>{ m.openPopup(); toggleSupply(code); }); } },700); }
 }
 
+function makePlanClusterIcon(cluster){
+  const n=cluster.getChildCount(), size=n<10?32:n<40?40:46;
+  return L.divIcon({html:`<div class="plan-clus" style="width:${size}px;height:${size}px">${n}</div>`, className:'plan-clus-wrap', iconSize:[size,size]});
+}
 function makeClusterIcon(cluster){
   const k=cluster.getAllChildMarkers(), n=k.length;
   const avg=k.reduce((a,m)=>a+(m.connMw||0),0)/(n||1);   // 평균 연계가능 → 링 색
@@ -701,7 +714,7 @@ function renderPlans(){
   const located=plans.filter(mapped);
   document.getElementById('planloc').textContent=located.length;
   document.getElementById('plancnt').textContent = q ? `(검색 ${plans.filter(matchQ).length}건 / 전체 ${plans.length})` : `(전체 ${plans.length}건)`;
-  PLAN_LAYER.clearLayers();
+  PLAN_LAYER.clearLayers(); const _pm=[];
   if(document.getElementById('planToggle').checked){
     located.filter(matchQ).forEach(p=>{
       const c=STAGE_COLOR[p.stage]||'#f0a53a';
@@ -717,8 +730,9 @@ function renderPlans(){
         <div class="popup-line muted" style="font-size:11.5px"><span>담당</span><span>${p.hq}${p.office?' · '+p.office:''}</span></div>
         <div class="muted" style="font-size:11px;margin-top:4px">${p.saup}</div>
         <div style="color:#7d8ea3;font-size:10.5px;margin-top:3px">※ 발전소 신설/증설 계획 · 계획 변동 가능${p.completion?'':' · 준공연도 미공개'}</div>`);
-      m.addTo(PLAN_LAYER);
+      _pm.push(m);
     });
+    PLAN_LAYER.addLayers(_pm);
   }
   // 세그먼트 컨트롤: 한 줄 · X축 균등 확장 · 라벨(풀네임) + 숫자 두 줄
   // Person A: matchQ 로 검색 필터링된 base 기준으로 카운트/리스트 계산
