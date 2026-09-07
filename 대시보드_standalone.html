@@ -102728,10 +102728,13 @@
   <!-- 필지 소유구분 범례(오버레이 켤 때만) -->
   <div id="ownLegend">
     <b>🏠 필지 소유구분</b>
-    <div><span class="ow" style="background:#cbedf8"></span> 개인</div>
-    <div><span class="ow" style="background:#e6d6f5"></span> 국유·법인</div>
-    <div><span class="ow" style="background:#fae2b3"></span> 종중·비법인</div>
-    <div class="lg-note">그 외 공유(시·도/시·군유지)·외국인 등 별색<br>색상=국토부 토지소유정보 표준(근사) · 필지에 지번·면적 표기</div>
+    <div id="ownLegLow" style="display:none;color:var(--y);line-height:1.5">🔍 <b>더 확대</b>하면 필지별<br>소유구분이 색으로 표시됩니다</div>
+    <div id="ownLegColors">
+      <div><span class="ow" style="background:#cbedf8"></span> 개인</div>
+      <div><span class="ow" style="background:#e6d6f5"></span> 국유·법인</div>
+      <div><span class="ow" style="background:#fae2b3"></span> 종중·비법인</div>
+      <div class="lg-note">그 외 공유(시·도/시·군유지)·외국인 등 별색<br>색상=국토부 표준(근사) · 필지에 지번·면적 표기</div>
+    </div>
   </div>
 </div>
 
@@ -102887,6 +102890,7 @@ function colorConn(mw){ return mw>=10?getCss('--g1'):mw>=5?getCss('--g2'):mw>=1?
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 let MAP, LAYER, DATA, MARKERS={}, BRANCHMARKERS=[], SEARCHMARKER=null, PLANS=null, PLAN_LAYER=null, PLAN_STAGE="전체", PLAN_Q="";
 let SEP_CIRCLE=null, SEP_RADIUS=0, LAST_PT=null;   // 이격거리 원(미터단위=축척 무관). 기본=끄기
+let OWN_WMS=null;   // 필지 소유구분 오버레이(토글)
 // Kakao 지오코딩(지번검색) — 아래에 카카오 JavaScript 키를 넣으면 활성화됨
 window.KAKAO_KEY = "3c003211be49659008929069de83dced";
 (function(){ if(window.KAKAO_KEY){ const sc=document.createElement('script'); sc.src="//dapi.kakao.com/v2/maps/sdk.js?appkey="+window.KAKAO_KEY+"&libraries=services&autoload=false"; sc.onload=()=>kakao.maps.load(()=>{}); document.head.appendChild(sc); } })();
@@ -102913,14 +102917,14 @@ function init(d){
   // 필지 소유구분 오버레이(국토부 토지소유정보 WMS · VWorld) — 줌16+에서 필지별 소유구분 색칠+지번·면적 라벨
   const VWORLD_KEY='9BF11E36-1DA3-4A68-9E7D-569D70370B58';
   const OwnershipWMS=L.TileLayer.WMS.extend({createTile:function(c,d){var t=L.TileLayer.WMS.prototype.createTile.call(this,c,d);t.referrerPolicy='no-referrer';return t;}});  // 이 타일만 Referer 제거(VWorld 통과·카카오와 분리)
-  const ownershipWMS=new OwnershipWMS('https://api.vworld.kr/ned/wms/getPossessionWMS',{
+  OWN_WMS=new OwnershipWMS('https://api.vworld.kr/ned/wms/getPossessionWMS',{
     layers:'dt_d160',styles:'',format:'image/png',transparent:true,version:'1.3.0',
-    key:VWORLD_KEY,domain:'http://localhost',minZoom:16,opacity:0.62,
+    key:VWORLD_KEY,domain:'http://localhost',minZoom:15,opacity:0.62,
     attribution:'토지소유정보 © 국토교통부·VWorld'});
-  L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, {'🏠 필지 소유구분 (확대 시)':ownershipWMS}, {position:'topright', collapsed: window.matchMedia('(max-width:760px)').matches}).addTo(MAP);
-  MAP.on('overlayadd', e=>{ if(e.layer===ownershipWMS){ document.getElementById('ownLegend').classList.add('on'); if(MAP.getZoom()<16) MAP.setZoom(16); } });
-  MAP.on('overlayremove', e=>{ if(e.layer===ownershipWMS) document.getElementById('ownLegend').classList.remove('on'); });
+  L.control.layers({'일반지도':osm,'위성':sat,'위성+지명':hybrid}, null, {position:'topright', collapsed: window.matchMedia('(max-width:760px)').matches}).addTo(MAP);
   addMeasureControl();
+  addOwnershipControl();   // 🏠 필지 소유구분 전용 토글 버튼(좌상단)
+  MAP.on('zoomend', ()=>{ if(MAP.hasLayer(OWN_WMS)) updateOwnLegend(); });
   // 변전소 마커: 축소 시 클러스터로 묶고(개수 표시), 확대/클릭 시 펼쳐짐
   LAYER = L.markerClusterGroup({
     maxClusterRadius: 55, showCoverageOnHover: false, spiderfyOnMaxZoom: false,
@@ -103282,6 +103286,30 @@ function addMeasureControl(){
     d.innerHTML='<a href="#" title="거리·면적 측정" id="measureToggle" style="font-size:18px">📏</a>';
     L.DomEvent.disableClickPropagation(d);
     L.DomEvent.on(d,'click',function(e){ L.DomEvent.preventDefault(e); toggleMeasure(); });
+    return d; };
+  C.addTo(MAP);
+}
+
+// ── 필지 소유구분 오버레이 토글(전용 버튼) ──────────────────────────────
+window.toggleOwnership=function(){
+  const on=!MAP.hasLayer(OWN_WMS);
+  const tog=document.getElementById('ownToggle'); if(tog) tog.classList.toggle('on',on);
+  if(on){ OWN_WMS.addTo(MAP); const z=MAP.getZoom(); if(z>=12 && z<16) MAP.setView(MAP.getCenter(),16); updateOwnLegend(); }
+  else { MAP.removeLayer(OWN_WMS); document.getElementById('ownLegend').classList.remove('on'); }
+};
+function updateOwnLegend(){
+  const lg=document.getElementById('ownLegend'); if(!MAP.hasLayer(OWN_WMS)){ lg.classList.remove('on'); return; }
+  lg.classList.add('on');
+  const low=MAP.getZoom()<16;
+  document.getElementById('ownLegLow').style.display=low?'block':'none';
+  document.getElementById('ownLegColors').style.display=low?'none':'block';
+}
+function addOwnershipControl(){
+  const C=L.control({position:'topleft'});
+  C.onAdd=function(){ const d=L.DomUtil.create('div','leaflet-bar measure-ctl');
+    d.innerHTML='<a href="#" title="필지 소유구분(개인/국/공유)" id="ownToggle" style="font-size:17px">🏠</a>';
+    L.DomEvent.disableClickPropagation(d);
+    L.DomEvent.on(d,'click',function(e){ L.DomEvent.preventDefault(e); toggleOwnership(); });
     return d; };
   C.addTo(MAP);
 }
