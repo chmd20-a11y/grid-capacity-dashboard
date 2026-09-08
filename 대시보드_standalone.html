@@ -307,6 +307,24 @@
     .m-side-close:hover{background:#f0f0f0}
     .m-side-close:active{transform:scale(.9)}
   }
+  /* 로그인 게이트 */
+  #loginGate{position:fixed;inset:0;z-index:100000;background:radial-gradient(1100px 620px at 50% -12%,#17222e,#0a0e13);
+    display:flex;align-items:center;justify-content:center;padding:20px}
+  #loginGate.hidden{display:none}
+  #loginGate .box{width:100%;max-width:340px;background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:30px 26px;box-shadow:0 24px 70px -24px rgba(0,0,0,.8)}
+  #loginGate .logo{font-size:20px;font-weight:800;letter-spacing:-.02em}
+  #loginGate .sub{font-size:12.5px;color:var(--tx2);margin:5px 0 24px}
+  #loginGate label{display:block;font-size:11px;color:var(--tx2);letter-spacing:.05em;text-transform:uppercase;margin:0 0 6px 2px}
+  #loginGate input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--tx);
+    font-size:16px;padding:12px 13px;margin-bottom:15px;outline:none;-webkit-appearance:none}
+  #loginGate input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,158,111,.2)}
+  #loginGate button{width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;
+    font-size:15px;font-weight:700;padding:14px;cursor:pointer;margin-top:6px}
+  #loginGate button:hover{filter:brightness(1.08)}
+  #loginGate .err{color:var(--r);font-size:12.5px;min-height:15px;margin:0 2px 8px;display:none}
+  #loginGate .err.show{display:block}
+  #loginGate .foot{font-size:11px;color:var(--tx2);text-align:center;margin-top:18px;line-height:1.55}
 </style>
 <script>window.__DATA__={
  "generated_at": "2026-09-07 12:21 KST",
@@ -106394,6 +106412,19 @@
 };</script>
 </head>
 <body>
+<div id="loginGate">
+  <form class="box" id="loginForm" autocomplete="off">
+    <div class="logo">⚡ 계통 여유용량 대시보드</div>
+    <div class="sub">태양광 영업 지원 도구 · 로그인</div>
+    <label for="lgId">아이디</label>
+    <input id="lgId" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="아이디">
+    <label for="lgPw">비밀번호</label>
+    <input id="lgPw" type="password" placeholder="비밀번호">
+    <div class="err" id="lgErr">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+    <button type="submit">로그인</button>
+    <div class="foot">🔒 회사 내부 공유용 · 외부 유출 금지</div>
+  </form>
+</div>
 <header>
   <h1>⚡ 계통 여유용량 영업 대시보드</h1>
   <span class="meta" id="meta">불러오는 중…</span>
@@ -107203,6 +107234,54 @@ function initMobileDrawer(){
     MAP.on('click', ()=>setDrawer(false));
   }
 }
+</script>
+<script>
+/* 로그인 게이트: ID=solar 고정, PW 해시 고정(변경 불가). 정적 사이트라 소프트 게이트. */
+(function(){
+  var GATE=document.getElementById('loginGate');
+  if(!GATE) return;
+  var PW_HASH='2a48d3dea06bb97c2ceeec84aff334a2769d912c308a9f9680d38053d078de62'; // sha256('@1234')
+  var KEY='gc_auth_v1';
+  function sha256(ascii){
+    function rr(v,a){return (v>>>a)|(v<<(32-a));}
+    var mp=Math.pow,mw=mp(2,32),res='',words=[],bitLen=ascii.length*8;
+    var hash=sha256.h=sha256.h||[],k=sha256.k=sha256.k||[],pc=k.length,comp={};
+    for(var cand=2;pc<64;cand++){ if(!comp[cand]){ for(var i=0;i<313;i+=cand)comp[i]=cand; hash[pc]=(mp(cand,.5)*mw)|0; k[pc++]=(mp(cand,1/3)*mw)|0; } }
+    ascii+='\x80'; while(ascii.length%64-56)ascii+='\x00';
+    for(i=0;i<ascii.length;i++){ var c=ascii.charCodeAt(i); if(c>>8)return''; words[i>>2]|=c<<((3-i)%4)*8; }
+    words[words.length]=((bitLen/mw)|0); words[words.length]=(bitLen);
+    for(var j=0;j<words.length;){
+      var w=words.slice(j,j+=16),oh=hash; hash=hash.slice(0,8);
+      for(i=0;i<64;i++){
+        var w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4];
+        var t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]
+          +(w[i]=i<16?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+        var t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+        hash=[(t1+t2)|0].concat(hash); hash[4]=(hash[4]+t1)|0;
+      }
+      for(i=0;i<8;i++)hash[i]=(hash[i]+oh[i])|0;
+    }
+    for(i=0;i<8;i++)for(j=3;j+1;j--){ var b=(hash[i]>>(j*8))&255; res+=((b<16)?0:'')+b.toString(16); }
+    return res;
+  }
+  function unlock(){ GATE.classList.add('hidden'); document.body.style.overflow=''; if(window.MAP&&MAP.invalidateSize){try{MAP.invalidateSize();}catch(e){}} }
+  try{ if(localStorage.getItem(KEY)==='1'){ unlock(); return; } }catch(e){}
+  document.body.style.overflow='hidden';
+  setTimeout(function(){ var el=document.getElementById('lgId'); if(el)el.focus(); },80);
+  document.getElementById('loginForm').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var id=(document.getElementById('lgId').value||'').trim();
+    var pw=document.getElementById('lgPw').value||'';
+    var err=document.getElementById('lgErr');
+    if(id==='solar' && sha256(pw)===PW_HASH){
+      try{ localStorage.setItem(KEY,'1'); }catch(e){}
+      unlock();
+    } else {
+      err.classList.add('show');
+      var p=document.getElementById('lgPw'); p.value=''; p.focus();
+    }
+  });
+})();
 </script>
 </body>
 </html>
