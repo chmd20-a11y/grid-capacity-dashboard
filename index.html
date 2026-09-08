@@ -77,6 +77,8 @@
   @media (max-width:760px){ #ownLegend{right:8px;bottom:12px;font-size:11px;max-width:180px} }
   #helpBtn{margin-left:auto;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
   #helpBtn:hover{background:#3ab183}
+  #logoutBtn{margin-left:8px;background:var(--panel2);color:var(--tx2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+  #logoutBtn:hover{color:var(--tx);border-color:var(--tx2)}
   .plan-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:18px 0 8px}
   .plan-head h2{margin:0}
   #reviewLink{background:var(--panel2);color:var(--tx);border:1px solid var(--accent);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
@@ -350,6 +352,7 @@
   <span class="meta" id="meta">불러오는 중…</span>
   <span class="meta pill" id="scope">전국</span>
   <button id="helpBtn" title="사용법 보기">❓ 사용법</button>
+  <button id="logoutBtn" title="로그아웃">로그아웃</button>
 </header>
 <div class="wrap">
   <aside class="side">
@@ -1185,6 +1188,8 @@ function initMobileDrawer(){
     return res;
   }
   function unlock(){ GATE.classList.add('hidden'); document.body.style.overflow=''; if(window.MAP&&MAP.invalidateSize){try{MAP.invalidateSize();}catch(e){}} }
+  var lo=document.getElementById('logoutBtn');   // 로그아웃: 기억 삭제 후 재로그인 화면 (early-return 前 바인딩)
+  if(lo) lo.onclick=function(){ try{localStorage.removeItem(KEY);}catch(e){} location.reload(); };
   try{ if(localStorage.getItem(KEY)==='1'){ unlock(); return; } }catch(e){}
   document.body.style.overflow='hidden';
   setTimeout(function(){ var el=document.getElementById('lgPw'); if(el)el.focus(); },80);
