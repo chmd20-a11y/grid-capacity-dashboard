@@ -107240,7 +107240,7 @@ function initMobileDrawer(){
 (function(){
   var GATE=document.getElementById('loginGate');
   if(!GATE) return;
-  var PW_HASH='2a48d3dea06bb97c2ceeec84aff334a2769d912c308a9f9680d38053d078de62'; // sha256('@1234')
+  var PW_HASH='2a48d3dea06bb97c2ceeec84aff334a2769d912c308a9f9680d38053d078de62'; // 고정 비밀번호의 sha256
   var KEY='gc_auth_v1';
   function sha256(ascii){
     function rr(v,a){return (v>>>a)|(v<<(32-a));}
